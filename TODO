@@ -1,0 +1,35 @@
+release 0.00_00
+
+XFN
+hMeasure
+species
+
+release 0.00_01
+
+rel=enclosure
+rel=license
+hAtom
+hEntry
+
+release 0.00_02
+
+hCalendar
+hEvent
+hAlarm
+hFreebusy
+hTodo
+
+release 0.00_03
+
+hResume
+hReview
+
+release 0.00_04
+
+hAudio
+hRecipe
+COinS
+figure
+xoxo
+
+release 0.00_05

@@ -1,0 +1,72 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.61.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 1a57ed9dcb106d5b7a45d4fd1ef7a661653cf672 Changes
+SHA1 7e13dbc5eabfa16f5d924efe3673e7379b9e5d64 Changes.ttl
+SHA1 e7c448d78ddb4f4518a6caefabe17bfd824224d3 Changes.xml
+SHA1 a3a48a8e542545762e7e5d5cf4ff73e68dde2907 MANIFEST
+SHA1 7bcd12224c061ef26e3716ff1db5ede5bc425e4c MANIFEST.SKIP
+SHA1 884a5872f365bf0b5b22523e7e763aa31ea545a7 META.yml
+SHA1 50a228fd9bd11e9ec133252fb75449e8fc3666c4 Makefile.PL
+SHA1 74a37e5a7280a6e6f0c469f174c4464c04e93ca1 README
+SHA1 07c276353a04fbfcead0e3366221e7e7166c9adf TODO
+SHA1 e5fb92ac217988bfc7a6af739b0459627020a27e inc/Module/AutoInstall.pm
+SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
+SHA1 5c529e96420d964b192f011b121283a4916f7331 inc/Module/Install/AutoInstall.pm
+SHA1 7cd7c349afdf3f012e475507b1017bdfa796bfbd inc/Module/Install/Base.pm
+SHA1 ba186541bbf6439111f01fc70769cf24d22869bf inc/Module/Install/Can.pm
+SHA1 3369e95c2e5dc40a19931995dffa67929ff4d369 inc/Module/Install/DOAPChangeSets.pm
+SHA1 aaa50eca0d7751db7a4d953fac9bc72c6294e238 inc/Module/Install/Fetch.pm
+SHA1 219da5a95c290312a81477b226f005997d97dcfd inc/Module/Install/Include.pm
+SHA1 3e83972921d54198d1246f7278f08664006cd65d inc/Module/Install/Makefile.pm
+SHA1 12bf1867955480d47d5171a9e9c6a96fabe0b58f inc/Module/Install/Metadata.pm
+SHA1 a615bb050ca0b2d79bfa0224addcb83019a53b09 inc/Module/Install/ReadmeFromPod.pm
+SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
+SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
+SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
+SHA1 2c0b3098b4c393f6414524a4ce2f68492001a64b lib/HTML/Microformats.pm
+SHA1 9e325c1a0ad40994e267039c132fe33be3e5721a lib/HTML/Microformats/Datatypes.pm
+SHA1 de42f1b3675867645221b796063ea368ab3cb560 lib/HTML/Microformats/Datatypes/DateTime.pm
+SHA1 eb08b7db3feda4b9ea5a3c551c74e738eb4cf46a lib/HTML/Microformats/Datatypes/DateTime/Parser.pm
+SHA1 1d337b8176170b3253a70737909af9c681c0f861 lib/HTML/Microformats/Datatypes/Duration.pm
+SHA1 60bf770f44ee6fbe034f716b5657397c4ab15e9c lib/HTML/Microformats/Datatypes/Interval.pm
+SHA1 f356013007da6fdda60088a54e563579a5c5cf10 lib/HTML/Microformats/Datatypes/String.pm
+SHA1 a8e27d706fd2411eadf454ee05aa95b1f6628766 lib/HTML/Microformats/RelTag.pm
+SHA1 6d2382689d65d006047216d0b97b068b49b5167b lib/HTML/Microformats/_base.pm
+SHA1 cfce52ccf0b44f3596ad2384bf2a3c44366ba00b lib/HTML/Microformats/_cache.pm
+SHA1 0438ce0cc45f0dac3094bc28a29123f0084d7898 lib/HTML/Microformats/_context.pm
+SHA1 7815550a7910fc230ca8576debaef41d454bb2af lib/HTML/Microformats/_simple_parser.pm
+SHA1 4907e48a97820d4725b68e98bdb493fa8d7d0372 lib/HTML/Microformats/_simple_rdf.pm
+SHA1 b1d391d9575949632f1fc3c9e173890dd0e47802 lib/HTML/Microformats/_util.pm
+SHA1 2f9eed68d6de9695a8ac58cda23c5e13e7c385e2 lib/HTML/Microformats/adr.pm
+SHA1 8cc3b9a4035999c4ce40e6c7307f8e90f9be9d23 lib/HTML/Microformats/geo.pm
+SHA1 62bf13f7a9088b21e0aa0a18e1687f8450847d81 lib/HTML/Microformats/hCard.pm
+SHA1 955bfd788205e9dab037eaa64d5c0dbdec384136 lib/HTML/Microformats/hCard/_vt.pm
+SHA1 317f55b081c183057f78b5c0affbd4e55a6d0a85 lib/HTML/Microformats/hCard/email.pm
+SHA1 3962f7689a7db0876a435f57566d0cfff2398d34 lib/HTML/Microformats/hCard/impp.pm
+SHA1 74b2b4bcd86771dfccde985d113134802a0501f6 lib/HTML/Microformats/hCard/label.pm
+SHA1 0b205e05650323111893d769b9b41d1196e51c8c lib/HTML/Microformats/hCard/n.pm
+SHA1 41d3d96334ff76dc9bdde65f01922ef6ad646802 lib/HTML/Microformats/hCard/org.pm
+SHA1 9832985ce6ab24d333c37ed74596f045ccc9f041 lib/HTML/Microformats/hCard/tel.pm
+SHA1 bb128dce2db8ad397dbeb957d79d084cc5d2391a t/00sig.t
+SHA1 b860cbfb1804e58c949b431f70f3b18c0da4c26b t/01basic.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+iEYEARECAAYFAkt/KawACgkQzr+BKGoqfTl6KQCeI4oOlrJR2x/q0PF3yQpzi80O
+mF8An1aJFFODrLOfaaXKQJaxpmXHAPzE
+=3Fvz
+-----END PGP SIGNATURE-----
