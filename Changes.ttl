@@ -28,6 +28,25 @@ my:v_0_00_00
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_00.tar.gz> ;
 	rdfs:comment    "Original version, forked from Swignition. Supports hCard, adr, geo and rel-tag."@en .
 
+my:v_0_00_01
+
+	a               :Version ;
+	dc:issued       "2010-02-24"^^xsd:date ;
+	:revision       "0.00_01"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_01.tar.gz> ;
+	rdfs:comment    "Adds XFN, species and hMeasure."@en ;
+	dcs:changeset [
+			dcs:versus my:v_0_00_00 ;
+			dcs:item
+				[ rdfs:label "Figure out which hCard on a page is the 'representative' one (for the purposes of XFN)."@en ; a dcs:Addition ] ,
+				[ rdfs:label "XFN support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Copyright statements now reflect the fact that much of this code comes from 2008."@en ] ,
+				[ rdfs:label "Draft 'species' microformat support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Improve hCard type+value property parsing."@en ] ,
+				[ rdfs:label "Draft 'hMeasure' microformat support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Document HTML::Microformats::hCard."@en ]
+		] .
+
 #############################################################
 
 my:project
@@ -46,7 +65,7 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-02-08"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0_00_00 .
+	:release        my:v_0_00_00 , my:v_0_00_01 .
 
 #############################################################
 

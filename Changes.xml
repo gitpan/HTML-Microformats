@@ -21,6 +21,52 @@
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_00</revision>
     <rdfs:comment xml:lang="en">Original version, forked from Swignition. Supports hCard, adr, geo and rel-tag.</rdfs:comment>
   </Version>
+  <Version rdf:about="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Figure out which hCard on a page is the 'representative' one (for the purposes of XFN).</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">XFN support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Copyright statements now reflect the fact that much of this code comes from 2008.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Draft 'species' microformat support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Improve hCard type+value property parsing.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Draft 'hMeasure' microformat support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Document HTML::Microformats::hCard.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_00"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-24</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_01.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_01</revision>
+    <rdfs:comment xml:lang="en">Adds XFN, species and hMeasure.</rdfs:comment>
+  </Version>
   <Project rdf:about="http://search.cpan.org/dist/HTML-Microformats/#project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-08</created>
@@ -33,6 +79,7 @@
     <name>HTML-Microformats</name>
     <programming-language>Perl</programming-language>
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_00"/>
+    <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>

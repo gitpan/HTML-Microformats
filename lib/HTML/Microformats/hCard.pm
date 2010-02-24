@@ -1,3 +1,28 @@
+=head1 NAME
+
+HTML::Microformats::hCard - the hCard microformat
+
+=head1 SYNOPSIS
+
+ use HTML::Microformats::_context;
+ use HTML::Microformats::hCard;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @cards   = HTML::Microformats::hCard->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $card (@cards)
+ {
+   print $card->get_fn . "\n";
+ }
+
+=head1 DESCRIPTION
+
+HTML::Microformats::hCard inherits from HTML::Microformats::_base. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::hCard;
 
 use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
@@ -294,7 +319,6 @@ sub format_signature
 			'agent'            => { 'resource' => ["${vcard}agent"] , 'literal' => ["${vx}agent"] } ,
 			'anniversary'      => { 'literal'  => ["${vx}anniversary"] },
 			'bday'             => { 'literal'  => ["${vcard}bday"] },
-			'biota'            => { 'literal'  => ["http://purl.org/NET/biol/ns#hasTaxonomy"] },
 			'birth'            => { 'resource' => ["${vx}birth"] ,    'literal'  => ["${vx}birth"] },
 			'caladruri'        => { 'resource' => ["${vx}caladruri"] },
 			'caluri'           => { 'resource' => ["${vx}caluri"] },
@@ -306,7 +330,7 @@ sub format_signature
 			'fn'               => { 'literal'  => ["${vcard}fn", "http://www.w3.org/2000/01/rdf-schema#label"] },
 			'fburl'            => { 'resource' => ["${vx}fburl"] },
 			'gender'           => { 'literal'  => ["${vx}gender"] },
-			'geo'              => { 'resource' => ["${vcard}geo", "${geo}location"] } ,
+			'geo'              => { 'resource' => ["${vcard}geo"] } ,
 			'impp'             => { 'resource' => ["${vx}impp"] },
 			'kind'             => { 'literal'  => ["${vx}kind"] },
 			'key'              => { 'resource' => ["${vcard}key"] },
@@ -324,6 +348,7 @@ sub format_signature
 			'sex'              => { 'literal'  => ["${vx}sex"] },
 			'sort-string'      => { 'literal'  => ["${vcard}sort-string"] },
 			'sound'            => { 'resource' => ["${vcard}sound"] },
+			'species'          => { 'resource' => ["${vx}x-species"] },
 			'tel'              => { 'resource' => ["${vcard}tel"] },
 			'title'            => { 'literal'  => ["${vcard}title"] },
 			'tz'               => { 'literal'  => ["${vcard}tz"] },
@@ -367,9 +392,9 @@ sub add_to_model
 
 	$self->_simple_rdf($model);
 	
-	foreach my $property (qw(n org adr geo agent tel email label impp birth caluri death fburl delegated-from sent-by member))
+	foreach my $property (qw(n org adr geo agent tel email label impp birth caluri death fburl delegated-from sent-by member species))
 	{
-		foreach my $value (@{ $self->data->{'property'} })
+		foreach my $value (@{ $self->data->{$property} })
 		{
 			if (UNIVERSAL::can($value, 'add_to_model'))
 			{
@@ -378,11 +403,66 @@ sub add_to_model
 		}
 	}
 	
-	$model->add_statement(RDF::Trine::Statement->new(
-		$self->id(1, 'holder'),
-		RDF::Trine::Node::Resource->new('http://purl.org/uF/hCard/terms/hasCard'),
-		$self->id(1),
-		));
+	# From the vCard we can infer data about its holder.
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'holder'),
+			RDF::Trine::Node::Resource->new('http://purl.org/uF/hCard/terms/hasCard'),
+			$self->id(1),
+			));
+		
+		if (lc $self->data->{'kind'} eq 'individual')
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/Person'),
+				));
+		}
+		elsif (lc $self->data->{'kind'} eq 'org')
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/Organization'),
+				));
+		}
+		elsif (lc $self->data->{'kind'} eq 'group')
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/Group'),
+				));
+		}
+		elsif (lc $self->data->{'kind'} eq 'location')
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+				RDF::Trine::Node::Resource->new('http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing'),
+				));
+		}
+
+		foreach my $species (@{ $self->data->{'species'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://purl.org/NET/biol/ns#hasTaxonomy'),
+				$species->id(1),
+				));
+		}
+	}
+	
+	$self->context->representative_hcard;
+	if ($self->{'representative'})
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			RDF::Trine::Node::Resource->new($self->context->uri),
+			RDF::Trine::Node::Resource->new('http://purl.org/uF/hCard/terms/representative'),
+			$self->id(1),
+			));
+	}
 	
 	return $self;
 }
@@ -398,3 +478,68 @@ sub profiles
 }
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::hCard supports hCard as described at
+L<http://microformats.org/wiki/hcard>, with the following additions:
+
+=over 4
+
+=item * vCard 4.0 terms
+
+This module includes additional property terms taken from the latest
+vCard 4.0 drafts. For example the property 'impp' may be used to mark up
+instant messaging addresses for a contact.
+
+The vCard 4.0 property 'kind' is used to record the kind of contact described
+by the hCard (an individual, an organisation, etc). In many cases this is
+automatically inferred.
+
+=item * Embedded species microformat
+
+If the species microformat (see L<HTML::Microformats::species>) is found
+embedded within an hCard, then this is taken to be the species of a contact.
+
+=item * Embedded hMeasure
+
+If the hMeasure microformat (see L<HTML::Microformats::hMeasure>) is
+found embedded within an hCard, and no 'item' property is provided, then
+the measurement is taken to pertain to the contact described by the hCard.
+
+=back
+
+=head1 RDF OUTPUT
+
+Data is returned using the W3C's vCard vocabulary
+(L<http://www.w3.org/2006/vcard/ns#>) with some supplemental
+terms from Toby Inkster's vCard extensions vocabulary
+(L<http://buzzword.org.uk/rdf/vcardx#>) and occasional other terms.
+
+After long deliberation on the "has-a/is-a issue", the author of this
+module decided that the holder of a vCard and the vCard itself should
+be modelled as two separate resources, and this is how the data is
+returned.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::_base>,
+L<HTML::Microformats>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

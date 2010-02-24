@@ -28,11 +28,14 @@ lib/HTML/Microformats/hCard/org.pm
 lib/HTML/Microformats/hCard.pm
 lib/HTML/Microformats/hCard/tel.pm
 lib/HTML/Microformats/hCard/_vt.pm
+lib/HTML/Microformats/hMeasure.pm
 lib/HTML/Microformats.pm
 lib/HTML/Microformats/RelTag.pm
 lib/HTML/Microformats/_simple_parser.pm
 lib/HTML/Microformats/_simple_rdf.pm
+lib/HTML/Microformats/species.pm
 lib/HTML/Microformats/_util.pm
+lib/HTML/Microformats/XFN.pm
 
 t/00sig.t
 t/01basic.t
@@ -51,3 +54,4 @@ inc/Module/Install/ReadmeFromPod.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Test/Signature.pm
+

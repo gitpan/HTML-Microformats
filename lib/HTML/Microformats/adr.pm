@@ -8,9 +8,8 @@ use Locale::Country qw(country2code LOCALE_CODE_ALPHA_2);
 
 sub new
 {
-	# HTML::Microformats::adr->new($html_element, $context, [$cache]);
-
-	my ($class, $element, $context, $cache) = @_;
+	my ($class, $element, $context) = @_;
+	my $cache = $context->cache;
 	
 	return $cache->get($context, $element, $class)
 		if defined $cache && $cache->get($context, $element, $class);

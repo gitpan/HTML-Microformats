@@ -7,6 +7,7 @@ use common::sense;
 use 5.008;
 
 use HTML::Microformats::hCard;
+use HTML::Microformats::_util qw(searchClass stringify);
 
 sub new
 {
@@ -21,9 +22,34 @@ sub new
 		};	
 	bless $self, $class;
 
+	my $hclass = 'tel';
+	$hclass = $1 if $class =~ /::([^:]+)$/;
+
 	my $clone = $element->cloneNode(1);	
 	$self->_expand_patterns($clone);
 	$self->_simple_parse($clone);
+	
+	unless (length $self->{'DATA'}->{'value'} or $hclass eq 'label')
+	{
+		if ($element->hasAttribute('href'))
+		{
+			$self->{'DATA'}->{'value'} = $self->context->uri( $element->getAttribute('href') );
+		}
+		elsif ($element->hasAttribute('src'))
+		{
+			$self->{'DATA'}->{'value'} = $self->context->uri( $element->getAttribute('src') );
+		}
+	}
+	unless (length $self->{'DATA'}->{'value'})
+	{
+		my @types = searchClass('type', $clone);
+		foreach my $type (@types)
+		{
+			$type->parentNode->removeChild($type);
+		}
+		$self->{'DATA'}->{'value'} = stringify($clone);
+		$self->{'DATA'}->{'value'} =~ s/(^\s+|\s+$)//g;
+	}
 
 	return $self;
 }
@@ -49,7 +75,7 @@ sub format_signature
 		'options' => {
 			'no-destroy' => ['adr', 'geo']
 		},
-		'rdf:type' => [ (($hclass =~ /tel|email/) ? $vcard : $vx).ucfirst $hclass ] ,
+		'rdf:type' => [ (($hclass =~ /^(tel|email|label)$/) ? $vcard : $vx).ucfirst $hclass ] ,
 		'rdf:property' => {
 			'type'  => { 'literal' => ["${vx}usage"] } ,
 			'value' => { 'literal' => ["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"] , 'resource' => ["http://www.w3.org/1999/02/22-rdf-syntax-ns#value"] } ,

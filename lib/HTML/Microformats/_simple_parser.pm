@@ -8,7 +8,9 @@ use HTML::Microformats::adr;
 use HTML::Microformats::Datatypes;
 use HTML::Microformats::geo;
 use HTML::Microformats::hCard;
+use HTML::Microformats::hMeasure;
 use HTML::Microformats::RelTag;
+use HTML::Microformats::species;
 use URI::URL;
 use XML::LibXML qw(:all);
 
@@ -545,18 +547,20 @@ sub _simple_parse
 	};
 	foreach my $root (@{ $options->{'no-destroy'} })
 		{ $do_destroy->{$root} = 0; }
-##TODO
-#	if (defined $options->{'hmeasure'})
-#	{
-#		my @measures = Swignition::uF::hMeasure::parse_all($page, $root);
-#		foreach my $m (@measures)
-#		{
-#			push @{ $self->{$options->{'hmeasure'}} }, $m
-#				unless ($m->{item_dom} || $m->{item_object});
-#			destroy_element($m->{'_dom'})
-#				if ($do_destroy->{ $m->{class} });
-#		}
-#	}
+
+	if (defined $options->{'hmeasure'})
+	{
+		my @measures = HTML::Microformats::hMeasure->extract_all($root, $self->context);
+		foreach my $m (@measures)
+		{
+			push @{ $self->{$options->{'hmeasure'}} }, $m
+				unless defined $m->data->{'item'}
+				|| defined $m->data->{'item_link'}
+				|| defined $m->data->{'item_label'};
+			$self->destroy_element($m->{'element'})
+				if $do_destroy->{ $m->data->{'class'} } && defined $m->{'element'};
+		}
+	}
 	
 	# rel-tag
 	if (defined $options->{'rel-tag'})
@@ -903,7 +907,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2010 Toby Inkster
+Copyright 2008-2010 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

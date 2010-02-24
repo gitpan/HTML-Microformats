@@ -6,7 +6,7 @@ use 5.008;
 
 use XML::LibXML qw(:all);
 
-our @EXPORT_OK = qw(searchClass searchRel searchID stringify xml_stringify);
+our @EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchID stringify xml_stringify);
 
 sub searchClass
 {
@@ -14,17 +14,17 @@ sub searchClass
 	my $dom    = shift;
 	my $prefix = shift || undef;
 	
-	return unless ($dom);
+	my @matches;
+	return @matches unless $dom;
 	
-	my @matches = ();
 	foreach my $node ($dom->getElementsByTagName('*'))
 	{
 		my $classList;
 		$classList = $node->getAttribute('class');
 		$classList = $node->getAttribute('name')
-			if ((!length $classList) && ($node->tagName eq 'param'));
+			if (!length $classList) && ($node->tagName eq 'param');
 			
-		next unless ((length $classList));
+		next unless length $classList;
 		
 		if ((defined $prefix) && $classList =~ / (^|\s) ($prefix \-?)? $target (\s|$) /x)
 		{
@@ -36,8 +36,35 @@ sub searchClass
 		}
 	}
 	
-	return @matches;
+	return @matches;	
+}
+
+sub searchAncestorClass
+{
+	my $target = shift;
+	my $dom    = shift;
+	my $skip   = shift;
 	
+	if ($skip <= 0)
+	{
+		my $classList;
+		$classList = $dom->getAttribute('class');
+		$classList = $dom->getAttribute('name')
+			if (!length $classList and $dom->tagName eq 'param');
+		
+		if ($classList =~ / (^|\s) $target (\s|$) /x)
+		{
+			return $dom;
+		}
+	}
+	
+	if (defined $dom->parentNode
+	and $dom->parentNode->isa('XML::LibXML::Element'))
+	{
+		return searchAncestorClass($target, $dom->parentNode, $skip-1);
+	}
+	
+	return undef;
 }
 
 sub searchRel

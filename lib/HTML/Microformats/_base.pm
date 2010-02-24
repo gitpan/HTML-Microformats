@@ -22,7 +22,7 @@ sub new
 
 sub extract_all
 {
-	my ($class, $dom, $context, $cache) = @_;
+	my ($class, $dom, $context) = @_;
 	my @rv;
 	
 	my $hclass = $class->format_signature->{'root'};
@@ -37,7 +37,7 @@ sub extract_all
 			my @elements = searchClass($hc, $dom);
 			foreach my $e (@elements)
 			{
-				push @rv, $class->new($e, $context, $cache);
+				push @rv, $class->new($e, $context);
 			}
 		}
 	}
@@ -50,7 +50,7 @@ sub extract_all
 			my @elements = searchRel($r, $dom);
 			foreach my $e (@elements)
 			{
-				push @rv, $class->new($e, $context, $cache);
+				push @rv, $class->new($e, $context);
 			}
 		}
 	}
@@ -167,19 +167,19 @@ sub AUTOLOAD
 		elsif ($method eq 'clear')
 		{
 			croak "Attempt to clear required property $datum.\n"
-				if $opts =~ /1\+/;
+				if $opts =~ /[1\+]/;
 			delete $self->{'DATA'}->{$datum};
 		}
 		elsif ($method eq 'add')
 		{
 			croak "Attempt to add more than one value to singular property $datum.\n"
-				if $opts =~ /1\?/ && defined $self->{'DATA'}->{$datum};
+				if $opts =~ /[1\?]/ && defined $self->{'DATA'}->{$datum};
 			
-			if ($opts =~ /1\?/)
+			if ($opts =~ /[1\?]/)
 			{
 				$self->{'DATA'}->{$datum} = shift;
 			}
-			elsif ($opts =~ /\&/)
+			elsif ($opts =~ /[\&]/)
 			{
 				$self->{'DATA'}->{$datum} .= shift;
 			}
@@ -190,7 +190,7 @@ sub AUTOLOAD
 		}
 		elsif ($method eq 'set')
 		{
-			if ($opts =~ /1\?\&/)
+			if ($opts =~ /[1\?\&]/)
 			{
 				$self->{'DATA'}->{$datum} = shift;
 			}

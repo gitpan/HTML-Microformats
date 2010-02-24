@@ -27,19 +27,22 @@ use HTML::Microformats::_context;
 use HTML::Microformats::adr;
 use HTML::Microformats::geo;
 use HTML::Microformats::hCard;
+use HTML::Microformats::hMeasure;
+use HTML::Microformats::species;
 use HTML::Microformats::RelTag;
+use HTML::Microformats::XFN;
 use JSON;
 use RDF::Trine 0.117;
 use XML::LibXML;
 
 =head1 VERSION
 
-0.00_00
+0.00_01
 
 =cut
 
-our $VERSION = '0.00_00';
-my @Formats = qw(adr geo hCard RelTag);
+our $VERSION = '0.00_01';
+my @Formats = qw(adr geo hCard hMeasure RelTag species XFN);
 
 =head1 DESCRIPTION
 
@@ -438,6 +441,8 @@ Individual microformat modules:
 
 =item * L<HTML::Microformats::RelTag>
 
+=item * L<HTML::Microformats::XFN>
+
 =back
 
 =head1 AUTHOR
@@ -446,7 +451,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2010 Toby Inkster
+Copyright 2008-2010 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

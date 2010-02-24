@@ -200,6 +200,75 @@ sub add_profile
 	}
 }
 
+sub representative_hcard
+{
+	my $self = shift;
+	
+	unless ($self->{'representative_hcard'})
+	{
+		my @hcards = HTML::Microformats::hCard->extract_all($self->document->documentElement, $self);
+		HCARD: foreach my $hc (@hcards)
+		{
+			if ($hc->data->{'_has_relme'})
+			{
+				$self->{'representative_hcard'} = $hc;
+				last HCARD;
+			}
+		}
+		unless ($self->{'representative_hcard'})
+		{
+			HCARD: foreach my $hc (@hcards)
+			{
+				foreach my $url ($hc->data->{'url'})
+				{
+					if ($url eq $self->uri)
+					{
+						$self->{'representative_hcard'} = $hc;
+						last HCARD;
+					}
+				}
+			}
+		}
+		unless ($self->{'representative_hcard'})
+		{
+			$self->{'representative_hcard'} = $hcards[0] if @hcards;
+		}
+		if ($self->{'representative_hcard'})
+		{
+			$self->{'representative_hcard'}->{'representative'} = 1;
+		}
+	}
+	
+	return $self->{'representative_hcard'};
+}
+
+sub representative_person_id
+{
+	my $self     = shift;
+	my $as_trine = shift;
+	
+	my $hcard = $self->representative_hcard;
+	if ($hcard)
+	{
+		return $hcard->id($as_trine, 'holder');
+	}
+	
+	unless (defined $self->{'representative_person_id'})
+	{
+		$self->{'representative_person_id'} = $self->make_bnode;
+	}
+	
+	if ($as_trine)
+	{
+		return ($self->{'representative_person_id'}  =~ /^_:(.*)$/) ?
+				 RDF::Trine::Node::Blank->new($1) :
+				 RDF::Trine::Node::Resource->new($self->{'representative_person_id'});
+	}
+	
+	return $self->{'representative_person_id'};
+}
+
+
 sub _process_langs
 {
 	my $self = shift;
@@ -258,7 +327,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2010 Toby Inkster
+Copyright 2008-2010 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

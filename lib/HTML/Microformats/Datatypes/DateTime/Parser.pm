@@ -6,10 +6,6 @@
 package HTML::Microformats::Datatypes::DateTime::Parser;
 
 use common::sense;
-use warnings;
-
-use vars qw( $VERSION );
-$VERSION = '0.06';
 
 use Carp qw( croak );
 use DateTime;
