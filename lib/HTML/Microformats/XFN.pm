@@ -1,3 +1,29 @@
+=head1 NAME
+
+HTML::Microformats::XFN - the XFN microformat
+
+=head1 SYNOPSIS
+
+ use Data::Dumper;
+ use HTML::Microformats::_context;
+ use HTML::Microformats::XFN;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @links   = HTML::Microformats::XFN->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $link (@links)
+ {
+   printf("<%s> %s\n", $link->get_href, join(" ", $link->get_rel));
+ }
+
+=head1 DESCRIPTION
+
+HTML::Microformats::XFN inherits from HTML::Microformats::_base. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::XFN;
 
 use base qw(HTML::Microformats::_base);
@@ -372,5 +398,84 @@ sub _xfn_relationship_types
 	return \%xfn11;
 }
 
+=head2 Additional Public Methods
+
+=over 4
+
+=item C<< $xfn->subject_hcard>>
+
+Returns the hCard for the subject of the relationship. e.g. if Mary has parent Sue, then
+Mary is the subject.
+
+If the subject could not be determined, may return undef.
+
+=cut
+
+sub subject_hcard
+{
+	my $self = shift;
+	return $self->context->representative_hcard;
+}
+
+=item C<< $xfn->object_hcard>>
+
+Returns the hCard for the object of the relationship. e.g. if Mary has parent Sue, then
+Sue is the object.
+
+The person that is the object of the relationship may not have an hCard on this page,
+or the parser may not be able to determine the correct hCard, in which case, may return
+undef.
+
+=back
+
+=cut
+
+sub object_hcard
+{
+	my $self = shift;
+	return $self->{'hcard'};
+}
+
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::XFN supports XHTML Friends Network 1.0 and 1.1
+as described at L<http://gmpg.org/xfn/1> and L<http://gmpg.org/xfn/11>; plus the
+relationship profile described at L<http://purl.org/vocab/relationship/>;
+and XHTML Enemies Network 1.0 as described at L<http://xen.adactio.com/>.
+
+By default, only XFN 1.1 is parsed, but if the context has profiles matching the
+other URIs above, then the other vocabularies are supported.
+
+=head1 RDF OUTPUT
+
+Data is returned using the DERI's XFN vocabulary
+(L<http://vocab.sindice.com/xfn#>) and when appropriate, Ian Davis'
+RDF relationship vocab (L<http://purl.org/vocab/relationship/>)
+and Toby Inkster's XEN vocab (L<http://buzzword.org.uk/rdf/xen#>).
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::_base>,
+L<HTML::Microformats>,
+L<HTML::Microformats::hCard>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

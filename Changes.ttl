@@ -47,6 +47,23 @@ my:v_0_00_01
 				[ rdfs:label "Document HTML::Microformats::hCard."@en ]
 		] .
 
+my:v_0_00_02
+
+	a               :Version ;
+	dc:issued       "2010-03-01"^^xsd:date ;
+	:revision       "0.00_02"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_02.tar.gz> ;
+	rdfs:comment    "Adds rel-license, rel-enclosure, hAtom and hNews."@en ;
+	dcs:changeset [
+			dcs:versus my:v_0_00_01 ;
+			dcs:item
+				[ rdfs:label "Split out some common rel-X parsing into HTML::Microformats::_rel."@en ] ,
+				[ rdfs:label "rel-license support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "rel-enclosure support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Support for hAtom and hNews."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Document geo, adr, XFN and hAtom support."@en ] 
+		] .
+
 #############################################################
 
 my:project
@@ -65,7 +82,7 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-02-08"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0_00_00 , my:v_0_00_01 .
+	:release        my:v_0_00_00 , my:v_0_00_01 , my:v_0_00_02 .
 
 #############################################################
 

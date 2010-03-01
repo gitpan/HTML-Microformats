@@ -29,11 +29,11 @@ use HTML::Microformats::_util qw(searchClass stringify);
 
 =over 4
 
-=item C<< $duration = HTML::Microformats::Datatypes::Duration->new($d) >>
+=item C<< $d = HTML::Microformats::Datatypes::Duration->new($duration) >>
 
 Creates a new HTML::Microformats::Datatypes::Duration object.
 
-$span is a DateTime::Duration object.
+$duration is a DateTime::Duration object.
 
 =cut
 
@@ -48,20 +48,39 @@ sub new
 	return $this;
 }
 
-=item C<< $i = HTML::Microformats::Datatypes::Duration->parse($string, $elem, $context) >>
+=item C<< $d = HTML::Microformats::Datatypes::Duration->parse($string, $elem, $context) >>
 
 Creates a new HTML::Microformats::Datatypes::Duration object.
 
-$string is an duration represented in ISO 8601 format, for example:
+$string is a duration represented in ISO 8601 format, for example:
 'P1Y' or 'PT2H29M58.682S'. $elem is the XML::LibXML::Element
 being parsed. $context is the document context.
 
-This constructor supports a number of experimental microformat
-duration patterns. e.g.
+The standard way of representing durations in Microformats is
+as an ISO 8601 string:
+
+ <abbr class="duration" title="P4DT4H">4 and a half days</abbr>
+
+This constructor also supports a number of experimental microformat
+duration patterns. ISO-31 class names are supported:
 
  <div class="duration">
-  <span class="d">4</span> days.
+  <span claa="d">4</span> and
+  <abbr title="12" class="h">a half</abbr> days.
  </div>
+
+As are metric/SI measures (in seconds):
+
+ <span class="duration">124 s</span>
+ <span class="duration">124</span> seconds
+
+Or using an hMeasure microformat with no 'item' property, the 'type' property
+either absent or a case-insensitive match of 'duration' and a unit property
+of 's'/'sec'/'seconds', 'min'/'minutes', 'h'/'hours' or 'd'/'days'. For example:
+
+ <span class="duration hmeasure">
+  <b class="unit">Days</b>: <span class="num">4.5</span>
+ </span>
 
 =back
 
@@ -208,114 +227,114 @@ sub parse
 		);
 		my $rv = $1 eq '-' ? $pkg->new($dur->inverse) 
 		                   : $pkg->new($dur);
-		$rv->{string}  = $string;
-		$rv->{element} = $elem;
+		$rv->{'string'}  = $string;
+		$rv->{'element'} = $elem;
 		return $rv;
 	}
 
-##TODO
-#	# Look for hMeasure.
-#	elsif ($elem && $page)
-#	{
-#		# By this point, we're on a clone of the element, and certain class data
-#		# within it may have been destroyed. This is a little hack to find our
-#		# way back to the *real* element!
-#		my $real;
-#		my @real = $page->{DOM}->findnodes($elem->getAttribute('_xpath'));
-#		$real = $real[0] if (@real);
-#		return $string unless ($real);
-#		
-#		my @measures;
-#		if ($real->getAttribute('class') =~ /\b(hmeasure)\b/)
-#			{ push @measures, Swignition::uF::hMeasure::parse($page, $real); }
-#		else
-#			{ @measures = Swignition::uF::hMeasure::parse_all($page, $real); }
-#			
-#		foreach my $m (@measures)
-#		{
-#			next if ($m->{item});
-#			next if ($m->{type} && ($m->{type} !~ /^\s*(duration)\s*$/i));
-#			
-#			my ($dur, $neg);
-#			my $n = $m->{num};
-#			$n = "$n"; # MagicString -> string
-#			if ($n < 0)
-#			{
-#				$neg = 1;
-#				$n   = 0 - $n;
-#			}
-#			
-#			if ($m->{unit} && ($m->{unit} =~ /^\s* s ( ec (ond)? s? )? \s*$/ix))
-#			{
+	# Look for hMeasure.
+	elsif ($elem && $page)
+	{
+		# By this point, we're on a clone of the element, and certain class data
+		# within it may have been destroyed. This is a little hack to find our
+		# way back to the *real* element!
+		
+		my $real;
+		my @real = $page->document->findnodes($elem->getAttribute('data-cpan-html-microformats-nodepath'));
+		$real = $real[0] if @real;
+		return $string unless ($real);
+	
+		my @measures;
+		if ($real->getAttribute('class') =~ /\b(hmeasure)\b/)
+			{ push @measures, HTML::Microformats::hMeasure->new($real, $page); }
+		else
+			{ @measures = HTML::Microformats::hMeasure->extract_all($real, $page); }
+
+		foreach my $m (@measures)
+		{
+			next if $m->data->{'item'} || $m->data->{'item_link'} || $m->data->{'item_label'} ;
+			next if defined $m->data->{'type'} && $m->data->{'type'} !~ /^\s*(duration)\s*$/i;
+
+			my ($dur, $neg);
+			my $n = $m->data->{'num'};
+			$n = "$n"; # MagicString -> string
+			if ($n < 0)
+			{
+				$neg = 1;
+				$n   = 0 - $n;
+			}
+			
+			if (defined $m->data->{'unit'} && $m->data->{'unit'} =~ /^\s* s ( ec (ond)? s? )? \s*$/ix)
+			{
 #				print "hMeasure duration in seconds.\n";
-#				my $seconds     = int($n); $n -= $seconds; $n *= 1000000000;
-#				my $nanoseconds = int($n);
-#		
-#				# Construct and return object.
-#				$dur = DateTime::Duration->new(
-#					seconds     => $seconds,
-#					nanoseconds => $nanoseconds
-#				);
-#			}
-#			
-#			elsif ($m->{unit} && ($m->{unit} =~ /^\s* min ( (ute)? s? )? \s*$/ix))
-#			{
+				my $seconds     = int($n); $n -= $seconds; $n *= 1000000000;
+				my $nanoseconds = int($n);
+		
+				# Construct and return object.
+				$dur = DateTime::Duration->new(
+					seconds     => $seconds,
+					nanoseconds => $nanoseconds
+				);
+			}
+			
+			elsif (defined $m->data->{'unit'} && $m->data->{'unit'} =~ /^\s* min ( (ute)? s? )? \s*$/ix)
+			{
 #				print "hMeasure duration in minutes.\n";
-#				my $minutes     = int($n); $n -= $minutes; $n *= 60;
-#				my $seconds     = int($n); $n -= $seconds; $n *= 1000000000;
-#				my $nanoseconds = int($n);
-#		
-#				# Construct and return object.
-#				$dur = DateTime::Duration->new(
-#				   minutes     => $minutes,
-#					seconds     => $seconds,
-#					nanoseconds => $nanoseconds
-#				);
-#			}
-#
-#			elsif ($m->{unit} && ($m->{unit} =~ /^\s* h ( our s? )? \s*$/ix))
-#			{
+				my $minutes     = int($n); $n -= $minutes; $n *= 60;
+				my $seconds     = int($n); $n -= $seconds; $n *= 1000000000;
+				my $nanoseconds = int($n);
+		
+				# Construct and return object.
+				$dur = DateTime::Duration->new(
+				   minutes     => $minutes,
+					seconds     => $seconds,
+					nanoseconds => $nanoseconds
+				);
+			}
+
+			elsif (defined $m->data->{'unit'} && $m->data->{'unit'} =~ /^\s* h ( our s? )? \s*$/ix)
+			{
 #				print "hMeasure duration in hours.\n";
-#				my $hours       = int($n); $n -= $hours;   $n *= 60;
-#				my $minutes     = int($n); $n -= $minutes; $n *= 60;
-#				my $seconds     = int($n); 
-#		
-#				# Construct and return object.
-#				$dur = DateTime::Duration->new(
-#				   hours       => $hours,
-#				   minutes     => $minutes,
-#					seconds     => $seconds
-#				);
-#			}
-#
-#			elsif ($m->{unit} && ($m->{unit} =~ /^\s* d ( ay s? )? \s*$/ix))
-#			{
+				my $hours       = int($n); $n -= $hours;   $n *= 60;
+				my $minutes     = int($n); $n -= $minutes; $n *= 60;
+				my $seconds     = int($n); 
+		
+				# Construct and return object.
+				$dur = DateTime::Duration->new(
+				   hours       => $hours,
+				   minutes     => $minutes,
+					seconds     => $seconds
+				);
+			}
+
+			elsif (defined $m->data->{'unit'} && $m->data->{'unit'} =~ /^\s* d ( ay s? )? \s*$/ix)
+			{
 #				print "hMeasure duration in days.\n";
-#				my $days        = int($n); $n -= $days;    $n *= 24;
-#				my $hours       = int($n); $n -= $hours;   $n *= 60;
-#				my $minutes     = int($n); $n -= $minutes; $n *= 60;
-#				my $seconds     = int($n); 
-#		
-#				# Construct and return object.
-#				$dur = DateTime::Duration->new(
-#				   days        => $days,
-#				   hours       => $hours,
-#				   minutes     => $minutes,
-#					seconds     => $seconds
-#				);
-#			}
-#			
-#			if ($dur)
-#			{
-#				my $rv = ($neg==1) ? Swignition::MagicDuration->new($dur->inverse) 
-#		                         : Swignition::MagicDuration->new($dur);
-#				$rv->{string}   = $string;
-#				$rv->{element}  = $elem;
-#				$rv->{hmeasure} = $m;
-#				return $rv;
-#			}
-#		}
-#	}
+				my $days        = int($n); $n -= $days;    $n *= 24;
+				my $hours       = int($n); $n -= $hours;   $n *= 60;
+				my $minutes     = int($n); $n -= $minutes; $n *= 60;
+				my $seconds     = int($n); 
+		
+				# Construct and return object.
+				$dur = DateTime::Duration->new(
+				   days        => $days,
+				   hours       => $hours,
+				   minutes     => $minutes,
+					seconds     => $seconds
+				);
+			}
+			
+			if ($dur)
+			{
+				my $rv = ($neg==1) ? $pkg->new($dur->inverse) 
+		                         : $pkg->new($dur);
+				$rv->{'string'}   = $string;
+				$rv->{'element'}  = $elem;
+				$rv->{'hmeasure'} = $m;
+				return $rv;
+			}
+		}
+	}
 	
 	return $string;
 }
@@ -324,7 +343,7 @@ sub parse
 
 =over 4
 
-=item C<< $d = $duration->duration >>
+=item C<< $d->duration >>
 
 Returns a DateTime::Duration object.
 
@@ -332,8 +351,8 @@ Returns a DateTime::Duration object.
 
 sub duration
 {
-	my $this = shift;
-	return $this->{d}
+	my $self = shift;
+	return $self->{d}
 }
 
 =item C<< $d->to_string >>

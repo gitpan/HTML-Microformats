@@ -7,8 +7,12 @@ use HTML::Microformats::_util qw(/^search/);
 use HTML::Microformats::adr;
 use HTML::Microformats::Datatypes;
 use HTML::Microformats::geo;
+use HTML::Microformats::hAtom;
 use HTML::Microformats::hCard;
+use HTML::Microformats::hEntry;
 use HTML::Microformats::hMeasure;
+use HTML::Microformats::RelEnclosure;
+use HTML::Microformats::RelLicense;
 use HTML::Microformats::RelTag;
 use HTML::Microformats::species;
 use URI::URL;
@@ -27,7 +31,7 @@ sub _destroyer
 	# Classes to be destroyed
 	my @containers = qw(mfo vcard adr geo vcalendar vevent vtodo valarm
 		vfreebusy hfeed hentry hslice hreview hresume xfolkentry biota haudio
-		hmeasure hangle hmoney hlisting vtodo-list figure hproduct);
+		hmeasure hangle hmoney hlisting vtodo-list figure hproduct hnews);
 	my %C;
 	foreach my $c (@containers) { $C{$c}=1; }
 	
@@ -421,7 +425,7 @@ sub _simple_parse
 			# </div>
 			my @mfos = qw(mfo vcard adr geo vcalendar vevent vtodo valarm
 				vfreebusy hfeed hentry hslice hreview hresume xfolkentry biota haudio
-				hmeasure hangle hmoney hlisting vtodo-list figure hproduct);
+				hmeasure hangle hmoney hlisting vtodo-list figure hproduct hnews);
 			my $mfos = '\b('.(join '|', @mfos).')\b';
 			foreach my $u (@{$class_options->{'allow-interleaved'}})
 				{ $mfos =~ s/\|$u//; }
@@ -430,7 +434,7 @@ sub _simple_parse
 			{
 				my $is_ok = 1;
 				my $ancestor = $mn->parentNode;
-				while (length $ancestor->getAttribute('data-cpan-html-microformats') > length $root->getAttribute('data-cpan-html-microformats'))
+				while (length $ancestor->getAttribute('data-cpan-html-microformats-nodepath') > length $root->getAttribute('data-cpan-html-microformats-nodepath'))
 				{
 					if ($ancestor->getAttribute('class')=~$mfos)
 					{
@@ -453,7 +457,7 @@ sub _simple_parse
 			foreach my $uf (@try_ufs)
 			{				
 				my $uf_class = (defined $uf_roots->{$uf}) ? $uf_roots->{$uf} : lc($uf);
-				last if (defined $node_parsed_objects[0]);
+				last if defined $node_parsed_objects[0];
 				
 				if ($uf eq '!person')
 				{
@@ -462,15 +466,15 @@ sub _simple_parse
 				}
 				elsif ($node->getAttribute('class') =~ /\b($uf_class)\b/)
 				{
-					my $sub = 'HTML::Microformats::'.$uf.'::new';
 					my $pkg = 'HTML::Microformats::'.$uf;
-					push @node_parsed_objects, &{$sub}($pkg, $node, $self->context, $self->cache, $class_options->{'is-in-ical'});
+					my $obj = eval "${pkg}->new(\$node, \$self->context, \$class_options->{'is-in-ical'});";
+					push @node_parsed_objects, $obj;
 				}
 				else
 				{
-					my $sub = 'HTML::Microformats::'.$uf.'::extract_all';
 					my $pkg = 'HTML::Microformats::'.$uf;
-					push @node_parsed_objects, &{$sub}($pkg, $node, $self->context, $self->cache, $class_options->{'is-in-ical'});
+					my @all = eval "${pkg}->extract_all(\$node, \$self->context, \$class_options->{'is-in-ical'});";
+					push @node_parsed_objects, @all if @all;
 				}
 				
 				$self->_simple_parse_found_error('W', "Multiple embedded $uf objects found in a single $class property. This is weird.")
@@ -479,8 +483,9 @@ sub _simple_parse
 			use strict 'refs';
 			
 			# If we've found something
-			if (defined $node_parsed_objects[0])
+			if (defined $node_parsed_objects[0] && ref $node_parsed_objects[0])
 			{
+				
 				# Remove $class from $node's class list, lest we pick it up again
 				# in the next giant loop!
 				my $new_class_attr = $node->getAttribute('class');
@@ -492,19 +497,13 @@ sub _simple_parse
 				#   <p class="vcard"></p>
 				#   <p class="vcard"></p>
 				# </div>
-				if ($type =~ /\*\*/)
+				foreach my $p (@node_parsed_objects)
 				{
-					foreach my $p (@node_parsed_objects)
-					{
-						# Record parent property node in case we need it (hResume does)!
-						$p->{parent_property_node} = $node;		
-						push @parsed_objects, $p;
-					}
-				}
-				else
-				{
-					$node_parsed_objects[0]->{parent_property_node} = $node;
-					push @parsed_objects, $node_parsed_objects[0];
+					next unless ref $p;
+					# Record parent property node in case we need it (hResume does)!
+					$p->{'parent_property_node'} = $node;		
+					push @parsed_objects, $p;
+					last unless $type =~ /\*\*/;
 				}
 			}
 		}
@@ -512,7 +511,7 @@ sub _simple_parse
 		# What key should we use to store everything in $self?
 		my $object_key = $class;
 		$object_key = $class_options->{'use-key'}
-			if (defined $class_options->{'use-key'});
+			if defined $class_options->{'use-key'};
 
 		# Actually do the storing!
 		if ($type =~ /[1\?]/ && !defined $self->{'DATA'}->{$object_key})
@@ -578,14 +577,14 @@ sub _simple_parse
 #		foreach my $l (@licenses)
 #			{ push @{ $self->{$options->{'rel-license'}} }, $l; }
 #	}
-#	
-#	# rel-enclosure
-#	if (defined $options->{'rel-enclosure'})
-#	{
-#		my @attachments = Swignition::uF::RelEnclosure::parse_all($page, $root);
-#		foreach my $a (@attachments)
-#			{ push @{ $self->{$options->{'rel-enclosure'}} }, $a; }
-#	}
+	
+	# rel-enclosure
+	if (defined $options->{'rel-enclosure'})
+	{
+		my $key  = $options->{'rel-enclosure'};
+		my @encs = HTML::Microformats::RelEnclosure->extract_all($root, $self->context);
+		push @{ $self->{'DATA'}->{$key} }, @encs if @encs;
+	}
 	
 	# For each of the classes that we're looking for...
 	foreach my $c (@$classes)
@@ -601,7 +600,7 @@ sub _simple_parse
 		next if $type =~ /#/;
 
 		my @matching_nodes = $self->_matching_nodes($class, $type, $root);
-		
+
 		# Parse each node that matched.
 		my @parsed_values;
 		my @parsed_values_nodes;
@@ -875,7 +874,7 @@ sub _stringify
 sub _xml_stringify
 {
 	my $self = shift;
-	return HTML::Microformats::_util::_xml_stringify(@_);
+	return HTML::Microformats::_util::xml_stringify(@_);
 }
 
 1;

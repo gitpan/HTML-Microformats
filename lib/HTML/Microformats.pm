@@ -26,10 +26,15 @@ use HTML::HTML5::Sanity qw(fix_document);
 use HTML::Microformats::_context;
 use HTML::Microformats::adr;
 use HTML::Microformats::geo;
+use HTML::Microformats::hAtom;
 use HTML::Microformats::hCard;
+use HTML::Microformats::hEntry;
 use HTML::Microformats::hMeasure;
-use HTML::Microformats::species;
+use HTML::Microformats::hNews;
+use HTML::Microformats::RelEnclosure;
+use HTML::Microformats::RelLicense;
 use HTML::Microformats::RelTag;
+use HTML::Microformats::species;
 use HTML::Microformats::XFN;
 use JSON;
 use RDF::Trine 0.117;
@@ -37,12 +42,12 @@ use XML::LibXML;
 
 =head1 VERSION
 
-0.00_01
+0.00_02
 
 =cut
 
-our $VERSION = '0.00_01';
-my @Formats = qw(adr geo hCard hMeasure RelTag species XFN);
+our $VERSION = '0.00_02';
+my @Formats = qw(adr geo hAtom hCard hMeasure RelEnclosure RelLicense RelTag species XFN);
 
 =head1 DESCRIPTION
 
@@ -202,7 +207,7 @@ all known microformats.
 sub assume_all_profiles
 {
    my $self = shift;
-   $self->assume_profile(@Formats);
+   $self->assume_profile(@Formats, 'hNews');
 }
 
 =head2 Parsing Microformats
@@ -233,9 +238,7 @@ sub parse_microformats
 		{
 			my @objects = "HTML::Microformats::${fmt}"->extract_all(
 				$self->{'context'}->document->documentElement,
-				$self->{'context'},
-				$self->{'context'}->cache);
-			
+				$self->{'context'});
 			$self->{'objects'}->{$fmt} = \@objects;
 		}
 	}
@@ -427,7 +430,7 @@ Please report any bugs to L<http://rt.cpan.org/>.
 L<RDF::RDFa::Parser>,
 L<HTML::HTML5::Microdata::Parser>.
 
-L<http://www.perlrdf.org/>.
+L<http://microformats.org/>, L<http://www.perlrdf.org/>.
 
 Individual microformat modules:
 
@@ -437,7 +440,15 @@ Individual microformat modules:
 
 =item * L<HTML::Microformats::geo>
 
+=item * L<HTML::Microformats::hAtom>
+
 =item * L<HTML::Microformats::hCard>
+
+=item * L<HTML::Microformats::hNews>
+
+=item * L<HTML::Microformats::RelEnclosure>
+
+=item * L<HTML::Microformats::RelLicense>
 
 =item * L<HTML::Microformats::RelTag>
 

@@ -37,7 +37,9 @@ sub extract_all
 			my @elements = searchClass($hc, $dom);
 			foreach my $e (@elements)
 			{
-				push @rv, $class->new($e, $context);
+				my $object = $class->new($e, $context);
+				next if grep { $_->id eq $object->id } @rv; # avoid duplicates
+				push @rv, $object if ref $object;
 			}
 		}
 	}
@@ -50,7 +52,9 @@ sub extract_all
 			my @elements = searchRel($r, $dom);
 			foreach my $e (@elements)
 			{
-				push @rv, $class->new($e, $context);
+				my $object = $class->new($e, $context);
+				next if grep { $_->id eq $object->id } @rv; # avoid duplicates
+				push @rv, $object if ref $object;
 			}
 		}
 	}

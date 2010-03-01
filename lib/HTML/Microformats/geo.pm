@@ -1,3 +1,29 @@
+=head1 NAME
+
+HTML::Microformats::geo - the geo microformat
+
+=head1 SYNOPSIS
+
+ use Data::Dumper;
+ use HTML::Microformats::_context;
+ use HTML::Microformats::geo;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @geos    = HTML::Microformats::geo->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $geo (@geos)
+ {
+   printf("%s;%s\n", $geo->get_latitude, $geo->get_longitude);
+ }
+
+=head1 DESCRIPTION
+
+HTML::Microformats::geo inherits from HTML::Microformats::_base. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::geo;
 
 use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
@@ -128,3 +154,71 @@ sub profiles
 }
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::geo supports geo as described at
+L<http://microformats.org/wiki/geo>, with the following additions:
+
+=over 4
+
+=item * 'altitude' property
+
+You may provide an altitude as either a number (taken to be metres above sea level)
+or an embedded hMeasure. e.g.:
+
+ <span class="geo">
+  lat:  <span class="latitude">12.34</span>,
+  long: <span class="longitude">56.78</span>,
+  alt:  <span class="altitude">90</span> metres.
+ </span>
+ 
+ <span class="geo">
+  lat:  <span class="latitude">12.34</span>,
+  long: <span class="longitude">56.78</span>,
+  alt:  <span class="altitude hmeasure">
+          <span class="num">90</span>
+          <span class="unit">m</span>
+        </span>.
+ </span>
+
+=item * 'body' and 'reference-frame'
+
+The geo microformat is normally only defined for WGS84 co-ordinates on
+Earth. Using 'body' and 'reference-frame' properties (each of which take
+string values), you may give co-ordinates on other planets, asteroids,
+moons, etc; or on Earth but using a non-WGS84 system.
+
+=back
+
+=head1 RDF OUTPUT
+
+Data is returned using the W3C's vCard vocabulary
+(L<http://www.w3.org/2006/vcard/ns#>) and the W3C's 
+WGS84 vocabulary (L<http://www.w3.org/2003/01/geo/wgs84_pos#>).
+
+For non-WGS84 co-ordinates, UNGEO (L<http://buzzword.org.uk/rdf/ungeo#>)
+is used instead.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::_base>,
+L<HTML::Microformats>,
+L<HTML::Microformats::hCard>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut

@@ -20,6 +20,7 @@ lib/HTML/Microformats/Datatypes/Interval.pm
 lib/HTML/Microformats/Datatypes.pm
 lib/HTML/Microformats/Datatypes/String.pm
 lib/HTML/Microformats/geo.pm
+lib/HTML/Microformats/hAtom.pm
 lib/HTML/Microformats/hCard/email.pm
 lib/HTML/Microformats/hCard/impp.pm
 lib/HTML/Microformats/hCard/label.pm
@@ -28,8 +29,13 @@ lib/HTML/Microformats/hCard/org.pm
 lib/HTML/Microformats/hCard.pm
 lib/HTML/Microformats/hCard/tel.pm
 lib/HTML/Microformats/hCard/_vt.pm
+lib/HTML/Microformats/hEntry.pm
 lib/HTML/Microformats/hMeasure.pm
+lib/HTML/Microformats/hNews.pm
 lib/HTML/Microformats.pm
+lib/HTML/Microformats/RelEnclosure.pm
+lib/HTML/Microformats/RelLicense.pm
+lib/HTML/Microformats/_rel.pm
 lib/HTML/Microformats/RelTag.pm
 lib/HTML/Microformats/_simple_parser.pm
 lib/HTML/Microformats/_simple_rdf.pm

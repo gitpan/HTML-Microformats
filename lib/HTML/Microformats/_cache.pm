@@ -84,7 +84,7 @@ sub get
 	return $self->{ $ctx->uri }->{ $klass }->{ $nodepath };
 }
 
-=item C<< $object = $cache->get($context, [$package]);
+=item C<< @objects = $cache->get_all($context, [$package]);
 
 For a given context and package (e.g. 'HTML::Microformats::hCard'), retrieves a
 list of objects from within the cache.

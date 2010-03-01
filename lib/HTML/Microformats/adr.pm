@@ -1,3 +1,29 @@
+=head1 NAME
+
+HTML::Microformats::adr - the adr microformat
+
+=head1 SYNOPSIS
+
+ use Data::Dumper;
+ use HTML::Microformats::_context;
+ use HTML::Microformats::adr;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @adrs    = HTML::Microformats::adr->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $adr (@adrs)
+ {
+   print Dumper($adr->data) . "\n";
+ }
+
+=head1 DESCRIPTION
+
+HTML::Microformats::adr inherits from HTML::Microformats::_base. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::adr;
 
 use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
@@ -122,3 +148,58 @@ sub profiles
 }
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::adr supports adr as described at
+L<http://microformats.org/wiki/adr>, with the following additions:
+
+=over 4
+
+=item * 'type' property
+
+This module is used by HTML::Microformats::hCard to handle addresses
+within the hCard microformat. hCard addresses include a 'type' property
+indicating the address type (e.g. home, work, etc). This module supports
+the 'type' property whether or the address is part of an hCard. 
+
+=item * Embedded geo microformat
+
+If an instance of the geo microformat is found embedded within an address,
+that geographic location will be associated with the address.
+
+=back
+
+=head1 RDF OUTPUT
+
+Data is returned using the W3C's vCard vocabulary
+(L<http://www.w3.org/2006/vcard/ns#>) and occasional other terms.
+
+Where possible, the module uses Locale::Country to determine the
+two letter ISO code for the country of the address, and include this in the
+RDF output.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::_base>,
+L<HTML::Microformats>,
+L<HTML::Microformats::hCard>,
+L<HTML::Microformats::geo>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

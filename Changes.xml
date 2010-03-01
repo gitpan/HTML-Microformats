@@ -67,6 +67,42 @@
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_01</revision>
     <rdfs:comment xml:lang="en">Adds XFN, species and hMeasure.</rdfs:comment>
   </Version>
+  <Version rdf:about="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_02">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">rel-license support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">rel-enclosure support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Support for hAtom and hNews.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Document geo, adr, XFN and hAtom support.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Split out some common rel-X parsing into HTML::Microformats::_rel.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-03-01</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_02.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_02</revision>
+    <rdfs:comment xml:lang="en">Adds rel-license, rel-enclosure, hAtom and hNews.</rdfs:comment>
+  </Version>
   <Project rdf:about="http://search.cpan.org/dist/HTML-Microformats/#project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-08</created>
@@ -80,6 +116,7 @@
     <programming-language>Perl</programming-language>
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_00"/>
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01"/>
+    <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_02"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>

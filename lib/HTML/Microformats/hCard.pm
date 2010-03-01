@@ -125,7 +125,7 @@ sub new
 
 	$cache->set($context, $element, $class, $self)
 		if defined $cache;
-		
+	
 	return $self;
 }
 
@@ -322,7 +322,7 @@ sub format_signature
 			'birth'            => { 'resource' => ["${vx}birth"] ,    'literal'  => ["${vx}birth"] },
 			'caladruri'        => { 'resource' => ["${vx}caladruri"] },
 			'caluri'           => { 'resource' => ["${vx}caluri"] },
-			'category'         => { 'resource' => ["${vx}category"] , 'literal' => ["${vcard}category"]},
+			'category'         => { 'resource' => ["${vx}category", 'http://www.holygoat.co.uk/owl/redwood/0.1/tags/taggedWithTag'] , 'literal' => ["${vcard}category"]},
 			'class'            => { 'literal'  => ["${vcard}class"] },
 			'dday'             => { 'literal'  => ["${vx}dday"] },
 			'death'            => { 'resource' => ["${vx}death"] ,    'literal'  => ["${vx}death"] },

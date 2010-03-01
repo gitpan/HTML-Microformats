@@ -209,6 +209,7 @@ sub representative_hcard
 		my @hcards = HTML::Microformats::hCard->extract_all($self->document->documentElement, $self);
 		HCARD: foreach my $hc (@hcards)
 		{
+			next unless ref $hc;
 			if ($hc->data->{'_has_relme'})
 			{
 				$self->{'representative_hcard'} = $hc;
@@ -219,6 +220,7 @@ sub representative_hcard
 		{
 			HCARD: foreach my $hc (@hcards)
 			{
+				next unless ref $hc;
 				foreach my $url ($hc->data->{'url'})
 				{
 					if ($url eq $self->uri)
