@@ -103,6 +103,37 @@
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_02</revision>
     <rdfs:comment xml:lang="en">Adds rel-license, rel-enclosure, hAtom and hNews.</rdfs:comment>
   </Version>
+  <Version rdf:about="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_03">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Rename _base.pm to BASE.pm; _simple_parser.pm to Mixin/Parser.pm; _simple_rdf.pm to Mixin/RDF.pm; _rel.pm to BASEREL.pm.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">hCalendar support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Document BASE microformat class.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">RecurringDateTime datatype.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-03-09</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_03.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_03</revision>
+    <rdfs:comment xml:lang="en">Adds hCalendar.</rdfs:comment>
+  </Version>
   <Project rdf:about="http://search.cpan.org/dist/HTML-Microformats/#project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-08</created>
@@ -117,6 +148,7 @@
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_00"/>
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01"/>
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_02"/>
+    <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_03"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>

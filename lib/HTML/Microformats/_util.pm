@@ -2,8 +2,10 @@ package HTML::Microformats::_util;
 
 use base qw(Exporter);
 use common::sense;
+use utf8;
 use 5.008;
 
+use HTML::Microformats::Datatypes::String;
 use XML::LibXML qw(:all);
 
 our @EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchID stringify xml_stringify);
@@ -23,7 +25,7 @@ sub searchClass
 		$classList = $node->getAttribute('class');
 		$classList = $node->getAttribute('name')
 			if (!length $classList) && ($node->tagName eq 'param');
-			
+		
 		next unless length $classList;
 		
 		if ((defined $prefix) && $classList =~ / (^|\s) ($prefix \-?)? $target (\s|$) /x)
@@ -154,6 +156,10 @@ sub stringify
 			||  $title =~ / data\: (.*) $ /x )
 				{ $title = $1; }
 	
+			$title = utf8::upgrade($title);
+			$title = '***UTF-8 ERROR (Not UTF-8)***' unless utf8::is_utf8("$title");
+			$title = '***UTF-8 ERROR (Bad UTF-8)***' unless utf8::valid("$title");
+	
 			if (length $title)
 				{ return (ms $title, $dom); }
 		}
@@ -218,9 +224,14 @@ sub stringify
 		}
 	}
 
-	my $inpre = ($dom->getAttribute('_xpath') =~ /\/pre\b/i) ? 1 : 0;
-	$str = _stringify_helper($dom, $inpre, 0)
-		unless (defined $str);
+	my $inpre = ($dom->getAttribute('_xpath') =~ /\/pre\b/i) ? 1 : 0; ##TODO - this doesn't work!
+	eval {
+		$str = _stringify_helper($dom, $inpre, 0)
+			unless defined $str;
+	};
+	$str = '***UTF-8 ERROR (WTF Happened?)***' if $@;
+	$str = '***UTF-8 ERROR (Not UTF-8)***' unless utf8::is_utf8("$str");
+	$str = '***UTF-8 ERROR (Bad UTF-8)***' unless utf8::valid("$str");
 
 	unless ($opts{'no-reduce-whitespace'})
 	{
@@ -259,11 +270,12 @@ sub _stringify_helper
 	# Text node, or equivalent.
 	if (!$tag || $tag eq 'img' || $tag eq 'input' || $tag eq 'param')
 	{
-		$rv = $domNode->getData               if (!$tag);
-		$rv = $domNode->getAttribute('alt')   if ($tag
-		                                      && length $domNode->getAttribute('alt'));
-		$rv = $domNode->getAttribute('value') if ($tag
-		                                      && length $domNode->getAttribute('value'));
+		$rv = $domNode->getData
+			unless $tag;
+		$rv = $domNode->getAttribute('alt')
+			if $tag && $domNode->hasAttribute('alt');
+		$rv = $domNode->getAttribute('value')
+			if $tag && $domNode->hasAttribute('value');
 
 		unless ($inPRE)
 		{
@@ -467,8 +479,28 @@ sub _stringify_helper
 
 sub xml_stringify ##TODO
 {
-	my $node = shift;
-	return $node->toString;  #TODO - remove any attributes prefixed 'data-cpan-html-microformats'
+	my $node  = shift;
+	my $clone = $node->cloneNode(1);
+	
+	foreach my $attr ($clone->attributes)
+	{
+		if ($attr->nodeName =~ /^data-cpan-html-microformats-/)
+		{
+			$clone->removeAttribute($attr->nodeName);
+		}
+	}
+	foreach my $kid ($clone->getElementsByTagName('*'))
+	{
+		foreach my $attr ($kid->attributes)
+		{
+			if ($attr->nodeName =~ /^data-cpan-html-microformats-/)
+			{
+				$kid->removeAttribute($attr->nodeName);
+			}
+		}
+	}
+	
+	return $clone->toString;
 }
 
 1;

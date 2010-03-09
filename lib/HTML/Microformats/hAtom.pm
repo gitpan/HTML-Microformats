@@ -21,7 +21,7 @@ HTML::Microformats::hAtom - the hAtom microformat
 
 =head1 DESCRIPTION
 
-HTML::Microformats::hAtom inherits from HTML::Microformats::_base. See the
+HTML::Microformats::hAtom inherits from HTML::Microformats::BASE. See the
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
@@ -29,7 +29,7 @@ constructors, etc.
 
 package HTML::Microformats::hAtom;
 
-use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
+use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
@@ -70,7 +70,7 @@ sub extract_all
 {
 	my ($class, $element, $context) = @_;
 	
-	my @feeds = HTML::Microformats::_base::extract_all($class, $element, $context);
+	my @feeds = HTML::Microformats::BASE::extract_all($class, $element, $context);
 	
 	if ($element->tagName eq 'html' || !@feeds)
 	{
@@ -182,7 +182,7 @@ Please report any bugs to L<http://rt.cpan.org/>.
 
 =head1 SEE ALSO
 
-L<HTML::Microformats::_base>,
+L<HTML::Microformats::BASE>,
 L<HTML::Microformats>,
 L<HTML::Microformats::hEntry>,
 L<HTML::Microformats::hNews>.

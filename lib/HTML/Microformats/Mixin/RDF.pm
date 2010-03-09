@@ -1,4 +1,4 @@
-package HTML::Microformats::_simple_rdf;
+package HTML::Microformats::Mixin::RDF;
 
 use common::sense;
 use 5.008;
@@ -32,7 +32,7 @@ sub _simple_rdf
 
 		foreach my $val (@$vals)
 		{
-			my $can_id      =   ref $val  && $val->can('id');
+			my $can_id      = ref $val && $val->can('id');
 			my $seems_bnode = ($val =~ /^_:\S+$/);
 			my $seems_uri   = ($val =~ /^[a-z0-9\.\+\-]{1,20}:\S+$/);
 
@@ -71,15 +71,31 @@ sub _simple_rdf
 				{
 					my $trine_node;
 					
-					if (UNIVERSAL::isa($val, 'HTML::Microformats::Datatypes::String'))
+					if (UNIVERSAL::can($val, 'to_string')
+					and UNIVERSAL::can($val, 'datatype'))
 					{
 						$trine_node = RDF::Trine::Node::Literal->new(
-							$val->to_string, $val->{'lang'});
+							$val->to_string, undef, $val->datatype);
 					}
-					# elsif MagicDuration, MagicInterval, DateTime.
+					elsif (UNIVERSAL::can($val, 'to_string')
+					   and UNIVERSAL::can($val, 'lang'))
+					{
+						$trine_node = RDF::Trine::Node::Literal->new(
+							$val->to_string, $val->lang);
+					}
 					else
 					{
-						$trine_node = RDF::Trine::Node::Literal->new($val);
+						my $dt = $rdf->{'literal_datatype'};
+						if (defined $dt and length $dt and $dt !~ /:/)
+						{
+							$dt = 'http://www.w3.org/2001/XMLSchema#'.$dt;
+						}
+						if ($dt eq 'http://www.w3.org/2001/XMLSchema#integer')
+						{
+							$dt = int $dt;
+						}
+						
+						$trine_node = RDF::Trine::Node::Literal->new($val, undef, $dt);
 					}
 					
 					$model->add_statement(RDF::Trine::Statement->new(
@@ -99,14 +115,14 @@ __END__
 
 =head1 NAME
 
-HTML::Microformats::_simple_rdf - RDF output mixin
+HTML::Microformats::Mixin::RDF - RDF output mixin
 
 =head1 DESCRIPTION
 
-HTML::Microformats::_simple_rdf provides some utility code for microformat
+HTML::Microformats::Mixin::RDF provides some utility code for microformat
 modules to more easily output RDF.
 
-HTML::Microformats::_base inherits from this, so by extension, all the
+HTML::Microformats::BASE inherits from this, so by extension, all the
 microformat modules do too.
 
 =head1 BUGS

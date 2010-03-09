@@ -2,7 +2,7 @@ package HTML::Microformats::hCard::_vt;
 
 # _vt = value+type structures.
 
-use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
+use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 

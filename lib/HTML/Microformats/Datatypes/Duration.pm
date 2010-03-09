@@ -20,7 +20,6 @@ our @EXPORT_OK = qw(compare add subtract);
 
 use DateTime;
 use DateTime::Duration;
-use HTML::Microformats::_simple_parser;
 use HTML::Microformats::_util qw(searchClass stringify);
 
 =head1 DESCRIPTION
@@ -359,8 +358,6 @@ sub duration
 
 Returns an ISO 8601 formatted string representing the duration.
 
-=back
-
 =cut
 
 sub to_string
@@ -399,6 +396,26 @@ sub to_string
 	$str =~ s/T$//;
 	
 	return $str;
+}
+
+sub TO_JSON
+{
+	my $self = shift;
+	return $self->to_string;
+}
+
+=item C<< $d->datatype >>
+
+Returns an the RDF datatype URI representing the data type of this literal.
+
+=back
+
+=cut
+
+sub datatype
+{
+	my $self = shift;
+	return 'http://www.w3.org/2001/XMLSchema#duration';
 }
 
 =head2 Functions

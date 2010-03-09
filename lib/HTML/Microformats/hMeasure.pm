@@ -1,6 +1,6 @@
 package HTML::Microformats::hMeasure;
 
-use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
+use base qw(HTML::Microformats::BASE);
 use common::sense;
 use 5.008;
 

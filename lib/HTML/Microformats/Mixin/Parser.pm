@@ -1,4 +1,4 @@
-package HTML::Microformats::_simple_parser;
+package HTML::Microformats::Mixin::Parser;
 
 use common::sense;
 use 5.008;
@@ -8,8 +8,8 @@ use HTML::Microformats::adr;
 use HTML::Microformats::Datatypes;
 use HTML::Microformats::geo;
 use HTML::Microformats::hAtom;
+use HTML::Microformats::hCalendar;
 use HTML::Microformats::hCard;
-use HTML::Microformats::hEntry;
 use HTML::Microformats::hMeasure;
 use HTML::Microformats::RelEnclosure;
 use HTML::Microformats::RelLicense;
@@ -322,6 +322,7 @@ sub _simple_parse_found_error
 #  ** = plural, optional, and funny behaviour with embedded microformats
 #  d  = date
 #  D  = duration
+#  e  = exrule/rrule
 #  i  = interval
 #  h  = HTML
 #  H  = HTML and Text (HTML value is prefixed 'html_')
@@ -462,18 +463,19 @@ sub _simple_parse
 				if ($uf eq '!person')
 				{
 					# This is used as a last-ditch attempt to parse a person.
-					##TODO## @node_parsed_objects = Swignition::uF::hCalendar::parsePerson($page, $node);
+					my $obj = HTML::Microformats::hCard->new_fallback($node, $self->context);
+					push @node_parsed_objects, $obj;
 				}
 				elsif ($node->getAttribute('class') =~ /\b($uf_class)\b/)
 				{
 					my $pkg = 'HTML::Microformats::'.$uf;
-					my $obj = eval "${pkg}->new(\$node, \$self->context, \$class_options->{'is-in-ical'});";
+					my $obj = eval "${pkg}->new(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-ical'});";
 					push @node_parsed_objects, $obj;
 				}
 				else
 				{
 					my $pkg = 'HTML::Microformats::'.$uf;
-					my @all = eval "${pkg}->extract_all(\$node, \$self->context, \$class_options->{'is-in-ical'});";
+					my @all = eval "${pkg}->extract_all(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-ical'});";
 					push @node_parsed_objects, @all if @all;
 				}
 				
@@ -727,12 +729,18 @@ sub _simple_parse
 		{
 			my $joiner = ($type =~ /u/i) ? ' ' : '';
 			$joiner = $class_options->{'concatenate-with'}
-				if (defined $class_options->{'concatenate-with'});
-				
-			my $value = join $joiner, @parsed_values;
-			@parsed_values = ($value);
-			$value = join $joiner, @parsed_values_alternatives;
-			@parsed_values_alternatives = ($value);
+				if defined $class_options->{'concatenate-with'};
+			
+			if (@parsed_values)
+			{
+				my $value = join $joiner, @parsed_values;
+				@parsed_values = ($value);
+			}
+			if (@parsed_values_alternatives)
+			{
+				my $value = join $joiner, @parsed_values_alternatives;
+				@parsed_values_alternatives = ($value);
+			}
 		}
 		
 		# Check which values are acceptable.
@@ -810,6 +818,29 @@ sub _simple_parse
 				}
 				next;
 			}
+			# Check intervals are OK
+			elsif ($type =~ /e/)
+			{
+				my $D;
+				if (HTML::Microformats::Datatypes::String::isms($value))
+				{
+					$D = HTML::Microformats::Datatypes::RecurringDateTime->parse($value->{string}, $value->{dom}, $page)
+				}
+				else
+				{
+					$D = HTML::Microformats::Datatypes::RecurringDateTime->parse($value, undef, $page)
+				}
+				if ($D)
+				{
+					push @acceptable_values, $D;
+					push @acceptable_values_nodes, $parsed_values_nodes[$i];
+				}
+				else
+				{
+					$self->_simple_parse_found_error('E', "$class could not be parsed as an interval.");
+				}
+				next;
+			}
 			# Everything else we won't bother to check if it's OK.
 			else
 			{
@@ -862,6 +893,15 @@ sub _simple_parse
 				}
 			}
 		}
+		
+		# for classes called 'uid', special handling.
+		if ($class eq 'uid' and !defined $self->{'DATA'}->{$object_key})
+		{
+			if ($root->hasAttribute('id') and length $root->getAttribute('id'))
+			{
+				$self->{'DATA'}->{$object_key} = $self->context->uri('#'.$root->getAttribute('id'));
+			}
+		}
 	}
 }
 
@@ -883,11 +923,11 @@ __END__
 
 =head1 NAME
 
-HTML::Microformats::_simple_parser - microformat parsing mixin
+HTML::Microformats::Mixin::Parser - microformat parsing mixin
 
 =head1 DESCRIPTION
 
-HTML::Microformats::_simple_parser implements a number of functions that
+HTML::Microformats::Mixin::Parser implements a number of private methods that
 take care of the bulk of parsing complex, compound microformats.
 
 Many of the individual microformat modules multi-inherit from this.

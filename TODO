@@ -1,11 +1,3 @@
-hCalendar
-hEvent
-hAlarm
-hFreebusy
-hTodo
-
-release 0.00_03
-
 class=value-title pattern
 hResume
 hReview

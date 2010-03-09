@@ -17,7 +17,7 @@ HTML::Microformats::hCard - the hCard microformat
 
 =head1 DESCRIPTION
 
-HTML::Microformats::hCard inherits from HTML::Microformats::_base. See the
+HTML::Microformats::hCard inherits from HTML::Microformats::BASE. See the
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
@@ -25,7 +25,7 @@ constructors, etc.
 
 package HTML::Microformats::hCard;
 
-use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
+use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
@@ -39,7 +39,7 @@ use HTML::Microformats::hCard::impp;
 
 sub new
 {
-	my ($class, $element, $context) = @_;
+	my ($class, $element, $context, %options) = @_;
 	my $cache = $context->cache;
 	
 	return $cache->get($context, $element, $class)
@@ -54,7 +54,7 @@ sub new
 		};
 	
 	##TODO - detect if we're inside an hCalendar component.
-	$self->{'in_hcalendar'} = 0;
+	$self->{'in_hcalendar'} = $options{'in_hcalendar'};
 	
 	bless $self, $class;
 	
@@ -126,6 +126,53 @@ sub new
 	$cache->set($context, $element, $class, $self)
 		if defined $cache;
 	
+	return $self;
+}
+
+sub new_fallback
+{
+	my ($class, $element, $context, %options) = @_;
+	my $cache = $context->cache;
+	
+	return $cache->get($context, $element, $class)
+		if defined $cache && $cache->get($context, $element, $class);
+	
+	my $self = {
+		'element'    => $element ,
+		'context'    => $context ,
+		'cache'      => $cache ,
+		'id'         => $context->make_bnode($element) ,
+		'id.holder'  => $context->make_bnode ,
+		};
+	
+	bless $self, $class;
+	
+	$self->{'DATA'}->{'fn'} = stringify($element);
+
+	if ($element->getAttribute('href') =~ /^mailto\:/i)
+	{
+		push @{$self->{'DATA'}->{'email'}}, HTML::Microformats::hCard::email->new($element, $context);
+	}
+	elsif ($element->getAttribute('href') =~ /^(tel|fax|modem)\:/i)
+	{
+		push @{$self->{'DATA'}->{'tel'}}, HTML::Microformats::hCard::email->new($element, $context);
+	}
+	elsif ($element->hasAttribute('href'))
+	{
+		push @{$self->{'DATA'}->{'url'}}, $context->uri( $element->getAttribute('href') );
+	}
+	elsif ($element->tagName eq 'img' and $element->hasAttribute('src'))
+	{
+		push @{$self->{'DATA'}->{'photo'}}, $context->uri( $element->getAttribute('src') );
+	}
+
+	# Detect kind ('individual', 'org', etc)
+	$self->_detect_kind;
+	
+	# Perform N-optimisation.
+	$self->_n_optimisation
+		if lc $self->data->{'kind'} eq 'individual';
+
 	return $self;
 }
 
@@ -259,6 +306,7 @@ sub format_signature
 	my $self  = shift;
 	my $vcard = 'http://www.w3.org/2006/vcard/ns#';
 	my $vx    = 'http://buzzword.org.uk/rdf/vcardx#';
+	my $ical  = 'http://www.w3.org/2002/12/cal/icaltzd#';
 	my $ix    = 'http://buzzword.org.uk/rdf/icalx#';
 	my $geo   = 'http://www.w3.org/2003/01/geo/wgs84_pos#';
 
@@ -316,16 +364,16 @@ sub format_signature
 		'rdf:type' => ["${vcard}VCard"] ,
 		'rdf:property' => {
 			'adr'              => { 'resource' => ["${vcard}adr"] } ,
-			'agent'            => { 'resource' => ["${vcard}agent"] , 'literal' => ["${vx}agent"] } ,
+			'agent'            => { 'resource' => ["${vcard}agent"] , 'literal' => ["${vx}agent-literal"] } ,
 			'anniversary'      => { 'literal'  => ["${vx}anniversary"] },
 			'bday'             => { 'literal'  => ["${vcard}bday"] },
-			'birth'            => { 'resource' => ["${vx}birth"] ,    'literal'  => ["${vx}birth"] },
+			'birth'            => { 'resource' => ["${vx}birth"] ,    'literal'  => ["${vx}birth-literal"] },
 			'caladruri'        => { 'resource' => ["${vx}caladruri"] },
 			'caluri'           => { 'resource' => ["${vx}caluri"] },
 			'category'         => { 'resource' => ["${vx}category", 'http://www.holygoat.co.uk/owl/redwood/0.1/tags/taggedWithTag'] , 'literal' => ["${vcard}category"]},
 			'class'            => { 'literal'  => ["${vcard}class"] },
 			'dday'             => { 'literal'  => ["${vx}dday"] },
-			'death'            => { 'resource' => ["${vx}death"] ,    'literal'  => ["${vx}death"] },
+			'death'            => { 'resource' => ["${vx}death"] ,    'literal'  => ["${vx}death-literal"] },
 			'email'            => { 'resource' => ["${vcard}email"] },
 			'fn'               => { 'literal'  => ["${vcard}fn", "http://www.w3.org/2000/01/rdf-schema#label"] },
 			'fburl'            => { 'resource' => ["${vx}fburl"] },
@@ -354,11 +402,11 @@ sub format_signature
 			'tz'               => { 'literal'  => ["${vcard}tz"] },
 			'uid'              => { 'resource' => ["${vcard}uid"], 'literal'  => ["${vcard}uid"] },
 			'url'              => { 'resource' => ["${vcard}url"] },
-			'cn'               => { 'literal'  => ["${ix}cn"] },
-			'cutype'           => { 'literal'  => ["${ix}cutype"] },
-			'rsvp'             => { 'literal'  => ["${ix}rsvp"] },
-			'delegated-from'   => { 'resource' => ["${ix}delegatedFrom"] , 'literal' => ["${ix}delegatedFrom"] },
-			'sent-by'          => { 'resource' => ["${ix}sentBy"] ,        'literal' => ["${ix}sentBy"] },
+			'cn'               => { 'literal'  => ["${ical}cn"] },
+			'cutype'           => { 'literal'  => ["${ical}cutype"] },
+			'rsvp'             => { 'literal'  => ["${ical}rsvp"] },
+			'delegated-from'   => { 'resource' => ["${ix}delegatedFrom"] , 'literal' => ["${ical}delegatedFrom"] },
+			'sent-by'          => { 'resource' => ["${ix}sentBy"] ,        'literal' => ["${ical}sentBy"] },
 		},
 	};
 	
@@ -527,7 +575,7 @@ Please report any bugs to L<http://rt.cpan.org/>.
 
 =head1 SEE ALSO
 
-L<HTML::Microformats::_base>,
+L<HTML::Microformats::BASE>,
 L<HTML::Microformats>.
 
 =head1 AUTHOR

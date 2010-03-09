@@ -10,23 +10,30 @@ Home page:    <http://search.cpan.org/dist/HTML-Microformats/>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
+0.00_03 [2010-03-09]
+ - (Addition) hCalendar support.
+ - Rename _base.pm to BASE.pm; _simple_parser.pm to Mixin/Parser.pm;
+   _simple_rdf.pm to Mixin/RDF.pm; _rel.pm to BASEREL.pm.
+ - Document BASE microformat class.
+ - (Addition) RecurringDateTime datatype.
+
 0.00_02 [2010-03-01]
- - (Addition) rel-license support.
+ - Document geo, adr, XFN and hAtom support.
  - Split out some common rel-X parsing into HTML::Microformats::_rel.
  - (Addition) rel-enclosure support.
- - Document geo, adr, XFN and hAtom support.
  - (Addition) Support for hAtom and hNews.
+ - (Addition) rel-license support.
 
 0.00_01 [2010-02-24]
- - Document HTML::Microformats::hCard.
- - (Addition) Draft 'species' microformat support.
- - (Addition) XFN support.
- - Improve hCard type+value property parsing.
  - Copyright statements now reflect the fact that much of this code comes
    from 2008.
  - (Addition) Draft 'hMeasure' microformat support.
+ - (Addition) XFN support.
+ - (Addition) Draft 'species' microformat support.
  - (Addition) Figure out which hCard on a page is the 'representative' one
    (for the purposes of XFN).
+ - Document HTML::Microformats::hCard.
+ - Improve hCard type+value property parsing.
 
 0.00_00 [2010-02-19]
 

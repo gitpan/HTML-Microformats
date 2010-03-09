@@ -19,7 +19,7 @@ our @EXPORT    = qw();
 our @EXPORT_OK = qw(compare);
 
 use DateTime::Span;
-use HTML::Microformats::_simple_parser;
+use HTML::Microformats::_util qw(stringify searchClass);
 use HTML::Microformats::Datatypes::Duration;
 
 =head1 DESCRIPTION
@@ -136,8 +136,7 @@ sub parse
 			NODE: foreach my $n (@nodes)
 			{
 				$time->{$prop} = HTML::Microformats::Datatypes::DateTime->parse(
-					HTML::Microformats::_simple_parser->stringify($nodes[0], undef, 1),
-					$nodes[0], $page);
+					stringify($nodes[0], undef, 1),	$nodes[0], $page);
 				last NODE if ($time->{$prop});
 			}
 		}
@@ -147,16 +146,12 @@ sub parse
 			NODE: foreach my $n (@nodes)
 			{
 				$time->{$prop} = HTML::Microformats::Datatypes::DateTime->parse(
-					HTML::Microformats::_simple_parser->stringify($nodes[0], undef, 1),
-					$nodes[0],
-					$page,
-					undef,
-					($time->{start} || $time->{after})
+					stringify($nodes[0], undef, 1),	$nodes[0], $page, undef, ($time->{start} || $time->{after})
 				);
 				last NODE if ($time->{$prop});
 			}
 		}
-
+		
 		if (($time->{start}||$time->{after})
 		&&  ($time->{end}||$time->{before}))
 		{
@@ -192,8 +187,7 @@ sub parse
 				$endlabel    => ($time->{end}||$time->{before})
 			);
 			$rv->{i} = $span if ($span);
-		}
-		
+		}		
 	}
 
 	if ($rv->{i})
@@ -226,8 +220,6 @@ sub span
 
 Returns an ISO 8601 formatted string representing the interval.
 
-=back
-
 =cut
 
 sub to_string
@@ -235,7 +227,27 @@ sub to_string
 	my $this = shift;
 	my $D    = HTML::Microformats::Datatypes::Duration->new($this->{i}->duration);
 	
-	return $this->{i}->start.'/'."$D";
+	return $this->{i}->start . "/$D";
+}
+
+sub TO_JSON
+{
+	my $this = shift;
+	return $this->to_string;
+}
+
+=item C<< $d->datatype >>
+
+Returns an the RDF datatype URI representing the data type of this literal.
+
+=back
+
+=cut
+
+sub datatype
+{
+	my $self = shift;
+	return 'urn:iso:std:iso:8601#timeInterval';
 }
 
 =head2 Function

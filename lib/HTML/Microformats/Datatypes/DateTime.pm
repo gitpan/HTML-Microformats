@@ -177,13 +177,41 @@ sub _microformat_datetime_helper
 	return $dt;
 }
 
+
+=head2 Public Methods
+
+=over 4
+
+=item C<< $d->datatype >>
+
+Returns an the RDF datatype URI representing the data type of this literal.
+
+=back
+
+=cut
+
+sub datatype
+{
+	my $self = shift;
+	
+	if($self->{datatype})
+		{ return $self->{datatype}; }
+	elsif ($self->{resolution} eq 'year')
+		{ return 'http://www.w3.org/2001/XMLSchema#gYear'; }
+	elsif ($self->{resolution} eq 'month')
+		{ return 'http://www.w3.org/2001/XMLSchema#gYearMonth'; }
+	elsif ($self->{resolution} eq 'day')
+		{ return 'http://www.w3.org/2001/XMLSchema#date'; }
+		
+	return 'http://www.w3.org/2001/XMLSchema#dateTime';
+}
+
 sub TO_JSON
 {
 	return "$_[0]";
 }
 
 1;
-
 
 __END__
 

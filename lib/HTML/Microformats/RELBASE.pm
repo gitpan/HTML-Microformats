@@ -1,6 +1,6 @@
-package HTML::Microformats::_rel;
+package HTML::Microformats::RELBASE;
 
-use base qw(HTML::Microformats::_base);
+use base qw(HTML::Microformats::BASE);
 use common::sense;
 use 5.008;
 

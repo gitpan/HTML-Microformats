@@ -25,7 +25,7 @@ HTML::Microformats::hEntry is a helper module for HTML::Microformats::hAtom.
 This class is used to represent entries within feeds. Generally speaking, you want to
 use HTML::Microformats::hAtom instead.
 
-HTML::Microformats::hEntry inherits from HTML::Microformats::_base. See the
+HTML::Microformats::hEntry inherits from HTML::Microformats::BASE. See the
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
@@ -33,13 +33,14 @@ constructors, etc.
 
 package HTML::Microformats::hEntry;
 
-use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
+use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
 use HTML::Microformats::_util qw(searchClass searchAncestorClass stringify);
 use HTML::Microformats::Datatypes::String qw(isms);
 use HTML::Microformats::hCard;
+use HTML::Microformats::hEvent;
 use HTML::Microformats::hNews;
 
 sub new
@@ -252,6 +253,8 @@ sub add_to_model
 	
 	foreach my $field (qw(title summary))
 	{
+		next unless length $self->data->{"html_$field"};
+		
 		$self->{'id.'.$field} = $self->context->make_bnode
 			unless defined $self->{'id.'.$field};
 		
@@ -271,8 +274,7 @@ sub add_to_model
 			$self->id(1, $field),
 			RDF::Trine::Node::Resource->new("${awol}xhtml"),
 			RDF::Trine::Node::Literal->new($self->data->{"html_$field"}, undef, "${rdf}XMLLiteral"),
-			))
-			if defined $self->data->{"html_$field"};
+			));
 
 		if (isms($self->data->{$field}))
 		{
@@ -294,9 +296,11 @@ sub add_to_model
 
 	foreach my $field (qw(content))
 	{
+		next unless length $self->data->{"html_$field"};
+		
 		$self->{'id.'.$field} = $self->context->make_bnode
 			unless defined $self->{'id.'.$field};
-		
+
 		$model->add_statement(RDF::Trine::Statement->new(
 			$self->id(1),
 			RDF::Trine::Node::Resource->new("${awol}${field}"),
@@ -438,6 +442,8 @@ sub add_to_model
 				));
 		}
 	}
+	
+	HTML::Microformats::hEvent::_add_to_model_related($self, $model);
 
 	return $self;
 }
@@ -457,7 +463,7 @@ Please report any bugs to L<http://rt.cpan.org/>.
 
 =head1 SEE ALSO
 
-L<HTML::Microformats::_base>,
+L<HTML::Microformats::BASE>,
 L<HTML::Microformats>,
 L<HTML::Microformats::hAtom>,
 L<HTML::Microformats::hNews>.

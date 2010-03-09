@@ -18,7 +18,7 @@ HTML::Microformats::XFN - the XFN microformat
 
 =head1 DESCRIPTION
 
-HTML::Microformats::XFN inherits from HTML::Microformats::_base. See the
+HTML::Microformats::XFN inherits from HTML::Microformats::BASE. See the
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
@@ -26,7 +26,7 @@ constructors, etc.
 
 package HTML::Microformats::XFN;
 
-use base qw(HTML::Microformats::_base);
+use base qw(HTML::Microformats::BASE);
 use common::sense;
 use 5.008;
 
@@ -402,7 +402,7 @@ sub _xfn_relationship_types
 
 =over 4
 
-=item C<< $xfn->subject_hcard>>
+=item C<< $xfn->subject_hcard >>
 
 Returns the hCard for the subject of the relationship. e.g. if Mary has parent Sue, then
 Mary is the subject.
@@ -417,7 +417,7 @@ sub subject_hcard
 	return $self->context->representative_hcard;
 }
 
-=item C<< $xfn->object_hcard>>
+=item C<< $xfn->object_hcard >>
 
 Returns the hCard for the object of the relationship. e.g. if Mary has parent Sue, then
 Sue is the object.
@@ -462,7 +462,7 @@ Please report any bugs to L<http://rt.cpan.org/>.
 
 =head1 SEE ALSO
 
-L<HTML::Microformats::_base>,
+L<HTML::Microformats::BASE>,
 L<HTML::Microformats>,
 L<HTML::Microformats::hCard>.
 

@@ -18,7 +18,7 @@ HTML::Microformats::geo - the geo microformat
 
 =head1 DESCRIPTION
 
-HTML::Microformats::geo inherits from HTML::Microformats::_base. See the
+HTML::Microformats::geo inherits from HTML::Microformats::BASE. See the
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
@@ -26,7 +26,7 @@ constructors, etc.
 
 package HTML::Microformats::geo;
 
-use base qw(HTML::Microformats::_base HTML::Microformats::_simple_parser);
+use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
@@ -206,7 +206,7 @@ Please report any bugs to L<http://rt.cpan.org/>.
 
 =head1 SEE ALSO
 
-L<HTML::Microformats::_base>,
+L<HTML::Microformats::BASE>,
 L<HTML::Microformats>,
 L<HTML::Microformats::hCard>.
 

@@ -3,6 +3,7 @@ package HTML::Microformats::Datatypes;
 use HTML::Microformats::Datatypes::DateTime;
 use HTML::Microformats::Datatypes::Duration;
 use HTML::Microformats::Datatypes::Interval;
+use HTML::Microformats::Datatypes::RecurringDateTime;
 use HTML::Microformats::Datatypes::String;
 
 1;

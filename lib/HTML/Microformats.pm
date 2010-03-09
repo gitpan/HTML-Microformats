@@ -28,9 +28,8 @@ use HTML::Microformats::adr;
 use HTML::Microformats::geo;
 use HTML::Microformats::hAtom;
 use HTML::Microformats::hCard;
-use HTML::Microformats::hEntry;
+use HTML::Microformats::hCalendar;
 use HTML::Microformats::hMeasure;
-use HTML::Microformats::hNews;
 use HTML::Microformats::RelEnclosure;
 use HTML::Microformats::RelLicense;
 use HTML::Microformats::RelTag;
@@ -42,12 +41,12 @@ use XML::LibXML;
 
 =head1 VERSION
 
-0.00_02
+0.00_03
 
 =cut
 
-our $VERSION = '0.00_02';
-my @Formats = qw(adr geo hAtom hCard hMeasure RelEnclosure RelLicense RelTag species XFN);
+our $VERSION = '0.00_03';
+my @Formats = qw(adr geo hAtom hCalendar hCard hMeasure RelEnclosure RelLicense RelTag species XFN);
 
 =head1 DESCRIPTION
 

@@ -49,7 +49,9 @@ sub new
 	
 	foreach my $e ($document->getElementsByTagName('*'))
 	{
-		$e->setAttribute('data-cpan-html-microformats-nodepath', $e->nodePath)
+		my $np = $e->nodePath;
+		$np =~ s?\*/?\*\[1\]/?g;
+		$e->setAttribute('data-cpan-html-microformats-nodepath', $np)
 	}
 
 	$self->_process_langs($document->documentElement);
@@ -151,7 +153,7 @@ sub make_bnode
 		return 'http://thing-described-by.org/?'.$uri;
 	}
 	
-	return '_:gen' . int(rand(100000));
+	return sprintf('_:gen%04d', $self->{'next_bnode'}++);
 }
 
 =item C<< $context->profiles >>
