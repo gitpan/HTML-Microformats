@@ -72,12 +72,31 @@ my:v_0_00_03
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_03.tar.gz> ;
 	rdfs:comment    "Adds hCalendar."@en ;
 	dcs:changeset [
-			dcs:versus my:v_0_00_01 ;
+			dcs:versus my:v_0_00_02 ;
 			dcs:item
 				[ rdfs:label "Rename _base.pm to BASE.pm; _simple_parser.pm to Mixin/Parser.pm; _simple_rdf.pm to Mixin/RDF.pm; _rel.pm to BASEREL.pm."@en ] ,
 				[ rdfs:label "hCalendar support."@en ; a dcs:Addition ] ,
 				[ rdfs:label "Document BASE microformat class."@en ] ,
 				[ rdfs:label "RecurringDateTime datatype."@en ; a dcs:Addition ]
+		] .
+
+my:v_0_00_04
+
+	a               :Version ;
+	dc:issued       "2010-03-20"^^xsd:date ;
+	:revision       "0.00_04"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_04.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0_00_03 ;
+			dcs:item
+				[ rdfs:label "Problems parsing hCard org properties resolved."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "hMeasure.pm wasn't inheriting properly from BASE.pm."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "Implement class=value-title support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Implement implied date for hCalendar dtend and hAtom updated properties."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Improvements in natural language date parsing."@en ] ,
+				[ rdfs:label "UTF8 fixes."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "hResume support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "hReview support."@en ; a dcs:Addition ]
 		] .
 
 #############################################################
@@ -98,7 +117,7 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-02-08"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0_00_00 , my:v_0_00_01 , my:v_0_00_02 , my:v_0_00_03 .
+	:release        my:v_0_00_00 , my:v_0_00_01 , my:v_0_00_02 , my:v_0_00_03 , my:v_0_00_04 .
 
 #############################################################
 

@@ -126,13 +126,63 @@
             <rdfs:label xml:lang="en">RecurringDateTime datatype.</rdfs:label>
           </dcs:Addition>
         </dcs:item>
-        <dcs:versus rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01"/>
+        <dcs:versus rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_02"/>
       </rdf:Description>
     </dcs:changeset>
     <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-03-09</dc:issued>
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_03.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_03</revision>
     <rdfs:comment xml:lang="en">Adds hCalendar.</rdfs:comment>
+  </Version>
+  <Version rdf:about="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_04">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Bugfix>
+            <rdfs:label xml:lang="en">Problems parsing hCard org properties resolved.</rdfs:label>
+          </dcs:Bugfix>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Bugfix>
+            <rdfs:label xml:lang="en">hMeasure.pm wasn't inheriting properly from BASE.pm.</rdfs:label>
+          </dcs:Bugfix>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Implement class=value-title support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Implement implied date for hCalendar dtend and hAtom updated properties.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Improvements in natural language date parsing.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Bugfix>
+            <rdfs:label xml:lang="en">UTF8 fixes.</rdfs:label>
+          </dcs:Bugfix>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">hResume support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">hReview support.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_03"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-03-20</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_04.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_04</revision>
   </Version>
   <Project rdf:about="http://search.cpan.org/dist/HTML-Microformats/#project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
@@ -149,6 +199,7 @@
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_01"/>
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_02"/>
     <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_03"/>
+    <release rdf:resource="http://search.cpan.org/dist/HTML-Microformats/#v_0_00_04"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>

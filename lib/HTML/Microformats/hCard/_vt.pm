@@ -47,7 +47,7 @@ sub new
 		{
 			$type->parentNode->removeChild($type);
 		}
-		$self->{'DATA'}->{'value'} = stringify($clone);
+		$self->{'DATA'}->{'value'} = stringify($clone, {'value-title'=>'allow'});
 		$self->{'DATA'}->{'value'} =~ s/(^\s+|\s+$)//g;
 	}
 
@@ -69,8 +69,8 @@ sub format_signature
 	return {
 		'root' => $hclass,
 		'classes' => [
-			['type',  '*'],
-			['value', '&v'],
+			['type',  '*',  {'value-title'=>'allow'}],
+			['value', '&v', {'value-title'=>($hclass eq 'tel' ? 'allow' : undef)}],
 		],
 		'options' => {
 			'no-destroy' => ['adr', 'geo']

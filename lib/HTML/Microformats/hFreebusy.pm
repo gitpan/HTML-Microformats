@@ -77,7 +77,7 @@ sub _parse_freebusy
 	{
 		my @fbtype_nodes = searchClass('fbtype', $fb);
 		next FREEBUSY unless @fbtype_nodes;
-		my $FB = { fbtype => stringify($fbtype_nodes[0]) };
+		my $FB = { fbtype => stringify($fbtype_nodes[0],  {'value-title'=>'allow'}) };
 		
 		my @value_nodes = searchClass('value', $fb);
 		VALUE: foreach my $v (@value_nodes)

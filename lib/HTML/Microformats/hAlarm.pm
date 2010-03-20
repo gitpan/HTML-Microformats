@@ -75,12 +75,12 @@ sub format_signature
 	return {
 		'root' => 'valarm',
 		'classes' => [
-			['action',       '?'],
+			['action',       '?',  {'value-title'=>'allow'}],
 			['attach',       'U?'],
 			['attendee',     'M*', {'embedded'=>'hCard', 'is-in-cal'=>1}],
 			['description',  '?'],
 			['duration',     'D?'],
-			['repeat',       'n?'],
+			['repeat',       'n?', {'value-title'=>'allow'}],
 			['trigger',      'D?'] # TODO: should really allow 'related' 
 			                       # subproperty and allow datetime values too.
 		],

@@ -19,6 +19,8 @@ use base qw(Exporter);
 our @EXPORT    = qw(ms isms);
 our @EXPORT_OK = qw(ms isms concat compare);
 
+use Encode;
+
 =head1 DESCRIPTION
 
 =head2 Constructor

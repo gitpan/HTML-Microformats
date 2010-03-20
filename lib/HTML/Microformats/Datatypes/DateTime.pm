@@ -86,7 +86,7 @@ sub _microformat_datetime_helper
 		
 	eval {
 		my $isostring = $string;
-		$isostring =~ s/([\+\-]\d\d)([014][50])$/\1\:\2/;	
+		$isostring =~ s/([\+\-]\d\d)([014][50])$/$1\:$2/;	
 		$dt = $f->parse_datetime($isostring);
 		$dt->{resolution} = $f->{resolution};
 		
@@ -181,6 +181,35 @@ sub _microformat_datetime_helper
 =head2 Public Methods
 
 =over 4
+
+=item C<< $d->to_string >>
+
+Returns a literal string.
+
+=cut
+
+sub to_string
+{
+	my $self = shift;
+	my $type = $self->datatype;
+	
+	if ($type eq 'http://www.w3.org/2001/XMLSchema#gYear')
+	{
+		return $self->strftime('%Y');
+	}
+	elsif ($type eq 'http://www.w3.org/2001/XMLSchema#gYearMonth')
+	{
+		return $self->strftime('%Y-%m');
+	}
+	elsif ($type eq 'http://www.w3.org/2001/XMLSchema#date')
+	{
+		return $self->strftime('%Y-%m-%d');
+	}
+	else
+	{
+		return "$self";
+	}
+}
 
 =item C<< $d->datatype >>
 

@@ -3,6 +3,7 @@ package HTML::Microformats::Mixin::RDF;
 use common::sense;
 use 5.008;
 
+use Encode qw(encode);
 use RDF::Trine;
 
 sub _simple_rdf
@@ -11,6 +12,9 @@ sub _simple_rdf
 	my $model = shift;
 
 	my $id    = $self->id(1);
+
+	return if $self->{'already_added'}->{"$model"};
+	$self->{'already_added'}->{"$model"}++;
 
 	foreach my $rdftype (@{ $self->format_signature->{'rdf:type'} })
 	{
@@ -69,43 +73,45 @@ sub _simple_rdf
 			{
 				foreach my $prop (@{ $rdf->{'literal'} })
 				{
-					my $trine_node;
-					
-					if (UNIVERSAL::can($val, 'to_string')
-					and UNIVERSAL::can($val, 'datatype'))
-					{
-						$trine_node = RDF::Trine::Node::Literal->new(
-							$val->to_string, undef, $val->datatype);
-					}
-					elsif (UNIVERSAL::can($val, 'to_string')
-					   and UNIVERSAL::can($val, 'lang'))
-					{
-						$trine_node = RDF::Trine::Node::Literal->new(
-							$val->to_string, $val->lang);
-					}
-					else
-					{
-						my $dt = $rdf->{'literal_datatype'};
-						if (defined $dt and length $dt and $dt !~ /:/)
-						{
-							$dt = 'http://www.w3.org/2001/XMLSchema#'.$dt;
-						}
-						if ($dt eq 'http://www.w3.org/2001/XMLSchema#integer')
-						{
-							$dt = int $dt;
-						}
-						
-						$trine_node = RDF::Trine::Node::Literal->new($val, undef, $dt);
-					}
-					
 					$model->add_statement(RDF::Trine::Statement->new(
 						$id,
 						RDF::Trine::Node::Resource->new($prop),
-						$trine_node,
+						$self->_make_literal($val, $rdf->{'literal_datatype'}),
 						));
 				}
 			}
 		}
+	}
+}
+
+sub _make_literal
+{
+	my ($self, $val, $dt) = @_;
+	
+	if (UNIVERSAL::can($val, 'to_string')
+	and UNIVERSAL::can($val, 'datatype'))
+	{
+		return RDF::Trine::Node::Literal->new(
+			encode('utf8', $val->to_string), undef, $val->datatype);
+	}
+	elsif (UNIVERSAL::can($val, 'to_string')
+		and UNIVERSAL::can($val, 'lang'))
+	{
+		return RDF::Trine::Node::Literal->new(
+			encode('utf8', $val->to_string), $val->lang);
+	}
+	else
+	{
+		if (defined $dt and length $dt and $dt !~ /:/)
+		{
+			$dt = 'http://www.w3.org/2001/XMLSchema#'.$dt;
+		}
+		if ($dt eq 'http://www.w3.org/2001/XMLSchema#integer')
+		{
+			$val = int $val;
+		}
+		
+		return RDF::Trine::Node::Literal->new(encode('utf8', $val), undef, $dt);
 	}
 }
 
@@ -120,9 +126,13 @@ HTML::Microformats::Mixin::RDF - RDF output mixin
 =head1 DESCRIPTION
 
 HTML::Microformats::Mixin::RDF provides some utility code for microformat
-modules to more easily output RDF.
+modules to more easily output RDF. It includes methods C<_simple_rdf> which
+takes an RDF::Trine model as a parameter and adds some basic triples to it
+based on the object's format signature; and C<_make_literal> taking either
+a string plus datatype as parameters, or any of the HTML::Microformats::Datatypes
+objects, returning an RDF::Trine::Node::Literal.
 
-HTML::Microformats::BASE inherits from this, so by extension, all the
+HTML::Microformats::BASE inherits from this module, so by extension, all the
 microformat modules do too.
 
 =head1 BUGS

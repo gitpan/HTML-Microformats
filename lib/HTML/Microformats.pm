@@ -30,6 +30,8 @@ use HTML::Microformats::hAtom;
 use HTML::Microformats::hCard;
 use HTML::Microformats::hCalendar;
 use HTML::Microformats::hMeasure;
+use HTML::Microformats::hResume;
+use HTML::Microformats::hReview;
 use HTML::Microformats::RelEnclosure;
 use HTML::Microformats::RelLicense;
 use HTML::Microformats::RelTag;
@@ -41,12 +43,12 @@ use XML::LibXML;
 
 =head1 VERSION
 
-0.00_03
+0.00_04
 
 =cut
 
-our $VERSION = '0.00_03';
-my @Formats = qw(adr geo hAtom hCalendar hCard hMeasure RelEnclosure RelLicense RelTag species XFN);
+our $VERSION = '0.00_04';
+my @Formats = qw(adr geo hAtom hCalendar hCard hMeasure hResume hReview RelEnclosure RelLicense RelTag species XFN);
 
 =head1 DESCRIPTION
 
@@ -323,7 +325,10 @@ Returns data roughly equivalent to the C<all_objects> method, but as a JSON
 string.
 
 %opts is a hash of options, suitable for passing to the L<JSON>
-module's to_json function.
+module's to_json function. The 'convert_blessed' and 'utf8' options are
+enabled by default, but can be disabled by explicitly setting them to 0, e.g.
+
+  print $doc->json( pretty=>1, canonical=>1, utf8=>0 );
 
 =cut
 
@@ -334,6 +339,9 @@ sub json
 	
 	$opts{'convert_blessed'} = 1
 		unless defined $opts{'convert_blessed'};
+
+	$opts{'utf8'} = 1
+		unless defined $opts{'utf8'};
 
 	return to_json($self->all_objects, \%opts);
 }

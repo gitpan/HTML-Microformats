@@ -166,13 +166,6 @@ sub new_fallback
 		push @{$self->{'DATA'}->{'photo'}}, $context->uri( $element->getAttribute('src') );
 	}
 
-	# Detect kind ('individual', 'org', etc)
-	$self->_detect_kind;
-	
-	# Perform N-optimisation.
-	$self->_n_optimisation
-		if lc $self->data->{'kind'} eq 'individual';
-
 	return $self;
 }
 
@@ -324,7 +317,7 @@ sub format_signature
 			['caladruri',   'u*'],   #extension
 			['caluri',      'MMu*',  {'embedded'=>'hCalendar'}], #extension
 			['category',    '*'],
-			['class',       '?'],
+			['class',       '?',     {'value-title'=>'allow'}],
 			['dday',        'd?'],   #extension
 			['death',       'M?',    {'embedded'=>'hCard adr geo'}], #extension
 			['email',       '*#'],
@@ -333,10 +326,10 @@ sub format_signature
 			['gender',      '?'],    #extension
 			['geo',         'm*',    {'embedded'=>'geo'}],
 			['impp',        '*#'],   #extension
-			['kind',        '?'],    #extension
+			['kind',        '?',     {'value-title'=>'allow'}], #extension
 			['key',         'u*'],
 			['label',       '*#'],
-			['lang',        '*'],    #extension
+			['lang',        '*',     {'value-title'=>'allow'}], #extension
 			['logo',        'u*'],
 			['mailer',      '*'],
 			['n',           '*#'],
@@ -351,7 +344,7 @@ sub format_signature
 			['sound',       'u*'],
 			['tel',         '*#'],
 			['title',       '*'],
-			['tz',          '?'],
+			['tz',          '?',     {'value-title'=>'allow'}],
 			['uid',         'U?'],
 			['url',         'u*'],
 		],

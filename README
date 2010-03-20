@@ -13,7 +13,7 @@ SYNOPSIS
      my $results = rdf_query($sparql, $doc->model);
 
 VERSION
-    0.00_03
+    0.00_04
 
 DESCRIPTION
     The HTML::Microformats module is a wrapper for parser and handler
@@ -125,7 +125,11 @@ DESCRIPTION
         a JSON string.
 
         %opts is a hash of options, suitable for passing to the JSON
-        module's to_json function.
+        module's to_json function. The 'convert_blessed' and 'utf8' options
+        are enabled by default, but can be disabled by explicitly setting
+        them to 0, e.g.
+
+          print $doc->json( pretty=>1, canonical=>1, utf8=>0 );
 
     "$doc->model"
         Returns data as an RDF::Trine::Model, suitable for serialising as

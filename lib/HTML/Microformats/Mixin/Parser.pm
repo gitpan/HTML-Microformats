@@ -343,6 +343,8 @@ sub _simple_parse_found_error
 
 sub _simple_parse
 # This was not simple to implement, but should be simple to use.
+# This function takes on too much responsibility.
+# It should delegate stuff.
 {
 	my $self    = shift;
 	my $root    = shift || $self->element;
@@ -487,12 +489,14 @@ sub _simple_parse
 			# If we've found something
 			if (defined $node_parsed_objects[0] && ref $node_parsed_objects[0])
 			{
-				
-				# Remove $class from $node's class list, lest we pick it up again
-				# in the next giant loop!
-				my $new_class_attr = $node->getAttribute('class');
-				$new_class_attr =~ s/\b($class)\b//;
-				$node->setAttribute('class', $new_class_attr);
+				unless ($class_options->{'again-again'})
+				{
+					# Remove $class from $node's class list, lest we pick it up again
+					# in the next giant loop!
+					my $new_class_attr = $node->getAttribute('class');
+					$new_class_attr =~ s/\b($class)\b//;
+					$node->setAttribute('class', $new_class_attr);
+				}
 
 				# If $type contains '**' then allow
 				# <div class="agent">
@@ -682,7 +686,12 @@ sub _simple_parse
 				}
 				else
 				{
-					push @parsed_values, $self->_stringify($node, ($type=~/v/?undef:'value'));
+					push @parsed_values, $self->_stringify($node, 
+						{
+							'excerpt-class' => ($type=~/v/?undef:'value'),
+							'value-title'   => defined $class_options->{'value-title'} ? $class_options->{'value-title'} : (($type=~/[Ddei]/ && $type!~/v/) ? 'allow' : undef),
+							'abbr-pattern'  => 1,
+						});
 					push @parsed_values_nodes, $node;
 					next;
 				}
@@ -703,10 +712,12 @@ sub _simple_parse
 			elsif ($type =~ /d/)
 			{
 				push @parsed_values, $self->_stringify($node, {
+					'value-title'   => defined $class_options->{'value-title'} ? $class_options->{'value-title'} : (($type=~/[Ddei]/ && $type!~/v/) ? 'allow' : undef),
 					'excerpt-class' => ($type=~/v/?undef:'value'),
 					'abbr-pattern'  => 1,
 					'datetime'      => 1,
-					'joiner'        => ' '
+					'joiner'        => ' ',
+					'datetime-feedthrough' => defined $class_options->{'datetime-feedthrough'} ? $self->{'DATA'}->{ $class_options->{'datetime-feedthrough'} } : undef,
 				});
 				push @parsed_values_nodes, $node;
 			}
@@ -717,7 +728,11 @@ sub _simple_parse
 			}
 			else
 			{
-				push @parsed_values, $self->_stringify($node, ($type=~/v/?undef:'value'));
+				push @parsed_values, $self->_stringify($node, {
+						'excerpt-class' => ($type=~/v/?undef:'value'),
+						'value-title'   => defined $class_options->{'value-title'} ? $class_options->{'value-title'} : (($type=~/[Ddei]/ && $type!~/v/) ? 'allow' : undef),
+						'abbr-pattern'  => 1,
+					});
 				push @parsed_values_nodes, $node;
 			}
 

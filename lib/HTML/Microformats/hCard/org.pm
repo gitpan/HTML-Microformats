@@ -5,6 +5,7 @@ use common::sense;
 use 5.008;
 
 use HTML::Microformats::hCard;
+use HTML::Microformats::_util qw(stringify);
 
 sub new
 {
@@ -22,6 +23,18 @@ sub new
 	my $clone = $element->cloneNode(1);	
 	$self->_expand_patterns($clone);
 	$self->_simple_parse($clone);
+	
+	if ($self->element->getAttribute('class') =~ /\b(org)\b/)
+	{
+		unless (defined $self->data->{'organization-name'}
+		or defined $self->data->{'organization-unit'}
+		or defined $self->data->{'x-vat-number'}
+		or defined $self->data->{'x-charity-number'}
+		or defined $self->data->{'x-company-number'})
+		{
+			$self->{'DATA'}->{'organization-name'} = stringify($clone, 'value');
+		}
+	}
 	
 	return $self;
 }

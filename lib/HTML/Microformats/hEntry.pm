@@ -217,7 +217,7 @@ sub format_signature
 			['in-reply-to',     'Ru*'], #extension
 			['published',       'd?'],
 			['replies',         'm*',   {'embedded'=>'hAtom'}], #extension
-			['updated',         'd*'],
+			['updated',         'd*',   {'datetime-feedthrough' => 'published'}],
 			['author',          '#*'],
 		],
 		'options' => {

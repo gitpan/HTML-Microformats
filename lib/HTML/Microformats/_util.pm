@@ -111,7 +111,8 @@ sub searchID
 	}	
 }
 
-
+# This function takes on too much responsibility.
+# It should delegate stuff.
 sub stringify
 {
 	my $dom        = shift;
@@ -131,6 +132,29 @@ sub stringify
 	
 	return unless ($dom);
 
+	# value-title
+	if ($opts{'value-title'} =~ /(allow|require)/i or
+	($opts{'datetime'} && $opts{'value-title'} !~ /(forbid)/i))
+	{
+		KIDDY: foreach my $kid ($dom->childNodes)
+		{
+			next if $kid->nodeName eq '#text' && $kid->textContent !~ /\S/; # skip whitespace
+			
+			last # anything without class='value-title' and a title attribute causes us to bail out.
+				unless
+				$opts{'value-title'} =~ /(lax)/i
+				|| ($kid->can('hasAttribute')
+				&& $kid->hasAttribute('class')
+				&& $kid->hasAttribute('title')
+				&& $kid->getAttribute('class') =~ /\b(value\-title)\b/);
+			
+			my $str = $kid->getAttribute('title');
+			utf8::encode($str);
+			return HTML::Microformats::Datatypes::String::ms($str, $kid);
+		}
+	}
+	return if $opts{'value-title'} =~ /(require)/i;
+
 	# ABBR pattern
 	if ($doABBR)
 	{
@@ -142,32 +166,31 @@ sub stringify
 		}
 		elsif ( ($dom->nodeType==XML_ELEMENT_NODE 
 			&& $dom->tagName eq 'abbr' 
-			&& length $dom->getAttribute('title'))
+			&& $dom->hasAttribute('title'))
 		||   ($dom->nodeType==XML_ELEMENT_NODE 
 			&& $dom->tagName eq 'acronym' 
-			&& length $dom->getAttribute('title'))
+			&& $dom->hasAttribute('title'))
 		||   ($dom->nodeType==XML_ELEMENT_NODE
 			&& $dom->getAttribute('title') =~ /data\:/)
 		)
 		{
 			my $title = $dom->getAttribute('title');
+			utf8::encode($title);
 	
-			if ($title =~ / [\(\[] data\: (.*) [\)\]] /x
+			if ($title =~ / [\(\[\{] data\: (.*) [\)\]\}] /x
 			||  $title =~ / data\: (.*) $ /x )
 				{ $title = $1; }
 	
-			$title = utf8::upgrade($title);
-			$title = '***UTF-8 ERROR (Not UTF-8)***' unless utf8::is_utf8("$title");
-			$title = '***UTF-8 ERROR (Bad UTF-8)***' unless utf8::valid("$title");
-	
-			if (length $title)
+			if (defined $title)
 				{ return (ms $title, $dom); }
 		}
 		elsif ($dom->nodeType==XML_ELEMENT_NODE 
 			&& $opts{'datetime'} 
-			&& length $dom->getAttribute('datetime'))
+			&& $dom->hasAttribute('datetime'))
 		{
-			return HTML::Microformats::Datatypes::String::ms($dom->getAttribute('datetime'), $dom);
+			my $str = $dom->getAttribute('datetime');
+			utf8::encode($str);
+			return HTML::Microformats::Datatypes::String::ms($str, $dom);
 		}
 	}
 	
@@ -181,10 +204,10 @@ sub stringify
 			foreach my $valueNode (@nodes)
 			{
 				push @strs, stringify($valueNode, {
-					'excerpt-class' => undef,
-					'abbr-pattern'  => $doABBR,
-					'datetime'      => $opts{'datetime'},
-					'no-reduce-whitespace' => 1
+					'excerpt-class'   => undef,
+					'abbr-pattern'    => $doABBR,
+					'datetime'        => $opts{'datetime'},
+					'keep-whitespace' => 1
 				});
 			}
 			
@@ -201,20 +224,40 @@ sub stringify
 						{ push @{$dt_things->{'t'}}, $1; }
 					elsif ($x =~ /^\s*([\d-]+)\s*$/i)
 						{ push @{$dt_things->{'d'}}, $1; }
+					elsif ($x =~ /^\s*T?([\d\.\:]+)\s*(Z|[+-]\d{1,2}(\:?\d\d)?)\s*$/i)
+					{
+						push @{$dt_things->{'t'}}, $1;
+						push @{$dt_things->{'z'}}, $2;
+					}
+					elsif ($x =~ /^\s*([\d]+)(?:[:\.](\d+))(?:[:\.](\d+))?\s*([ap])\.?\s*[m]\.?\s*$/i)
+					{
+						my $h = $1;
+						if (uc $4 eq 'P' && $h<12)
+						{
+							$h += 12;
+						}
+						elsif (uc $4 eq 'A' && $h==12)
+						{
+							$h = 0;
+						}
+						my $t = (defined $3) ? sprintf("%02d:%02d:%02d", $h, $2, $3) : sprintf("%02d:%02d", $h, $2);
+						push @{$dt_things->{'t'}}, $t;
+					}
 				}
 				
-				# If multiple date-looking things, multiple time-looking things or
-				# multiple timezone-looking things have been provided, this routine
-				# has probably gone all wrong.
-				unless (defined $dt_things->{'d'}->[1]
-				     || defined $dt_things->{'t'}->[1]
-				     || defined $dt_things->{'z'}->[1])
+				if (defined $opts{'datetime-feedthrough'} && !defined $dt_things->{'d'}->[0])
 				{
-					$str = sprintf("%s %s %s",
-						$dt_things->{'d'}->[0],
-						$dt_things->{'t'}->[0],
-						$dt_things->{'z'}->[0]);
+					push @{ $dt_things->{'d'} }, $opts{'datetime-feedthrough'}->ymd('-');
 				}
+				if (defined $opts{'datetime-feedthrough'} && !defined $dt_things->{'z'}->[0])
+				{
+					push @{ $dt_things->{'z'} }, $opts{'datetime-feedthrough'}->strftime('%z');
+				}
+				
+				$str = sprintf("%s %s %s",
+					$dt_things->{'d'}->[0],
+					$dt_things->{'t'}->[0],
+					$dt_things->{'z'}->[0]);
 			}
 			
 			unless (length $str)
@@ -229,11 +272,49 @@ sub stringify
 		$str = _stringify_helper($dom, $inpre, 0)
 			unless defined $str;
 	};
-	$str = '***UTF-8 ERROR (WTF Happened?)***' if $@;
-	$str = '***UTF-8 ERROR (Not UTF-8)***' unless utf8::is_utf8("$str");
-	$str = '***UTF-8 ERROR (Bad UTF-8)***' unless utf8::valid("$str");
+	#$str = '***UTF-8 ERROR (WTF Happened?)***' if $@;
+	#$str = '***UTF-8 ERROR (Not UTF-8)***' unless utf8::is_utf8("$str");
+	#$str = '***UTF-8 ERROR (Bad UTF-8)***' unless utf8::valid("$str");
+	
+	if ($opts{'datetime'} && defined $opts{'datetime-feedthrough'})
+	{
+		if ($str =~ /^\s*T?([\d\.\:]+)\s*$/i)
+		{
+			$str = sprintf('%s %s %s',
+				$opts{'datetime-feedthrough'}->ymd('-'),
+				$1,
+				$opts{'datetime-feedthrough'}->strftime('%z'),
+				);
+		}
+		elsif ($str =~ /^\s*T?([\d\.\:]+)\s*(Z|[+-]\d{1,2}(\:?\d\d)?)\s*$/i)
+		{
+			$str = sprintf('%s %s %s',
+				$opts{'datetime-feedthrough'}->ymd('-'),
+				$1,
+				$2,
+				);
+		}
+		elsif ($str =~ /^\s*([\d]+)(?:[:\.](\d+))(?:[:\.](\d+))?\s*([ap])\.?\s*[m]\.?\s*$/i)
+		{
+			my $h = $1;
+			if (uc $4 eq 'P' && $h<12)
+			{
+				$h += 12;
+			}
+			elsif (uc $4 eq 'A' && $h==12)
+			{
+				$h = 0;
+			}
+			my $t = (defined $3) ? sprintf("%02d:%02d:%02d", $h, $2, $3) : sprintf("%02d:%02d", $h, $2);
+			$str = sprintf('%s %s %s',
+				$opts{'datetime-feedthrough'}->ymd('-'),
+				$t,
+				$opts{'datetime-feedthrough'}->strftime('%z'),
+				);
+		}
+	}
 
-	unless ($opts{'no-reduce-whitespace'})
+	unless ($opts{'keep-whitespace'})
 	{
 		# \x1D is used as a "soft" line break. It can be "absorbed" into an adjacent
 		# "hard" line break.
@@ -261,11 +342,11 @@ sub _stringify_helper
 	}
 	elsif ($domNode->nodeType == XML_COMMENT_NODE)
 	{
-		return (HTML::Microformats::Datatypes::String::ms(''));
+		return HTML::Microformats::Datatypes::String::ms('');
 	}
 	
 	# Change behaviour within <pre>.
-	$inPRE++ if ($tag eq 'pre');
+	$inPRE++ if $tag eq 'pre';
 	
 	# Text node, or equivalent.
 	if (!$tag || $tag eq 'img' || $tag eq 'input' || $tag eq 'param')
@@ -276,6 +357,8 @@ sub _stringify_helper
 			if $tag && $domNode->hasAttribute('alt');
 		$rv = $domNode->getAttribute('value')
 			if $tag && $domNode->hasAttribute('value');
+
+		utf8::encode($rv);
 
 		unless ($inPRE)
 		{

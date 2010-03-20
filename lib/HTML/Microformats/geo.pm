@@ -30,6 +30,8 @@ use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
+use HTML::Microformats::_util qw(stringify);
+
 sub new
 {
 	my ($class, $element, $context) = @_;
@@ -53,11 +55,20 @@ sub new
 
 	if (!defined($self->{'DATA'}->{'longitude'}) || !defined($self->{'DATA'}->{'latitude'}))
 	{
-		my $str = $clone->toString;
-		$str = $clone->getAttribute('alt')
-			if $clone->localname eq 'img' || $clone->localname eq 'area';
+		my $str = stringify($clone, {
+			'excerpt-class' => 'value',
+			'value-title'   => 'allow',
+			'abbr-pattern'   => 1,
+			});
+		
+		if ($str =~ / ^\s* \+?(\-?[0-9\.]+) \s* [\,\;] \s* \+?(\-?[0-9\.]+) \s*$ /x)
+		{
+			$self->{'DATA'}->{'latitude'}  = $1;
+			$self->{'DATA'}->{'longitude'} = $2;
+		}
 
-		if ($str =~ / \s* \+?(\-?[0-9\.]+) \s* [\,\;] \s* \+?(\-?[0-9\.]+) \s* /x)
+		# Last ditch attempt!!
+		elsif ($clone->toString =~ / \s* \+?(\-?[0-9\.]+) \s* [\,\;] \s* \+?(\-?[0-9\.]+) \s* /x)
 		{
 			$self->{'DATA'}->{'latitude'}  = $1;
 			$self->{'DATA'}->{'longitude'} = $2;
@@ -78,8 +89,8 @@ sub format_signature
 	return {
 		'root' => 'geo',
 		'classes' => [
-			['longitude',        'n?'],
-			['latitude',         'n?'],
+			['longitude',        'n?', {'value-title'=>'allow'}],
+			['latitude',         'n?', {'value-title'=>'allow'}],
 			['body',             '?'], # extension
 			['reference-frame',  '?'], # extension
 			['altitude',         'M?', {embedded=>'hMeasure'}] # extension
