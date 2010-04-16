@@ -23,6 +23,7 @@ lib/HTML/Microformats/Datatypes/String.pm
 lib/HTML/Microformats/geo.pm
 lib/HTML/Microformats/hAlarm.pm
 lib/HTML/Microformats/hAtom.pm
+lib/HTML/Microformats/hAudio.pm
 lib/HTML/Microformats/hCalendar.pm
 lib/HTML/Microformats/hCard/email.pm
 lib/HTML/Microformats/hCard/impp.pm
@@ -37,9 +38,11 @@ lib/HTML/Microformats/hEvent.pm
 lib/HTML/Microformats/hFreebusy.pm
 lib/HTML/Microformats/hMeasure.pm
 lib/HTML/Microformats/hNews.pm
+lib/HTML/Microformats/hRecipe.pm
 lib/HTML/Microformats/hResume.pm
 lib/HTML/Microformats/hReview.pm
 lib/HTML/Microformats/hReview/rating.pm
+lib/HTML/Microformats/hReviewAggregate.pm
 lib/HTML/Microformats/hTodo.pm
 lib/HTML/Microformats/Mixin/Parser.pm
 lib/HTML/Microformats/Mixin/RDF.pm

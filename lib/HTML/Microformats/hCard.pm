@@ -37,6 +37,8 @@ use HTML::Microformats::hCard::email;
 use HTML::Microformats::hCard::label;
 use HTML::Microformats::hCard::impp;
 
+use HTML::Microformats::_util qw(stringify searchClass);
+
 sub new
 {
 	my ($class, $element, $context, %options) = @_;
@@ -485,6 +487,56 @@ sub add_to_model
 				));
 		}
 
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'holder'),
+			RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/name'),
+			$self->_make_literal($self->data->{'fn'}),
+			));
+
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'holder'),
+			RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/gender'),
+			$self->_make_literal($self->data->{'gender'}),
+			))
+			if defined $self->data->{'gender'};
+
+		foreach my $url (@{ $self->data->{'url'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/page'),
+				RDF::Trine::Node::Resource->new($url),
+				));
+		}
+		
+		foreach my $tel (@{ $self->data->{'tel'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/phone'),
+				RDF::Trine::Node::Resource->new($tel->get_value),
+				))
+				if $tel->get_value =~ /^(tel|fax|modem):\S+$/i;
+		}
+		
+		foreach my $photo (@{ $self->data->{'photo'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/depiction'),
+				RDF::Trine::Node::Resource->new($photo),
+				));
+		}
+		
+		foreach my $geo (@{ $self->data->{'geo'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/based_near'),
+				$geo->id(1, 'location'),
+				));
+		}
+		
 		foreach my $species (@{ $self->data->{'species'} })
 		{
 			$model->add_statement(RDF::Trine::Statement->new(
@@ -560,7 +612,11 @@ terms from Toby Inkster's vCard extensions vocabulary
 After long deliberation on the "has-a/is-a issue", the author of this
 module decided that the holder of a vCard and the vCard itself should
 be modelled as two separate resources, and this is how the data is
-returned.
+returned. Some information about the holder of the vCard can be inferred
+from information about the vCard; for instance, the vCard's fn property
+can be used to determin the holder's foaf:name. This module uses FOAF
+(L<http://xmlns.com/foaf/0.1/>) to represent information about the holder
+of the vCard.
 
 =head1 BUGS
 

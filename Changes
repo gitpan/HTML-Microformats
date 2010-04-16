@@ -10,41 +10,47 @@ Home page:    <http://search.cpan.org/dist/HTML-Microformats/>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
+0.00_05 [2010-04-16]
+ - (Addition) hAudio support.
+ - (Addition) hReview-aggregate support.
+ - (Addition) hProduct support.
+ - (Addition) hListing support.
+
 0.00_04 [2010-03-20]
- - (Addition) hResume support.
  - (Addition) Implement implied date for hCalendar dtend and hAtom updated
    properties.
+ - (Addition) hResume support.
+ - (Bugfix) hMeasure.pm wasn't inheriting properly from BASE.pm.
  - (Bugfix) UTF8 fixes.
  - (Bugfix) Problems parsing hCard org properties resolved.
- - (Addition) hReview support.
- - (Bugfix) hMeasure.pm wasn't inheriting properly from BASE.pm.
  - Improvements in natural language date parsing.
  - (Addition) Implement class=value-title support.
+ - (Addition) hReview and xFolk support.
 
 0.00_03 [2010-03-09]
+ - (Addition) hCalendar support.
+ - (Addition) RecurringDateTime datatype.
  - Rename _base.pm to BASE.pm; _simple_parser.pm to Mixin/Parser.pm;
    _simple_rdf.pm to Mixin/RDF.pm; _rel.pm to BASEREL.pm.
  - Document BASE microformat class.
- - (Addition) RecurringDateTime datatype.
- - (Addition) hCalendar support.
 
 0.00_02 [2010-03-01]
- - Split out some common rel-X parsing into HTML::Microformats::_rel.
- - (Addition) Support for hAtom and hNews.
- - (Addition) rel-enclosure support.
  - Document geo, adr, XFN and hAtom support.
  - (Addition) rel-license support.
+ - (Addition) rel-enclosure support.
+ - Split out some common rel-X parsing into HTML::Microformats::_rel.
+ - (Addition) Support for hAtom and hNews.
 
 0.00_01 [2010-02-24]
+ - (Addition) Draft 'hMeasure' microformat support.
+ - Improve hCard type+value property parsing.
  - Copyright statements now reflect the fact that much of this code comes
    from 2008.
- - (Addition) Draft 'hMeasure' microformat support.
- - (Addition) Draft 'species' microformat support.
  - (Addition) Figure out which hCard on a page is the 'representative' one
    (for the purposes of XFN).
- - (Addition) XFN support.
- - Improve hCard type+value property parsing.
  - Document HTML::Microformats::hCard.
+ - (Addition) XFN support.
+ - (Addition) Draft 'species' microformat support.
 
 0.00_00 [2010-02-19]
 

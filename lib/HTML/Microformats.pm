@@ -27,11 +27,16 @@ use HTML::Microformats::_context;
 use HTML::Microformats::adr;
 use HTML::Microformats::geo;
 use HTML::Microformats::hAtom;
+use HTML::Microformats::hAudio;
 use HTML::Microformats::hCard;
 use HTML::Microformats::hCalendar;
+use HTML::Microformats::hListing;
 use HTML::Microformats::hMeasure;
+use HTML::Microformats::hProduct;
+use HTML::Microformats::hRecipe;
 use HTML::Microformats::hResume;
 use HTML::Microformats::hReview;
+use HTML::Microformats::hReviewAggregate;
 use HTML::Microformats::RelEnclosure;
 use HTML::Microformats::RelLicense;
 use HTML::Microformats::RelTag;
@@ -43,12 +48,12 @@ use XML::LibXML;
 
 =head1 VERSION
 
-0.00_04
+0.00_05
 
 =cut
 
-our $VERSION = '0.00_04';
-my @Formats = qw(adr geo hAtom hCalendar hCard hMeasure hResume hReview RelEnclosure RelLicense RelTag species XFN);
+our $VERSION = '0.00_05';
+my @Formats = qw(adr geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate RelEnclosure RelLicense RelTag species XFN);
 
 =head1 DESCRIPTION
 
@@ -449,15 +454,29 @@ Individual microformat modules:
 
 =item * L<HTML::Microformats::hAtom>
 
+=item * L<HTML::Microformats::hAudio>
+
+=item * L<HTML::Microformats::hCalendar>
+
 =item * L<HTML::Microformats::hCard>
 
+=item * L<HTML::Microformats::hMeasure>
+
 =item * L<HTML::Microformats::hNews>
+
+=item * L<HTML::Microformats::hResume>
+
+=item * L<HTML::Microformats::hReview>
+
+=item * L<HTML::Microformats::hReviewAggregate>
 
 =item * L<HTML::Microformats::RelEnclosure>
 
 =item * L<HTML::Microformats::RelLicense>
 
 =item * L<HTML::Microformats::RelTag>
+
+=item * L<HTML::Microformats::species>
 
 =item * L<HTML::Microformats::XFN>
 

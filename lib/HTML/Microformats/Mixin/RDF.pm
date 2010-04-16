@@ -40,32 +40,42 @@ sub _simple_rdf
 			my $seems_bnode = ($val =~ /^_:\S+$/);
 			my $seems_uri   = ($val =~ /^[a-z0-9\.\+\-]{1,20}:\S+$/);
 
-			if (defined $rdf->{'resource'} && ($can_id || $seems_uri || $seems_bnode))
+			if ((defined $rdf->{'resource'}||defined $rdf->{'rev'})
+			&&  ($can_id || $seems_uri || $seems_bnode))
 			{
+				my $val_node = undef;
+				if ($can_id)
+				{
+					$val_node = $val->id(1);
+				}
+				else
+				{
+					$val_node = ($val =~ /^_:(.*)$/) ? 
+						RDF::Trine::Node::Blank->new($1) : 
+						RDF::Trine::Node::Resource->new($val);
+				}
+				
 				foreach my $prop (@{ $rdf->{'resource'} })
 				{
-					my $val_node = undef;
-					if ($can_id)
-					{
-						$val_node = $val->id(1);
-					}
-					else
-					{
-						$val_node = ($val =~ /^_:(.*)$/) ? 
-							RDF::Trine::Node::Blank->new($1) : 
-							RDF::Trine::Node::Resource->new($val);
-					}
-
 					$model->add_statement(RDF::Trine::Statement->new(
 						$id,
 						RDF::Trine::Node::Resource->new($prop),
 						$val_node
 						));
-
-					if ($can_id && $val->can('add_to_model'))
-					{
-						$val->add_to_model($model);
-					}
+				}
+				
+				foreach my $prop (@{ $rdf->{'rev'} })
+				{
+					$model->add_statement(RDF::Trine::Statement->new(
+						$val_node,
+						RDF::Trine::Node::Resource->new($prop),
+						$id
+						));
+				}
+				
+				if ($can_id && $val->can('add_to_model'))
+				{
+					$val->add_to_model($model);
 				}
 			}
 			

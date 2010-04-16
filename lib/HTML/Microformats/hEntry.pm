@@ -450,7 +450,9 @@ sub add_to_model
 
 sub profiles
 {
-	my @p = qw(http://purl.org/uF/hAtom/0.1/);
+	my @p = qw(http://microformats.org/profile/hatom
+		http://ufs.cc/x/hatom
+		http://purl.org/uF/hAtom/0.1/);
 	push @p, HTML::Microformats::hNews->profiles;
 	return @p;
 }

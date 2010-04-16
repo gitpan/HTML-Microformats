@@ -51,7 +51,15 @@ sub new
 		$self->{'DATA'}->{'value'} =~ s/(^\s+|\s+$)//g;
 	}
 
+	$self->_fix_value_uri;
+	
 	return $self;
+}
+
+sub _fix_value_uri
+{
+	my $self  = shift;
+	# no-op. override in descendent classes.
 }
 
 sub format_signature

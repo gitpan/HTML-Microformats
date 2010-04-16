@@ -1,6 +1,6 @@
 =head1 NAME
 
-HTML::Microformats::hReview - the hReview microformat
+HTML::Microformats::hReview - the hReview and xFolk microformats
 
 =head1 SYNOPSIS
 
@@ -57,7 +57,8 @@ sub new
 	
 	$self->_simple_parse($clone);
 	
-	$self->{'DATA'}->{'version'} ||= '0.3';
+	$self->{'DATA'}->{'version'} ||= '0.3'
+		if $element->getAttribute('class') =~ /\b(hreview)\b/;
 
 	##TODO
 	# If no "reviewer" is found inside the hReview, parsers should look 
@@ -100,6 +101,7 @@ sub _xfolk_stuff
 		$self->{'DATA'}->{'item'}->{'fn'}    = stringify($tl[0], 'value');
 		$self->{'DATA'}->{'item'}->{'url'}   = [$item_url];
 		$self->{'DATA'}->{'item'}->{'photo'} = [$item_img];
+		$self->{'DATA'}->{'type'} = 'url';
 	}
 
 	return $self;
@@ -214,7 +216,7 @@ sub format_signature
 			# Note: for item we try hAudio first, as it will likely contain an hCard,
 			# Then hEvent, as it may contain an hCard. Lastly try hCard, as it's unlikely
 			# to contain anything else.
-			['item',        'm1',   {'embedded'=>'hAudio hEvent hCard'}], # lowercase 'm' = don't try plain string.
+			['item',        'm1',   {'embedded'=>'hProduct hAudio hEvent hCard'}], # lowercase 'm' = don't try plain string.
 			['version',     'n?'],
 			['summary',     '1'],
 			['type',        '?'],
@@ -338,9 +340,12 @@ sub add_to_model
 sub profiles
 {
 	my $class = shift;
-	return qw(http://microformats.org/profile/xfolk
+	return qw(http://microformats.org/profile/hreview
+		http://ufs.cc/x/hreview
+		http://microformats.org/profile/xfolk
 		http://ufs.cc/x/xfolk
-		http://www.purl.org/stuff/rev);
+		http://www.purl.org/stuff/rev#
+		http://microformats.org/wiki/xfolk-profile);
 }
 
 1;

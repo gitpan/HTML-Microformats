@@ -4,7 +4,7 @@
 @prefix dcs:     <http://ontologi.es/doap-changeset#> .
 @prefix dc:      <http://purl.org/dc/terms/> .
 @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
-@prefix my:      <http://search.cpan.org/dist/HTML-Microformats/#> .
+@prefix my:      <http://purl.org/NET/cpan-uri/dist/HTML-Microformats/> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix toby:    <http://tobyinkster.co.uk/#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
@@ -20,7 +20,7 @@
 
 #############################################################
 
-my:v_0_00_00
+my:v_0-00_00
 
 	a               :Version ;
 	dc:issued       "2010-02-19"^^xsd:date ;
@@ -28,7 +28,7 @@ my:v_0_00_00
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_00.tar.gz> ;
 	rdfs:comment    "Original version, forked from Swignition. Supports hCard, adr, geo and rel-tag."@en .
 
-my:v_0_00_01
+my:v_0-00_01
 
 	a               :Version ;
 	dc:issued       "2010-02-24"^^xsd:date ;
@@ -36,7 +36,7 @@ my:v_0_00_01
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_01.tar.gz> ;
 	rdfs:comment    "Adds XFN, species and hMeasure."@en ;
 	dcs:changeset [
-			dcs:versus my:v_0_00_00 ;
+			dcs:versus my:v_0-00_00 ;
 			dcs:item
 				[ rdfs:label "Figure out which hCard on a page is the 'representative' one (for the purposes of XFN)."@en ; a dcs:Addition ] ,
 				[ rdfs:label "XFN support."@en ; a dcs:Addition ] ,
@@ -47,7 +47,7 @@ my:v_0_00_01
 				[ rdfs:label "Document HTML::Microformats::hCard."@en ]
 		] .
 
-my:v_0_00_02
+my:v_0-00_02
 
 	a               :Version ;
 	dc:issued       "2010-03-01"^^xsd:date ;
@@ -55,7 +55,7 @@ my:v_0_00_02
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_02.tar.gz> ;
 	rdfs:comment    "Adds rel-license, rel-enclosure, hAtom and hNews."@en ;
 	dcs:changeset [
-			dcs:versus my:v_0_00_01 ;
+			dcs:versus my:v_0-00_01 ;
 			dcs:item
 				[ rdfs:label "Split out some common rel-X parsing into HTML::Microformats::_rel."@en ] ,
 				[ rdfs:label "rel-license support."@en ; a dcs:Addition ] ,
@@ -64,7 +64,7 @@ my:v_0_00_02
 				[ rdfs:label "Document geo, adr, XFN and hAtom support."@en ] 
 		] .
 
-my:v_0_00_03
+my:v_0-00_03
 
 	a               :Version ;
 	dc:issued       "2010-03-09"^^xsd:date ;
@@ -72,7 +72,7 @@ my:v_0_00_03
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_03.tar.gz> ;
 	rdfs:comment    "Adds hCalendar."@en ;
 	dcs:changeset [
-			dcs:versus my:v_0_00_02 ;
+			dcs:versus my:v_0-00_02 ;
 			dcs:item
 				[ rdfs:label "Rename _base.pm to BASE.pm; _simple_parser.pm to Mixin/Parser.pm; _simple_rdf.pm to Mixin/RDF.pm; _rel.pm to BASEREL.pm."@en ] ,
 				[ rdfs:label "hCalendar support."@en ; a dcs:Addition ] ,
@@ -80,14 +80,14 @@ my:v_0_00_03
 				[ rdfs:label "RecurringDateTime datatype."@en ; a dcs:Addition ]
 		] .
 
-my:v_0_00_04
+my:v_0-00_04
 
 	a               :Version ;
 	dc:issued       "2010-03-20"^^xsd:date ;
 	:revision       "0.00_04"^^xsd:string ;
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_04.tar.gz> ;
 	dcs:changeset [
-			dcs:versus my:v_0_00_03 ;
+			dcs:versus my:v_0-00_03 ;
 			dcs:item
 				[ rdfs:label "Problems parsing hCard org properties resolved."@en ; a dcs:Bugfix ] ,
 				[ rdfs:label "hMeasure.pm wasn't inheriting properly from BASE.pm."@en ; a dcs:Bugfix ] ,
@@ -96,7 +96,22 @@ my:v_0_00_04
 				[ rdfs:label "Improvements in natural language date parsing."@en ] ,
 				[ rdfs:label "UTF8 fixes."@en ; a dcs:Bugfix ] ,
 				[ rdfs:label "hResume support."@en ; a dcs:Addition ] ,
-				[ rdfs:label "hReview support."@en ; a dcs:Addition ]
+				[ rdfs:label "hReview and xFolk support."@en ; a dcs:Addition ]
+		] .
+
+my:v_0-00_05
+
+	a               :Version ;
+	dc:issued       "2010-04-16"^^xsd:date ;
+	:revision       "0.00_05"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_05.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-00_04 ;
+			dcs:item
+				[ rdfs:label "hAudio support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "hReview-aggregate support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "hListing support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "hProduct support."@en ; a dcs:Addition ]
 		] .
 
 #############################################################
@@ -117,7 +132,8 @@ my:project
 	:tester         toby:i ;
 	:created        "2010-02-08"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
-	:release        my:v_0_00_00 , my:v_0_00_01 , my:v_0_00_02 , my:v_0_00_03 , my:v_0_00_04 .
+	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
+	                my:v_0-00_04 , my:v_0-00_05 .
 
 #############################################################
 
@@ -127,6 +143,7 @@ toby:i
 	foaf:name       "Toby Inkster" ;
 	foaf:homepage   <http://tobyinkster.co.uk/> ;
 	foaf:page       <http://search.cpan.org/~tobyink/> ;
-	foaf:mbox       <mailto:tobyink@cpan.org> .
+	foaf:mbox       <mailto:tobyink@cpan.org> ;
+	<http://www.w3.org/2002/07/owl#sameAs> <http://purl.org/NET/cpan-uri/person/tobyink> .
 
 #############################################################

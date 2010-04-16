@@ -560,7 +560,7 @@ sub _stringify_helper
 }
 
 
-sub xml_stringify ##TODO
+sub xml_stringify
 {
 	my $node  = shift;
 	my $clone = $node->cloneNode(1);
@@ -583,7 +583,10 @@ sub xml_stringify ##TODO
 		}
 	}
 	
-	return $clone->toString;
+	$node->ownerDocument->documentElement->appendChild($clone);
+	my $rv = $clone->toStringEC14N;
+	$node->ownerDocument->documentElement->removeChild($clone);
+	return $rv;
 }
 
 1;

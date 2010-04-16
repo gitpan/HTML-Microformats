@@ -75,6 +75,28 @@ sub new
 		}
 	}
 	
+	if (defined $self->data->{'body'}
+	or (defined $self->data->{'reference-frame'} && $self->data->{'reference-frame'}!~ /wgs[-\s]?84/i))
+	{
+		$self->{'id.location'} = $context->make_bnode;
+	}
+	elsif (defined $self->data->{'altitude'}
+	and (!ref $self->data->{'altitude'} || $self->data->{'altitude'}->can('to_string')))
+	{
+		$self->{'id.location'} = sprintf('geo:%s,%s,%s',
+			$self->data->{'latitude'},
+			$self->data->{'longitude'},
+			$self->data->{'altitude'},
+			);
+	}
+	else
+	{
+		$self->{'id.location'} = sprintf('geo:%s,%s',
+			$self->data->{'latitude'},
+			$self->data->{'longitude'},
+			);
+	}
+	
 	$cache->set($context, $element, $class, $self)
 		if defined $cache;
 
@@ -84,7 +106,7 @@ sub new
 sub format_signature
 {
 	my $vcard = 'http://www.w3.org/2006/vcard/ns#';
-	my $geo   = 'http://www.w3.org/2003/01/geo/wgs84_pos#';
+	my $vx    = 'http://buzzword.org.uk/rdf/vcardx#';
 
 	return {
 		'root' => 'geo',
@@ -97,11 +119,11 @@ sub format_signature
 		],
 		'options' => {
 		},
-		'rdf:type' => ["${vcard}Location", "${geo}Point"] ,
+		'rdf:type' => ["${vcard}Location"] ,
 		'rdf:property' => {
-			'latitude'         => { 'literal'  => ["${vcard}latitude", "${geo}lat"] } ,
-			'longitude'        => { 'literal'  => ["${vcard}longitude", "${geo}long"] } ,
-			'altitude'         => { 'literal'  => ["${geo}alt"] } ,
+			'latitude'         => { 'literal'  => ["${vcard}latitude"] } ,
+			'longitude'        => { 'literal'  => ["${vcard}longitude"] } ,
+			'altitude'         => { 'literal'  => ["${vx}altitude"] } ,
 		},
 	};
 }
@@ -115,7 +137,7 @@ sub add_to_model
 	or (defined $self->data->{'reference-frame'} && $self->data->{'reference-frame'}!~ /wgs[-\s]?84/i))
 	{
 		my $rdf = {
-				$self->id =>
+				$self->id(0,'location') =>
 				{
 					'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' =>
 						[{ 'value'=>'http://buzzword.org.uk/rdf/ungeo#Point' , 'type'=>'uri' }]
@@ -125,21 +147,19 @@ sub add_to_model
 		{
 			if (defined $self->data->{$p})
 			{
-				$rdf->{$self->id}->{'http://buzzword.org.uk/rdf/ungeo#'.$p} =
+				$rdf->{$self->id(0,'location')}->{'http://buzzword.org.uk/rdf/ungeo#'.$p} =
 					[{ 'value'=>$self->data->{$p}, 'type'=>'literal' }];
 			}
 		}
-		$self->{'rdf:resource'}->{'system'} = $self->context->make_bnode
-			unless defined $self->{'rdf:resource'}->{'system'};
 		
-		$rdf->{$self->id}->{'http://buzzword.org.uk/rdf/ungeo#system'} =
-			[{ 'value'=>$self->{'rdf:resource'}->{'system'}, 'type'=>'bnode' }];
-		$rdf->{$self->{'rdf:resource'}->{'system'}}->{'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'} =
+		$rdf->{$self->id(0,'location')}->{'http://buzzword.org.uk/rdf/ungeo#system'} =
+			[{ 'value'=>$self->id(0,'system'), 'type'=>'bnode' }];
+		$rdf->{$self->id(0,'system')}->{'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'} =
 			[{ 'value'=>'http://buzzword.org.uk/rdf/ungeo#ReferenceSystem', 'type'=>'uri' }];
-		$rdf->{$self->{'rdf:resource'}->{'system'}}->{'http://www.w3.org/2000/01/rdf-schema#label'} =
+		$rdf->{$self->id(0,'system')}->{'http://www.w3.org/2000/01/rdf-schema#label'} =
 			[{ 'value'=>$self->data->{'reference-frame'}, 'type'=>'literal' }]
 			if defined $self->data->{'reference-frame'};
-		$rdf->{$self->{'rdf:resource'}->{'system'}}->{'http://buzzword.org.uk/rdf/ungeo#body'} =
+		$rdf->{$self->id(0,'system')}->{'http://buzzword.org.uk/rdf/ungeo#body'} =
 			[{ 'value'=>$self->data->{'body'}, 'type'=>'literal' }]
 			if defined $self->data->{'body'};
 		
@@ -148,7 +168,38 @@ sub add_to_model
 	else
 	{
 		$self->_simple_rdf($model);
+		
+		my $geo   = 'http://www.w3.org/2003/01/geo/wgs84_pos#';
+		
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'location'),
+			RDF::Trine::Node::Resource->new('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+			RDF::Trine::Node::Resource->new("${geo}Point"),
+			));
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'location'),
+			RDF::Trine::Node::Resource->new("${geo}lat"),
+			$self->_make_literal($self->data->{'latitude'}, 'decimal'),
+			));
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'location'),
+			RDF::Trine::Node::Resource->new("${geo}long"),
+			$self->_make_literal($self->data->{'longitude'}, 'decimal'),
+			));
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'location'),
+			RDF::Trine::Node::Resource->new("${geo}alt"),
+			$self->_make_literal($self->data->{'altitude'}, 'decimal'),
+			))
+			if (defined $self->data->{'altitude'}
+			and (!ref $self->data->{'altitude'} || $self->data->{'altitude'}->can('to_string')));
 	}
+	
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new('http://buzzword.org.uk/rdf/vcardx#represents-location'),
+		$self->id(1, 'location'),
+		));
 
 	return $self;
 }
