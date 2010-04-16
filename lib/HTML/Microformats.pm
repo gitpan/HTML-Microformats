@@ -48,11 +48,11 @@ use XML::LibXML;
 
 =head1 VERSION
 
-0.00_05
+0.00_06
 
 =cut
 
-our $VERSION = '0.00_05';
+our $VERSION = '0.00_06';
 my @Formats = qw(adr geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate RelEnclosure RelLicense RelTag species XFN);
 
 =head1 DESCRIPTION

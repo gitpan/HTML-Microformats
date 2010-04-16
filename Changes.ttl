@@ -114,6 +114,18 @@ my:v_0-00_05
 				[ rdfs:label "hProduct support."@en ; a dcs:Addition ]
 		] .
 
+my:v_0-00_06
+
+	a               :Version ;
+	dc:issued       "2010-04-16"^^xsd:date ;
+	:revision       "0.00_06"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_06.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-00_05 ;
+			dcs:item
+				[ rdfs:label "Packaging fix."@en ; a dcs:Bugfix ]
+		] .
+
 #############################################################
 
 my:project
@@ -133,7 +145,7 @@ my:project
 	:created        "2010-02-08"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
-	                my:v_0-00_04 , my:v_0-00_05 .
+	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 .
 
 #############################################################
 

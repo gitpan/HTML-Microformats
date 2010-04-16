@@ -36,8 +36,10 @@ lib/HTML/Microformats/hCard/_vt.pm
 lib/HTML/Microformats/hEntry.pm
 lib/HTML/Microformats/hEvent.pm
 lib/HTML/Microformats/hFreebusy.pm
+lib/HTML/Microformats/hListing.pm
 lib/HTML/Microformats/hMeasure.pm
 lib/HTML/Microformats/hNews.pm
+lib/HTML/Microformats/hProduct.pm
 lib/HTML/Microformats/hRecipe.pm
 lib/HTML/Microformats/hResume.pm
 lib/HTML/Microformats/hReview.pm
