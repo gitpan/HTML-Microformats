@@ -22,6 +22,8 @@ sub profiles
 {
 	return qw(http://microformats.org/profile/rel-license
 		http://ufs.cc/x/rel-license
+		http://microformats.org/profile/specs
+		http://ufs.cc/x/specs
 		http://purl.org/uF/rel-license/1.0/
 		http://purl.org/uF/2008/03/);
 }

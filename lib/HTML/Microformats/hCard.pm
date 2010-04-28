@@ -565,6 +565,8 @@ sub profiles
 	my $class = shift;
 	return qw(http://microformats.org/profile/hcard
 		http://ufs.cc/x/hcard
+		http://microformats.org/profile/specs
+		http://ufs.cc/x/specs
 		http://www.w3.org/2006/03/hcard
 		http://purl.org/uF/hCard/1.0/
 		http://purl.org/uF/2008/03/);

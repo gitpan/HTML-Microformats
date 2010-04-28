@@ -126,6 +126,19 @@ my:v_0-00_06
 				[ rdfs:label "Packaging fix."@en ; a dcs:Bugfix ]
 		] .
 
+my:v_0-00_07
+
+	a               :Version ;
+	dc:issued       "2010-04-28"^^xsd:date ;
+	:revision       "0.00_07"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_07.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-00_06 ;
+			dcs:item
+				[ rdfs:label "Support http://microformats.org/profile/specs profile URI."@en ; a dcs:Update ] ,
+				[ rdfs:label "our @HTML::Microformats::Formats instead of 'my'."@en ]
+		] .
+
 #############################################################
 
 my:project
@@ -145,7 +158,7 @@ my:project
 	:created        "2010-02-08"^^xsd:date ;
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
-	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 .
+	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 , my:v_0-00_07 .
 
 #############################################################
 

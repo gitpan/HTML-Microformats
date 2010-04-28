@@ -288,6 +288,8 @@ sub profiles
 	return qw(http://gmpg.org/xfn/11
 		http://purl.org/uF/2008/03/
 		http://gmpg.org/xfn/1
+		http://microformats.org/profile/specs
+		http://ufs.cc/x/specs
 		http://xen.adactio.com/
 		http://purl.org/vocab/relationship/);
 }

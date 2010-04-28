@@ -10,50 +10,54 @@ Home page:    <http://search.cpan.org/dist/HTML-Microformats/>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
+0.00_07 [2010-04-28]
+ - (Update) Support http://microformats.org/profile/specs profile URI.
+ - our @HTML::Microformats::Formats instead of 'my'.
+
 0.00_06 [2010-04-16]
  - (Bugfix) Packaging fix.
 
 0.00_05 [2010-04-16]
- - (Addition) hReview-aggregate support.
  - (Addition) hListing support.
  - (Addition) hAudio support.
+ - (Addition) hReview-aggregate support.
  - (Addition) hProduct support.
 
 0.00_04 [2010-03-20]
- - (Bugfix) UTF8 fixes.
- - (Addition) Implement class=value-title support.
+ - Improvements in natural language date parsing.
  - (Addition) hReview and xFolk support.
+ - (Bugfix) hMeasure.pm wasn't inheriting properly from BASE.pm.
  - (Addition) Implement implied date for hCalendar dtend and hAtom updated
    properties.
- - (Bugfix) hMeasure.pm wasn't inheriting properly from BASE.pm.
+ - (Bugfix) UTF8 fixes.
  - (Bugfix) Problems parsing hCard org properties resolved.
+ - (Addition) Implement class=value-title support.
  - (Addition) hResume support.
- - Improvements in natural language date parsing.
 
 0.00_03 [2010-03-09]
- - (Addition) hCalendar support.
+ - Document BASE microformat class.
  - (Addition) RecurringDateTime datatype.
+ - (Addition) hCalendar support.
  - Rename _base.pm to BASE.pm; _simple_parser.pm to Mixin/Parser.pm;
    _simple_rdf.pm to Mixin/RDF.pm; _rel.pm to BASEREL.pm.
- - Document BASE microformat class.
 
 0.00_02 [2010-03-01]
- - (Addition) rel-enclosure support.
- - (Addition) rel-license support.
- - Document geo, adr, XFN and hAtom support.
- - Split out some common rel-X parsing into HTML::Microformats::_rel.
  - (Addition) Support for hAtom and hNews.
+ - Split out some common rel-X parsing into HTML::Microformats::_rel.
+ - (Addition) rel-license support.
+ - (Addition) rel-enclosure support.
+ - Document geo, adr, XFN and hAtom support.
 
 0.00_01 [2010-02-24]
+ - (Addition) XFN support.
+ - Document HTML::Microformats::hCard.
+ - (Addition) Draft 'species' microformat support.
  - Copyright statements now reflect the fact that much of this code comes
    from 2008.
- - (Addition) Draft 'hMeasure' microformat support.
- - (Addition) Draft 'species' microformat support.
- - Document HTML::Microformats::hCard.
- - (Addition) XFN support.
- - Improve hCard type+value property parsing.
  - (Addition) Figure out which hCard on a page is the 'representative' one
    (for the purposes of XFN).
+ - (Addition) Draft 'hMeasure' microformat support.
+ - Improve hCard type+value property parsing.
 
 0.00_00 [2010-02-19]
 

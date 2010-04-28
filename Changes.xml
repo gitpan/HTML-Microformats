@@ -229,6 +229,26 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_06.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_06</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_07">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Update>
+            <rdfs:label xml:lang="en">Support http://microformats.org/profile/specs profile URI.</rdfs:label>
+          </dcs:Update>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">our @HTML::Microformats::Formats instead of 'my'.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_06"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-04-28</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_07.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_07</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-08</created>
@@ -247,6 +267,7 @@
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_04"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_05"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_06"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_07"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>

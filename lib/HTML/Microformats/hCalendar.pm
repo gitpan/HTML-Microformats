@@ -247,6 +247,8 @@ sub profiles
 	return qw(http://purl.org/uF/hCalendar/1.1/
 		http://microformats.org/profile/hcalendar
 		http://ufs.cc/x/hcalendar
+		http://microformats.org/profile/specs
+		http://ufs.cc/x/specs
 		http://dannyayers.com/microformats/hcalendar-profile
 		http://www.w3.org/2002/12/cal/hcal
 		http://purl.org/uF/hCalendar/1.0/

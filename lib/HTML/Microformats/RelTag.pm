@@ -51,6 +51,8 @@ sub profiles
 {
 	return qw(http://microformats.org/profile/rel-tag
 		http://ufs.cc/x/rel-tag
+		http://microformats.org/profile/specs
+		http://ufs.cc/x/specs
 		http://purl.org/uF/rel-tag/1.0/
 		http://purl.org/uF/2008/03/);
 }

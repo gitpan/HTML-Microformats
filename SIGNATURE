@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.61.
+signed via the Module::Signature module, version 0.63.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,30 +14,30 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 0a8cd4f55da1159f36f8400d78c4940cf0d21d13 Changes
-SHA1 84e25a28c36cc16a6838675af08268cc2c7d0d82 Changes.ttl
-SHA1 eb462d5a192cdee0b686a17ad5970d1d2f54c00f Changes.xml
+SHA1 9ddb56f7c62736243da4d599e215ba6ed69933c6 Changes
+SHA1 7c09e8ff4b24cc6a889b56ad7f623dcc20501895 Changes.ttl
+SHA1 388e0cf5aabb5fc97e807fc932aead7cba831ef5 Changes.xml
 SHA1 85018643776ac541c81248e919d3971ac95cd851 MANIFEST
 SHA1 3a87c14f230631ea3f789001be4b57dd86ace388 MANIFEST.SKIP
-SHA1 1c2932dabd33d908099bb9fdae8ed151cfa70b2d META.yml
+SHA1 c328664b2c9ecdae7fa98147030ef29278b96193 META.yml
 SHA1 50a228fd9bd11e9ec133252fb75449e8fc3666c4 Makefile.PL
 SHA1 5cb88f64abeb3df82842b805284fca22e819e6ee README
 SHA1 76ab0ce07a650f61fbeda1d8d8bd7e6ef3d5458b TODO
-SHA1 e5fb92ac217988bfc7a6af739b0459627020a27e inc/Module/AutoInstall.pm
-SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
-SHA1 5c529e96420d964b192f011b121283a4916f7331 inc/Module/Install/AutoInstall.pm
-SHA1 7cd7c349afdf3f012e475507b1017bdfa796bfbd inc/Module/Install/Base.pm
-SHA1 ba186541bbf6439111f01fc70769cf24d22869bf inc/Module/Install/Can.pm
+SHA1 8842ca38ce27ccf75e1ce8f5dfb93fa62d933b2e inc/Module/AutoInstall.pm
+SHA1 1ebec4119486a032a5612a403e8d7b7be973e938 inc/Module/Install.pm
+SHA1 bec3c7f9af6e1a3cb4d143249956c98af30f0552 inc/Module/Install/AutoInstall.pm
+SHA1 24038af925a69df41972971356ccce885b0fe2ad inc/Module/Install/Base.pm
+SHA1 8f96eddfef548c9328457fbb17a121631cda356b inc/Module/Install/Can.pm
 SHA1 b19da2715a136aba51510f687a7b4e431e0a4bec inc/Module/Install/DOAPChangeSets.pm
-SHA1 aaa50eca0d7751db7a4d953fac9bc72c6294e238 inc/Module/Install/Fetch.pm
-SHA1 219da5a95c290312a81477b226f005997d97dcfd inc/Module/Install/Include.pm
-SHA1 3e83972921d54198d1246f7278f08664006cd65d inc/Module/Install/Makefile.pm
-SHA1 12bf1867955480d47d5171a9e9c6a96fabe0b58f inc/Module/Install/Metadata.pm
+SHA1 ec29048e48edd9c9c55f9de7b773bd7c904335ad inc/Module/Install/Fetch.pm
+SHA1 01862227830d2547f38275eaee0eb9f5add5a252 inc/Module/Install/Include.pm
+SHA1 0384525d85d51e99532e3ad8729d870113646d14 inc/Module/Install/Makefile.pm
+SHA1 38c657de4d91f5a60ff8e6c6f6a5547daf7c4ab2 inc/Module/Install/Metadata.pm
 SHA1 a615bb050ca0b2d79bfa0224addcb83019a53b09 inc/Module/Install/ReadmeFromPod.pm
-SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
-SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
+SHA1 5c25f1104c0038041e3b93e0660c39171e4caf2b inc/Module/Install/Win32.pm
+SHA1 94d47349c803c4bd2a9230d25e4db0b6aaf1acd8 inc/Module/Install/WriteAll.pm
 SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
-SHA1 506676254e1f7793c0414645b10d85d07d59ee56 lib/HTML/Microformats.pm
+SHA1 a2fe07040f598b3b82937b3f1701af8c09e4888a lib/HTML/Microformats.pm
 SHA1 7f18f55787e9617c3416375654f2ac6e60759c67 lib/HTML/Microformats/BASE.pm
 SHA1 c61a0b7d0a5b2b798f67889d39f515eb9389c214 lib/HTML/Microformats/Datatypes.pm
 SHA1 dbd1725e54fc87f054f3080cf542db4be69261e3 lib/HTML/Microformats/Datatypes/DateTime.pm
@@ -50,19 +50,19 @@ SHA1 2afb0be5d6b4c8fcaca543724da47372c3973b0e lib/HTML/Microformats/Mixin/Parser
 SHA1 9575c8d2c1a675cb84a68d244b757196290c11ad lib/HTML/Microformats/Mixin/RDF.pm
 SHA1 fd98df974d52eb71dcb8752943b797568eb2a041 lib/HTML/Microformats/RELBASE.pm
 SHA1 693382cfbff87428124b35ee0f3555e1bbdda754 lib/HTML/Microformats/RelEnclosure.pm
-SHA1 a7151ce9d4858cda63a8e77bf49d0213e5df4636 lib/HTML/Microformats/RelLicense.pm
-SHA1 3ddcee83a393e3541261bda683374891ed48a4e3 lib/HTML/Microformats/RelTag.pm
-SHA1 4f43e4c73cc4600af102cccfb04d72902493bcfb lib/HTML/Microformats/XFN.pm
+SHA1 4484c8ed13ddac0c4c765b0ef6e7a60cae012dbe lib/HTML/Microformats/RelLicense.pm
+SHA1 20860cffdef5a1c82b62f251011dbb189ed358a8 lib/HTML/Microformats/RelTag.pm
+SHA1 dde7f366abb5d5d308cc316f374c68c9f50f9b09 lib/HTML/Microformats/XFN.pm
 SHA1 20162f482b5f92a01e4714497df22077e43b85cc lib/HTML/Microformats/_cache.pm
 SHA1 fac8a19597c03c24c50851b83043b3a4176372ac lib/HTML/Microformats/_context.pm
 SHA1 021c235a5ae57024c3c192bc0b4ccf6331a1a129 lib/HTML/Microformats/_util.pm
-SHA1 888bb75b27eb801ce0ece136eee5a5916b581739 lib/HTML/Microformats/adr.pm
-SHA1 021a69b2d9101497a74f1a358dcc77b30cd9ce85 lib/HTML/Microformats/geo.pm
+SHA1 d41cf80f2a24f2f2d5f0cbd4302c32443ff2119a lib/HTML/Microformats/adr.pm
+SHA1 c592c00d2a426ec5d309bfe3465d73f1aa12f1a4 lib/HTML/Microformats/geo.pm
 SHA1 1c731578d86080306eee732328e95e94ce953462 lib/HTML/Microformats/hAlarm.pm
 SHA1 27eb740ab53fdc2e004be72348621c65f5bd49f6 lib/HTML/Microformats/hAtom.pm
 SHA1 a8a6b4251fa6bc7da1c20886c92eda375e710061 lib/HTML/Microformats/hAudio.pm
-SHA1 ad582c0f9a8d7376af951bd2a7c35d41ae94e989 lib/HTML/Microformats/hCalendar.pm
-SHA1 3e8a5d0d181660fbc1a84b41ba91af517cb1adb2 lib/HTML/Microformats/hCard.pm
+SHA1 ab86e8479ee58c1c2ca20ccaff8266a3f9f062a2 lib/HTML/Microformats/hCalendar.pm
+SHA1 a3ba60e2293908a82e54813b1626f6d3de771e84 lib/HTML/Microformats/hCard.pm
 SHA1 a19f4ca2aa2b22991482f5694d75dabd0f63c128 lib/HTML/Microformats/hCard/_vt.pm
 SHA1 2594526469407e585f87ec84d95ba4e0b694c6d8 lib/HTML/Microformats/hCard/email.pm
 SHA1 3962f7689a7db0876a435f57566d0cfff2398d34 lib/HTML/Microformats/hCard/impp.pm
@@ -89,7 +89,7 @@ SHA1 b860cbfb1804e58c949b431f70f3b18c0da4c26b t/01basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkvI5NcACgkQzr+BKGoqfTklvgCghHFCJ10LHG7oSlylFWm9ijzE
-iLgAnivetnFsjIpvx8WbDxaTgVR7wLLm
-=8Fk/
+iEYEARECAAYFAkvYDAQACgkQzr+BKGoqfTkwXQCgt2lEJK+gvSj3ZL80vqjmBhW/
+SjsAoIlYn/w2TU3JauNc51P6EUFvJ6Nu
+=yWZX
 -----END PGP SIGNATURE-----
