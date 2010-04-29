@@ -34,7 +34,7 @@ sub add_to_model
 	my $model = shift;
 	
 	$model->add_statement(RDF::Trine::Statement->new(
-		RDF::Trine::Node::Resource->new($self->context->uri),
+		RDF::Trine::Node::Resource->new($self->context->document_uri),
 		RDF::Trine::Node::Resource->new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
 		RDF::Trine::Node::Resource->new("http://creativecommons.org/ns#Work"),
 		));
@@ -50,7 +50,7 @@ sub add_to_model
 		http://purl.org/dc/terms/license))
 	{
 		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new($self->context->uri),
+			RDF::Trine::Node::Resource->new($self->context->document_uri),
 			RDF::Trine::Node::Resource->new($uri),
 			RDF::Trine::Node::Resource->new($self->data->{'href'}),
 			));
@@ -58,6 +58,5 @@ sub add_to_model
 		
 	return $self;
 }
-
 
 1;

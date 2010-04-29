@@ -45,7 +45,7 @@ sub add_to_model
 	my $enc  = 'http://purl.oclc.org/net/rss_2.0/enc#';
 	
 	$model->add_statement(RDF::Trine::Statement->new(
-		RDF::Trine::Node::Resource->new($self->context->uri),
+		RDF::Trine::Node::Resource->new($self->context->document_uri),
 		RDF::Trine::Node::Resource->new("${enc}enclosure"),
 		RDF::Trine::Node::Resource->new($self->data->{'href'}),
 		));

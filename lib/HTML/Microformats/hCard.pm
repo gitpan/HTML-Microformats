@@ -551,7 +551,7 @@ sub add_to_model
 	if ($self->{'representative'})
 	{
 		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new($self->context->uri),
+			RDF::Trine::Node::Resource->new($self->context->document_uri),
 			RDF::Trine::Node::Resource->new('http://purl.org/uF/hCard/terms/representative'),
 			$self->id(1),
 			));

@@ -180,7 +180,7 @@ sub _link_fallback
 		}
 		else
 		{
-			$self->data->{'link'} = $self->context->uri;
+			$self->data->{'link'} = $self->context->document_uri;
 		}
 	}
 }

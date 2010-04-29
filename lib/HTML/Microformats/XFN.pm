@@ -149,7 +149,7 @@ sub add_to_model
 		}
 		
 		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new( $self->context->uri ),
+			RDF::Trine::Node::Resource->new( $self->context->document_uri ),
 			RDF::Trine::Node::Resource->new( $page_link ),
 			RDF::Trine::Node::Resource->new( $self->data->{'href'} ),
 			));
@@ -267,8 +267,8 @@ sub add_to_model
 	if (grep /^me$/i, @{ $self->data->{'rel'} })
 	{
 		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new( $self->context->uri ),
-			RDF::Trine::Node::Resource->new( 'http://vocab.sindice.com/xfn#mePage' ),
+			RDF::Trine::Node::Resource->new( $self->context->document_uri ),
+			RDF::Trine::Node::Resource->new( 'http://vocab.sindice.com/xfn#me-hyperlink' ),
 			RDF::Trine::Node::Resource->new( $self->data->{'href'} ),
 			));
 	}
@@ -276,8 +276,8 @@ sub add_to_model
 	{
 		$model->add_statement(RDF::Trine::Statement->new(
 			RDF::Trine::Node::Resource->new( $self->data->{'href'} ),
-			RDF::Trine::Node::Resource->new( 'http://vocab.sindice.com/xfn#mePage' ),
-			RDF::Trine::Node::Resource->new( $self->context->uri ),
+			RDF::Trine::Node::Resource->new( 'http://vocab.sindice.com/xfn#me-hyperlink' ),
+			RDF::Trine::Node::Resource->new( $self->context->document_uri ),
 			));
 	}	
 }

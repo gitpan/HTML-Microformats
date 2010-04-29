@@ -52,7 +52,7 @@ use XML::LibXML;
 
 =cut
 
-our $VERSION = '0.00_07';
+our $VERSION = '0.00_08';
 our @Formats = qw(adr geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate RelEnclosure RelLicense RelTag species XFN);
 
 =head1 DESCRIPTION
@@ -159,7 +159,7 @@ treated as if they were found on the document.
 
 For example:
 
- $doc->assume_profile('http://microformats.org/profile/rel-tag')
+ $doc->add_profile('http://microformats.org/profile/rel-tag')
 
 This is useful for adding profile URIs declared outside the document itself
 (e.g. in HTTP headers).
@@ -440,7 +440,8 @@ Please report any bugs to L<http://rt.cpan.org/>.
 =head1 SEE ALSO
 
 L<RDF::RDFa::Parser>,
-L<HTML::HTML5::Microdata::Parser>.
+L<HTML::HTML5::Microdata::Parser>,
+L<XML::Atom::Microformats>.
 
 L<http://microformats.org/>, L<http://www.perlrdf.org/>.
 

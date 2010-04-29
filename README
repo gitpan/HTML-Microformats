@@ -63,7 +63,7 @@ DESCRIPTION
 
         For example:
 
-         $doc->assume_profile('http://microformats.org/profile/rel-tag')
+         $doc->add_profile('http://microformats.org/profile/rel-tag')
 
         This is useful for adding profile URIs declared outside the document
         itself (e.g. in HTTP headers).
@@ -177,7 +177,8 @@ BUGS
     Please report any bugs to <http://rt.cpan.org/>.
 
 SEE ALSO
-    RDF::RDFa::Parser, HTML::HTML5::Microdata::Parser.
+    RDF::RDFa::Parser, HTML::HTML5::Microdata::Parser,
+    XML::Atom::Microformats.
 
     <http://microformats.org/>, <http://www.perlrdf.org/>.
 

@@ -15,6 +15,7 @@ package HTML::Microformats::_context;
 use common::sense;
 use 5.008;
 
+use Data::UUID;
 use HTML::Microformats::_cache;
 use URI;
 use XML::LibXML qw(:all);
@@ -53,6 +54,8 @@ sub new
 		$np =~ s?\*/?\*\[1\]/?g;
 		$e->setAttribute('data-cpan-html-microformats-nodepath', $np)
 	}
+
+	($self->{'bnode_prefix'} = Data::UUID->new->create_hex) =~ s/^0x//;
 
 	$self->_process_langs($document->documentElement);
 	$self->_detect_profiles;
@@ -93,7 +96,8 @@ sub document
 
 Called without a parameter, returns the context's base URI.
 
-Called with a parameter, resolves the URI reference relative to the base URI.
+Called with a parameter, resolves the URI reference relative to the
+base URI.
 
 =cut
 
@@ -135,6 +139,19 @@ sub uri
 	return $rv;
 }
 
+=item C<< $context->document_uri >>
+
+Returns a URI representing the document itself. (Usually the same as the
+base URI.)
+
+=cut
+
+sub document_uri
+{
+	my $self = shift;
+	return $self->{'document_uri'} || $self->uri;
+}
+
 =item C<< $context->make_bnode( [$element] ) >>
 
 Mint a blank node identifier or a URI.
@@ -153,7 +170,7 @@ sub make_bnode
 		return 'http://thing-described-by.org/?'.$uri;
 	}
 	
-	return sprintf('_:gen%04d', $self->{'next_bnode'}++);
+	return sprintf('_:B%s%04d', $self->{'bnode_prefix'}, $self->{'next_bnode'}++);
 }
 
 =item C<< $context->profiles >>
@@ -225,7 +242,7 @@ sub representative_hcard
 				next unless ref $hc;
 				foreach my $url ($hc->data->{'url'})
 				{
-					if ($url eq $self->uri)
+					if ($url eq $self->document_uri)
 					{
 						$self->{'representative_hcard'} = $hc;
 						last HCARD;

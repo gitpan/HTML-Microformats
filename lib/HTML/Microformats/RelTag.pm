@@ -65,7 +65,7 @@ sub add_to_model
 	$self->_simple_rdf($model);
 	
 	$model->add_statement(RDF::Trine::Statement->new(
-		RDF::Trine::Node::Resource->new($self->context->uri),
+		RDF::Trine::Node::Resource->new($self->context->document_uri),
 		RDF::Trine::Node::Resource->new('http://www.holygoat.co.uk/owl/redwood/0.1/tags/taggedWithTag'),
 		$self->id(1),
 		));

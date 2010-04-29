@@ -63,6 +63,12 @@ sub format_signature
 	return $rv;
 }
 
+sub profiles
+{
+	# place holder
+	return qw('http://purl.org/NET/cpan-uri/dist/HTML-Microformats/profile-species');
+}
+
 sub add_to_model
 {
 	my ($self, $model) = @_;

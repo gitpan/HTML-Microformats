@@ -249,6 +249,28 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_07.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_07</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_08">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:comment xml:lang="en">This means that two runs of HTML::Microformats will result in different identifiers.</rdfs:comment>
+            <rdfs:label xml:lang="en">Introduce a context-unique component to blank node identifiers.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Distinguish between base URI and document/context URI.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_07"/>
+        <rdfs:comment xml:lang="en">These changes are for the benefit of XML-Atom-Microformats.</rdfs:comment>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-04-29</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_08.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_08</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-08</created>
@@ -268,6 +290,7 @@
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_05"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_06"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_07"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_08"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>
@@ -275,6 +298,7 @@
     </repository>
     <shortdesc xml:lang="en">parse microformats in HTML</shortdesc>
     <tester rdf:resource="http://tobyinkster.co.uk/#i"/>
+    <rdfs:seeAlso rdf:resource="http://search.cpan.org/dist/XML-Atom-Microformats/"/>
   </Project>
   <foaf:Person rdf:about="http://tobyinkster.co.uk/#i">
     <ns1:sameAs xmlns:ns1="http://www.w3.org/2002/07/owl#" rdf:resource="http://purl.org/NET/cpan-uri/person/tobyink"/>
