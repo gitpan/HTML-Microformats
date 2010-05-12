@@ -1,3 +1,30 @@
+=head1 NAME
+
+HTML::Microformats::RelEnclosure - the rel-enclosure microformat
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+HTML::Microformats::RelEnclosure inherits from HTML::Microformats::RELBASE. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=head2 Additional Method
+
+=over 4
+
+=item C<< $relenc->get_type() >>
+
+Returns the media type (Content-Type) of the resource being linked to. This
+is taken from the HTML 'type' attribute, so if that's not present, returns undef.
+
+=back
+
+=cut
+
 package HTML::Microformats::RelEnclosure;
 
 use base qw(HTML::Microformats::RELBASE);
@@ -101,3 +128,39 @@ sub add_to_model
 }
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::RelEnclosure supports rel-enclosure as described at
+L<http://microformats.org/wiki/rel-enclosure>.
+
+The "title" attribute on the link, and the linked text are taken to be significant.
+
+=head1 RDF OUTPUT
+
+Data is returned using the RSS Enclosures vocabulary
+(L<http://purl.oclc.org/net/rss_2.0/enc#>) and occasional other terms.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::RELBASE>,
+L<HTML::Microformats>,
+L<HTML::Microformats::hAtom>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

@@ -1,3 +1,19 @@
+=head1 NAME
+
+HTML::Microformats::RelLicense - the rel-license microformat
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+HTML::Microformats::RelLicense inherits from HTML::Microformats::RELBASE. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::RelLicense;
 
 use base qw(HTML::Microformats::RELBASE);
@@ -60,3 +76,36 @@ sub add_to_model
 }
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::RelLicense supports rel-license as described at
+L<http://microformats.org/wiki/rel-license>.
+
+=head1 RDF OUTPUT
+
+Data is returned using the Creative Commons vocabulary
+(L<http://creativecommons.org/ns#>) and occasional other terms.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::RELBASE>,
+L<HTML::Microformats>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

@@ -19,6 +19,7 @@ no_index:
     - inc
     - t
 requires:
+  CGI: 0
   CGI::Util: 0
   Carp: 1.00
   DateTime: 0
@@ -43,4 +44,4 @@ resources:
   homepage: http://search.cpan.org/dist/HTML-Microformats/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/
-version: 0.00_08
+version: 0.00_09

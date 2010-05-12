@@ -26,6 +26,7 @@ use HTML::HTML5::Sanity qw(fix_document);
 use HTML::Microformats::_context;
 use HTML::Microformats::adr;
 use HTML::Microformats::geo;
+use HTML::Microformats::figure;
 use HTML::Microformats::hAtom;
 use HTML::Microformats::hAudio;
 use HTML::Microformats::hCard;
@@ -37,23 +38,25 @@ use HTML::Microformats::hRecipe;
 use HTML::Microformats::hResume;
 use HTML::Microformats::hReview;
 use HTML::Microformats::hReviewAggregate;
+use HTML::Microformats::OpenURL_COinS;
 use HTML::Microformats::RelEnclosure;
 use HTML::Microformats::RelLicense;
 use HTML::Microformats::RelTag;
 use HTML::Microformats::species;
 use HTML::Microformats::XFN;
+use HTML::Microformats::XOXO;
 use JSON;
 use RDF::Trine 0.117;
 use XML::LibXML;
 
 =head1 VERSION
 
-0.00_06
+0.00_09
 
 =cut
 
-our $VERSION = '0.00_08';
-our @Formats = qw(adr geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate RelEnclosure RelLicense RelTag species XFN);
+our $VERSION = '0.00_09';
+our @Formats = qw(adr figure geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate OpenURL_COinS RelEnclosure RelLicense RelTag species XFN XOXO);
 
 =head1 DESCRIPTION
 
@@ -451,6 +454,8 @@ Individual microformat modules:
 
 =item * L<HTML::Microformats::adr>
 
+=item * L<HTML::Microformats::figure>
+
 =item * L<HTML::Microformats::geo>
 
 =item * L<HTML::Microformats::hAtom>
@@ -461,15 +466,23 @@ Individual microformat modules:
 
 =item * L<HTML::Microformats::hCard>
 
+=item * L<HTML::Microformats::hListing>
+
 =item * L<HTML::Microformats::hMeasure>
 
 =item * L<HTML::Microformats::hNews>
+
+=item * L<HTML::Microformats::hProduct>
+
+=item * L<HTML::Microformats::hRecipe>
 
 =item * L<HTML::Microformats::hResume>
 
 =item * L<HTML::Microformats::hReview>
 
 =item * L<HTML::Microformats::hReviewAggregate>
+
+=item * L<HTML::Microformats::OpenURL_COinS>
 
 =item * L<HTML::Microformats::RelEnclosure>
 
@@ -480,6 +493,8 @@ Individual microformat modules:
 =item * L<HTML::Microformats::species>
 
 =item * L<HTML::Microformats::XFN>
+
+=item * L<HTML::Microformats::XOXO>
 
 =back
 

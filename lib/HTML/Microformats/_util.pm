@@ -1,3 +1,13 @@
+=head1 NAME
+
+HTML::Microformats::_util - utility functions for searching and manipulating HTML
+
+=head1 DESCRIPTION
+
+This module includes a few functions for searching and manipulating HTML trees.
+
+=cut
+
 package HTML::Microformats::_util;
 
 use base qw(Exporter);
@@ -9,6 +19,20 @@ use HTML::Microformats::Datatypes::String;
 use XML::LibXML qw(:all);
 
 our @EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchID stringify xml_stringify);
+
+=over 4
+
+=item C<< searchClass($class, $node, [$prefix]) >>
+
+Returns a list of elements which are descendents of $node and have class name $class.
+
+$class can be a plain string, or a regular expression.
+
+If $prefix is supplied it is used as an optional prefix for $class. For example, with $class 'bar'
+and $prefix 'foo', searchClass will look for all of the following classes: 'bar', 'foobar', 'foo-bar'
+and 'foo:bar'.
+
+=cut
 
 sub searchClass
 {
@@ -28,7 +52,7 @@ sub searchClass
 		
 		next unless length $classList;
 		
-		if ((defined $prefix) && $classList =~ / (^|\s) ($prefix \-?)? $target (\s|$) /x)
+		if ((defined $prefix) && $classList =~ / (^|\s) ($prefix [:\-]?)? $target (\s|$) /x)
 		{
 			push @matches, $node;
 		}
@@ -40,6 +64,18 @@ sub searchClass
 	
 	return @matches;	
 }
+
+=item C<< searchAncestorClass($class, $node, [$skip]) >>
+
+Returns the first element which is an ancestor of $node having class name $class.
+
+$class can be a plain string, or a regular expression.
+
+$skip is the number of levels of ancestor to skip. If $skip is 0, then potentially searchAncestorClass
+will return $node itself. If $skip is 1, then it will not return $node but could potentially return
+its parent, and so on.
+
+=cut
 
 sub searchAncestorClass
 {
@@ -69,6 +105,14 @@ sub searchAncestorClass
 	return undef;
 }
 
+=item C<< searchRel($relationship, $node) >>
+
+Returns a list of elements which are descendents of $node and have relationship $relationship.
+
+$relationship can be a plain string, or a regular expression.
+
+=cut
+
 sub searchRel
 {
 	my $target = shift;
@@ -92,6 +136,12 @@ sub searchRel
 	
 }
 
+=item C<< searchID($id, $node) >>
+
+Returns a descendent of $node with id attribute $id, or undef.
+
+=cut
+
 sub searchID
 {
 	my $target = shift;
@@ -99,17 +149,20 @@ sub searchID
 	
 	$target =~ s/^\#//;
 	
-	my @matches = ();
 	for my $node ($dom->getElementsByTagName('*'))
 	{
 		my $id   = $node->getAttribute('id') || next;
-		
-		if ($id eq $target)
-		{
-			return $node;
-		}
+		return $node if $id eq $target;
 	}	
 }
+
+=item C<< stringify($node, \%options) >>
+
+Returns a stringified version of a DOM element. This is conceptually equivalent
+to C<< $node->textContent >>, but follows microformat-specific stringification
+rules, including value excerption, the abbr pattern and so on.
+
+=cut
 
 # This function takes on too much responsibility.
 # It should delegate stuff.
@@ -560,6 +613,14 @@ sub _stringify_helper
 }
 
 
+=item C<< xml_stringify($node) >>
+
+Returns an XML serialisation of a DOM element. This is conceptually equivalent
+to C<< $node->toStringEC14N >>, but hides certain attributes which
+HTML::Microformats::_context adds for internal processing.
+
+=cut
+
 sub xml_stringify
 {
 	my $node  = shift;
@@ -590,3 +651,28 @@ sub xml_stringify
 }
 
 1;
+
+__END__
+
+=back
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut

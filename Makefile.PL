@@ -17,6 +17,7 @@ license             'perl';
 test_requires       'Test::More' => '0.61';
 
 requires            'Carp'                => '1.00';
+requires            'CGI'                 => 0;
 requires            'CGI::Util'           => 0;
 requires            'common::sense'       => 0;
 requires            'DateTime'            => 0;

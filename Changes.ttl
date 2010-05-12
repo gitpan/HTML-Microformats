@@ -153,6 +153,23 @@ my:v_0-00_08
 				[ rdfs:label "Distinguish between base URI and document/context URI."@en ]
 		] .
 
+my:v_0-00_09
+
+	a               :Version ;
+	dc:issued       "2010-05-12" ;
+	:revision       "0.00_09"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_09.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-00_08 ;
+			dcs:item
+				[ rdfs:label "XOXO support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "OpenURL COinS support."@en ; rdfs:comment "Not technically a microformat."@en ; a dcs:Addition ] ,
+				[ rdfs:label "figure support."@en ; a dcs:Addition ] ,
+				[ rdfs:label "adr RDF output now better differentiates between the addresses and the places they represent."@en ] ,
+				[ rdfs:label "Document the rel-* microformat implementations and OpenURL COinS."@en ] ,
+				[ rdfs:label "Document the ISO8601 datetime parser."@en ]
+		] .
+
 #############################################################
 
 my:project
@@ -174,7 +191,7 @@ my:project
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
 	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 , my:v_0-00_07 ,
-	                my:v_0-00_08 .
+	                my:v_0-00_08 , my:v_0-00_09 .
 
 #############################################################
 

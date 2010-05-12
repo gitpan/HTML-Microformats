@@ -274,6 +274,8 @@ sub _detect_kind
 		{
 			ADRLOOP: foreach my $adr (@{ $rv->{'adr'} })
 			{
+				my $isFirstPart = 1;
+				
 				foreach my $part (qw(post-office-box extended-address
 					street-address locality region postal-code country-name))
 				{
@@ -282,8 +284,10 @@ sub _detect_kind
 						if ("$line" eq $rv->{'fn'})
 						{
 							$rv->{'kind'} = 'location';
+							$self->{'id.holder'} = $adr->id(0, 'place') if $isFirstPart;
 							last ADRLOOP;
 						}
+						$isFirstPart = 0;
 					}
 				}
 			}

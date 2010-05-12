@@ -1,7 +1,45 @@
-# Copyright (C) 2003-2005  Joshua Hoblitt
-# Copyright (C) 2008-2010  Toby Inkster
+=head1 NAME
 
-# Based on DateTime::Format::ISO8601, but includes some changes.
+HTML::Microformats::Datatypes::DateTime::Parser - parse ISO8601 datetimes
+
+=head1 DESCRIPTION
+
+This module is a moderately modified version of L<DateTime::Format::ISO8601>.
+
+It allows datetimes to be expressed with a somewhat looser syntax, especially
+support for whitespace between the date and time instead of a "T". It also
+calculates the "resolution" of the datetime (e.g. is it specified to year,
+month, day, hour, minute, second or nanosecond precision) which it places
+in $dt->{'resolution'}.
+
+Other than that, it can be used exactly as DateTime::Format::ISO8601 can.
+It parses strings into normal DateTime objects.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::Datatypes::DateTime>,
+L<DateTime>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+Based on DateTime::Format::ISO8601 by Joshua Hoblitt.
+
+=head1 COPYRIGHT
+
+Copyright 2003-2005 Joshua Hoblitt
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
 
 package HTML::Microformats::Datatypes::DateTime::Parser;
 

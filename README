@@ -13,7 +13,7 @@ SYNOPSIS
      my $results = rdf_query($sparql, $doc->model);
 
 VERSION
-    0.00_06
+    0.00_09
 
 DESCRIPTION
     The HTML::Microformats module is a wrapper for parser and handler
@@ -186,6 +186,8 @@ SEE ALSO
 
     *   HTML::Microformats::adr
 
+    *   HTML::Microformats::figure
+
     *   HTML::Microformats::geo
 
     *   HTML::Microformats::hAtom
@@ -196,15 +198,23 @@ SEE ALSO
 
     *   HTML::Microformats::hCard
 
+    *   HTML::Microformats::hListing
+
     *   HTML::Microformats::hMeasure
 
     *   HTML::Microformats::hNews
+
+    *   HTML::Microformats::hProduct
+
+    *   HTML::Microformats::hRecipe
 
     *   HTML::Microformats::hResume
 
     *   HTML::Microformats::hReview
 
     *   HTML::Microformats::hReviewAggregate
+
+    *   HTML::Microformats::OpenURL_COinS
 
     *   HTML::Microformats::RelEnclosure
 
@@ -215,6 +225,8 @@ SEE ALSO
     *   HTML::Microformats::species
 
     *   HTML::Microformats::XFN
+
+    *   HTML::Microformats::XOXO
 
 AUTHOR
     Toby Inkster <tobyink@cpan.org>.

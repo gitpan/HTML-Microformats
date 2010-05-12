@@ -1,3 +1,41 @@
+=head1 NAME
+
+HTML::Microformats::RelTag - the rel-tag microformat
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+HTML::Microformats::RelTag inherits from HTML::Microformats::RELBASE. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=head2 Additional Methods
+
+=over 4
+
+=item C<< $reltag->get_tag() >>
+
+Returns the tag being linked to. Given the following link:
+
+  http://example.com/foo/bar?baz=quux#xyzzy
+
+the tag is "bar".
+
+=item C<< $reltag->get_tagspace() >>
+
+Returns the tagspace of the tag being linked to. Given the following link:
+
+  http://example.com/foo/bar?baz=quux#xyzzy
+
+the tagspace is "http://example.com/foo/".
+
+=back
+
+=cut
+
 package HTML::Microformats::RelTag;
 
 use base qw(HTML::Microformats::RELBASE);
@@ -74,3 +112,41 @@ sub add_to_model
 }
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::RelTag supports rel-tag as described at
+L<http://microformats.org/wiki/rel-tag>.
+
+The "title" attribute on the link, and the linked text are taken to be significant.
+
+=head1 RDF OUTPUT
+
+Data is returned using the Richard Newman's tag vocabulary
+(L<http://www.holygoat.co.uk/owl/redwood/0.1/tags/>),
+the Atom OWL vocabulary (L<http://bblfish.net/work/atom-owl/2006-06-06/#>)
+and occasional other terms.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::RELBASE>,
+L<HTML::Microformats>,
+L<HTML::Microformats::hAtom>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

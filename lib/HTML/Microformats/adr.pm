@@ -80,9 +80,8 @@ sub format_signature
 		'options' => {
 			'no-destroy' => ['geo']
 		},
-		'rdf:type' => ["${vcard}Address", "${geo}SpatialThing"] ,
+		'rdf:type' => ["${vcard}Address"] ,
 		'rdf:property' => {
-			'geo'              => { 'resource' => ["${geo}location"] } ,
 			'post-office-box'  => { 'literal'  => ["${vcard}post-office-box"] } ,
 			'extended-address' => { 'literal'  => ["${vcard}extended-address"] } ,
 			'locality'         => { 'literal'  => ["${vcard}locality"] } ,
@@ -120,6 +119,27 @@ sub add_to_model
 			});
 	}
 	
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new('http://buzzword.org.uk/rdf/vcardx#represents-location'),
+		$self->id(1, 'place'),
+		));
+
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1, 'place'),
+		RDF::Trine::Node::Resource->new('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+		RDF::Trine::Node::Resource->new('http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing'),
+		));
+
+	foreach my $geo (@{ $self->data->{'geo'} })
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1, 'place'),
+			RDF::Trine::Node::Resource->new('http://www.w3.org/2003/01/geo/wgs84_pos#location'),
+			$geo->id(1, 'location'),
+			));
+	}
+
 	# Some clever additional stuff: figure out what country code they meant!
 	foreach my $country (@{ $self->data->{'country-name'} })
 	{
@@ -127,7 +147,7 @@ sub add_to_model
 		if (defined $code)
 		{
 			$model->add_hashref({
-				$self->id =>
+				$self->id(0, 'place') =>
 					{ 'http://www.geonames.org/ontology#inCountry' => [{ 'type'=>'uri', 'value'=>'http://ontologi.es/place/'.(uc $code) }] }
 				});
 		}
@@ -177,8 +197,16 @@ that geographic location will be associated with the address.
 Data is returned using the W3C's vCard vocabulary
 (L<http://www.w3.org/2006/vcard/ns#>) and occasional other terms.
 
+Like how HTML::Microformats::hCard differentiates between the business card
+and the entity represented by the card, this module differentiates between the
+address and the location represented by it. The former is an abstract social 
+construction, its definition being affected by ephemeral political boundaries;
+the latter is a physical place. Theoretically multiple addresses could represent the
+same, or overlapping locations, though this module does not generate any data
+where that is the case.
+
 Where possible, the module uses Locale::Country to determine the
-two letter ISO code for the country of the address, and include this in the
+two letter ISO code for the country of the location, and include this in the
 RDF output.
 
 =head1 BUGS

@@ -60,6 +60,11 @@ sub extract_all
 	my $hclass = $class->format_signature->{'root'};
 	my $rel    = $class->format_signature->{'rel'};
 	
+	unless (defined $rel || defined $hclass)
+	{
+		die "extract_all failed.\n";
+	}
+	
 	if (defined $hclass)
 	{
 		$hclass = [$hclass] unless ref $hclass eq 'ARRAY';
@@ -70,12 +75,14 @@ sub extract_all
 			foreach my $e (@elements)
 			{
 				my $object = $class->new($e, $context, %options);
+				next unless $object;
 				next if grep { $_->id eq $object->id } @rv; # avoid duplicates
 				push @rv, $object if ref $object;
 			}
 		}
 	}
-	elsif (defined $rel)
+	
+	if (defined $rel)
 	{
 		$rel = [$rel] unless ref $rel eq 'ARRAY';
 		
@@ -85,14 +92,11 @@ sub extract_all
 			foreach my $e (@elements)
 			{
 				my $object = $class->new($e, $context, %options);
+				next unless $object;
 				next if grep { $_->id eq $object->id } @rv; # avoid duplicates
 				push @rv, $object if ref $object;
 			}
 		}
-	}
-	else
-	{
-		die "extract_all failed.\n";
 	}
 	
 	return @rv;
