@@ -20,6 +20,7 @@ lib/HTML/Microformats/Datatypes/Interval.pm
 lib/HTML/Microformats/Datatypes.pm
 lib/HTML/Microformats/Datatypes/RecurringDateTime.pm
 lib/HTML/Microformats/Datatypes/String.pm
+lib/HTML/Microformats/figure.pm
 lib/HTML/Microformats/geo.pm
 lib/HTML/Microformats/hAlarm.pm
 lib/HTML/Microformats/hAtom.pm

@@ -170,6 +170,19 @@ my:v_0-00_09
 				[ rdfs:label "Document the ISO8601 datetime parser."@en ]
 		] .
 
+my:v_0-00_10
+
+	a               :Version ;
+	dc:issued       "2010-05-13" ;
+	:revision       "0.00_10"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_10.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-00_09 ;
+			dcs:item
+				[ rdfs:label "Packaging fix - include figure.pm in the distribution."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "Document hCard helper modules."@en ]
+		] .
+
 #############################################################
 
 my:project
@@ -191,7 +204,7 @@ my:project
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
 	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 , my:v_0-00_07 ,
-	                my:v_0-00_08 , my:v_0-00_09 .
+	                my:v_0-00_08 , my:v_0-00_09 , my:v_0-00_10 .
 
 #############################################################
 

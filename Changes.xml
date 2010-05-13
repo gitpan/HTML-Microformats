@@ -312,6 +312,26 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_09.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_09</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_10">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <dcs:Bugfix>
+            <rdfs:label xml:lang="en">Packaging fix - include figure.pm in the distribution.</rdfs:label>
+          </dcs:Bugfix>
+        </dcs:item>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Document hCard helper modules.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_09"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued>2010-05-13</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_10.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_10</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-08</created>
@@ -333,6 +353,7 @@
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_07"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_08"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_09"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_10"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>

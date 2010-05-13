@@ -14,15 +14,15 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 782fd0d2a6ed666db1f2b0b159a737eb3b5d11ae Changes
-SHA1 5c4e5db9de7c9d92ba894043471b95e9a691b998 Changes.ttl
-SHA1 0e6888a9c297c110e83d7bebfff2dd8bc6fdf750 Changes.xml
-SHA1 1dbc1425c31945d546b13e507ddf69c4728f507c MANIFEST
+SHA1 ece26e8f23837cfb183de1384aa069a2a5d91b2a Changes
+SHA1 85e0a8f9f7b925a74a7b6a2591f6a57ae5dacca8 Changes.ttl
+SHA1 1b6d7cba8d0290cdd9b7c6ae12129343f6723661 Changes.xml
+SHA1 1ab3e6346299a588bc00a59e4577868a5c22ada2 MANIFEST
 SHA1 3a87c14f230631ea3f789001be4b57dd86ace388 MANIFEST.SKIP
-SHA1 2639c3c01a80895aa87f16e623fa75f7ead63871 META.yml
+SHA1 4d877cc21c1ac3fa59ce17a379f43231b03db8f8 META.yml
 SHA1 68055b8bf2e6eba4f91978ed605478b1259a1c5a Makefile.PL
 SHA1 d09ae34d8fe52928c9c17d856693618da296b1cb README
-SHA1 fb684ca4c38d72201c88e12edf5c8f3763f2edec TODO
+SHA1 a47953fbd19fe725d5bfbb52982d1d607827b887 TODO
 SHA1 8842ca38ce27ccf75e1ce8f5dfb93fa62d933b2e inc/Module/AutoInstall.pm
 SHA1 1ebec4119486a032a5612a403e8d7b7be973e938 inc/Module/Install.pm
 SHA1 bec3c7f9af6e1a3cb4d143249956c98af30f0552 inc/Module/Install/AutoInstall.pm
@@ -37,7 +37,7 @@ SHA1 a615bb050ca0b2d79bfa0224addcb83019a53b09 inc/Module/Install/ReadmeFromPod.p
 SHA1 5c25f1104c0038041e3b93e0660c39171e4caf2b inc/Module/Install/Win32.pm
 SHA1 94d47349c803c4bd2a9230d25e4db0b6aaf1acd8 inc/Module/Install/WriteAll.pm
 SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
-SHA1 3e3d479aaa884d89e1868762cd0dfc923f073f92 lib/HTML/Microformats.pm
+SHA1 bfd8d006fe346234204cca5f8c0d1e12a2360362 lib/HTML/Microformats.pm
 SHA1 915c9d850b2e1740e27e39f7801cc8dda346e53a lib/HTML/Microformats/BASE.pm
 SHA1 c61a0b7d0a5b2b798f67889d39f515eb9389c214 lib/HTML/Microformats/Datatypes.pm
 SHA1 dbd1725e54fc87f054f3080cf542db4be69261e3 lib/HTML/Microformats/Datatypes/DateTime.pm
@@ -59,19 +59,20 @@ SHA1 20162f482b5f92a01e4714497df22077e43b85cc lib/HTML/Microformats/_cache.pm
 SHA1 f2995ffb9c4b688d15f3a046f3a767c0cae64be6 lib/HTML/Microformats/_context.pm
 SHA1 535ab1c253778f550087c488053df733e62570eb lib/HTML/Microformats/_util.pm
 SHA1 96d4a6fc0900dad4c6bf8030c84437c5c1fd71dd lib/HTML/Microformats/adr.pm
+SHA1 7aa39ef93c9134bfd46548d583a09e41cdbd0fe7 lib/HTML/Microformats/figure.pm
 SHA1 c592c00d2a426ec5d309bfe3465d73f1aa12f1a4 lib/HTML/Microformats/geo.pm
 SHA1 1c731578d86080306eee732328e95e94ce953462 lib/HTML/Microformats/hAlarm.pm
 SHA1 27eb740ab53fdc2e004be72348621c65f5bd49f6 lib/HTML/Microformats/hAtom.pm
 SHA1 a8a6b4251fa6bc7da1c20886c92eda375e710061 lib/HTML/Microformats/hAudio.pm
 SHA1 ab86e8479ee58c1c2ca20ccaff8266a3f9f062a2 lib/HTML/Microformats/hCalendar.pm
 SHA1 44d015de5bf49f6bf388cb8bcf826d3345dcf135 lib/HTML/Microformats/hCard.pm
-SHA1 a19f4ca2aa2b22991482f5694d75dabd0f63c128 lib/HTML/Microformats/hCard/_vt.pm
-SHA1 2594526469407e585f87ec84d95ba4e0b694c6d8 lib/HTML/Microformats/hCard/email.pm
-SHA1 3962f7689a7db0876a435f57566d0cfff2398d34 lib/HTML/Microformats/hCard/impp.pm
-SHA1 74b2b4bcd86771dfccde985d113134802a0501f6 lib/HTML/Microformats/hCard/label.pm
-SHA1 c67829e9284ecfc7f3b78588fc34067e96a7dc48 lib/HTML/Microformats/hCard/n.pm
-SHA1 a58ec2e97e5514bbe16d20772d0a5ff49cc95816 lib/HTML/Microformats/hCard/org.pm
-SHA1 aecf49db93e323514a5de261a264b394938feb02 lib/HTML/Microformats/hCard/tel.pm
+SHA1 2d4418f6c5338deb700d47e994a984c11c37d994 lib/HTML/Microformats/hCard/_vt.pm
+SHA1 ff30f5420332750714d5faa5bf9dbf17cc5a6d95 lib/HTML/Microformats/hCard/email.pm
+SHA1 b12093fbb539a5d80524653f0100db463f76cf7a lib/HTML/Microformats/hCard/impp.pm
+SHA1 0dcab2267d0d2c149f20824e0e5723442f43697f lib/HTML/Microformats/hCard/label.pm
+SHA1 fcb8298f0faa6b782a4a54ec096002b641e92b1f lib/HTML/Microformats/hCard/n.pm
+SHA1 122fb6be561113ad56498a57694daed0f25e859c lib/HTML/Microformats/hCard/org.pm
+SHA1 2c449279b9c57882d54f42c40794363a619db0df lib/HTML/Microformats/hCard/tel.pm
 SHA1 024352943765f3a1cf8ad0520510d5fbe5a038e1 lib/HTML/Microformats/hEntry.pm
 SHA1 deee99d62dcdfc3dd0955e838b90efaa8ec22f54 lib/HTML/Microformats/hEvent.pm
 SHA1 ffd8f59a2d251963db09e3aeafd308835a3f5e16 lib/HTML/Microformats/hFreebusy.pm
@@ -91,7 +92,7 @@ SHA1 b860cbfb1804e58c949b431f70f3b18c0da4c26b t/01basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkvq+JEACgkQzr+BKGoqfTnkCgCdE0ocl0G4iBlK73g+/a76zDfb
-xR0AoIYnRt0fN6Mo+HvtBof4tGFM1uf3
-=B5TS
+iEYEARECAAYFAkvscoAACgkQzr+BKGoqfTkE5gCeP9ibqNcqsnwTZJFTjoYYbeTb
+JXoAoI3jIeB7xmRIa4oXXda0g0cOzQpK
+=6huF
 -----END PGP SIGNATURE-----
