@@ -18,7 +18,7 @@ use 5.008;
 use HTML::Microformats::Datatypes::String;
 use XML::LibXML qw(:all);
 
-our @EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchID stringify xml_stringify);
+our @EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchRev searchID searchAncestorTag stringify xml_stringify);
 
 =over 4
 
@@ -83,7 +83,9 @@ sub searchAncestorClass
 	my $dom    = shift;
 	my $skip   = shift;
 	
-	if ($skip <= 0)
+	return undef unless defined $dom;
+
+	if (!defined $skip or $skip <= 0)
 	{
 		my $classList;
 		$classList = $dom->getAttribute('class');
@@ -118,13 +120,13 @@ sub searchRel
 	my $target = shift;
 	my $dom    = shift;
 	
-	$target =~ s/[\:\.]/\[\:\.\]/;
+	$target =~ tr/[\:\.]/\[\:\.\]/ unless ref $target;
 	
 	my @matches = ();
 	for my $node ($dom->getElementsByTagName('*'))
 	{
 		my $classList = $node->getAttribute('rel');
-		next unless (length $classList);
+		next unless length $classList;
 		
 		if ($classList =~ / (^|\s) $target (\s|$) /ix)
 		{
@@ -133,7 +135,34 @@ sub searchRel
 	}
 	
 	return @matches;
+}
+
+=item C<< searchRev($relationship, $node) >>
+
+As per searchRel, but uses the rev attribute.
+
+=cut
+
+sub searchRev
+{
+	my $target = shift;
+	my $dom    = shift;
 	
+	$target =~ tr/[\:\.]/\[\:\.\]/ unless ref $target;
+	
+	my @matches = ();
+	for my $node ($dom->getElementsByTagName('*'))
+	{
+		my $classList = $node->getAttribute('rev');
+		next unless length $classList;
+		
+		if ($classList =~ / (^|\s) $target (\s|$) /ix)
+		{
+			push @matches, $node;
+		}
+	}
+	
+	return @matches;
 }
 
 =item C<< searchID($id, $node) >>
@@ -154,6 +183,26 @@ sub searchID
 		my $id   = $node->getAttribute('id') || next;
 		return $node if $id eq $target;
 	}	
+}
+
+=item C<< searchAncestorTag($tagname, $node) >>
+
+Returns the nearest ancestor of $node with tag name $tagname, or undef.
+
+=cut
+
+sub searchAncestorTag
+{
+	my ($target, $node) = @_;
+	
+	return $node
+		if $node->localname =~ /^ $target $/ix;
+		
+	return searchAncestorTag($target, $node->parentNode)
+		if defined $node->parentNode
+		&& $node->parentNode->nodeType == XML_ELEMENT_NODE;
+	
+	return undef;
 }
 
 =item C<< stringify($node, \%options) >>
@@ -183,7 +232,7 @@ sub stringify
 		$doABBR     = $opts{'abbr-pattern'};
 	}
 	
-	return unless ($dom);
+	return unless $dom;
 
 	# value-title
 	if ($opts{'value-title'} =~ /(allow|require)/i or
@@ -320,7 +369,7 @@ sub stringify
 		}
 	}
 
-	my $inpre = ($dom->getAttribute('_xpath') =~ /\/pre\b/i) ? 1 : 0; ##TODO - this doesn't work!
+	my $inpre = searchAncestorTag('pre', $dom) ? 1 : 0;
 	eval {
 		$str = _stringify_helper($dom, $inpre, 0)
 			unless defined $str;
@@ -611,7 +660,6 @@ sub _stringify_helper
 
 	return $rv;
 }
-
 
 =item C<< xml_stringify($node) >>
 

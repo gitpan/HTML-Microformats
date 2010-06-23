@@ -98,6 +98,24 @@ sub _hentry_parse
 
 	# Handle replies hAtom feed
 	$self->_reply_handler;
+
+	if ($self->context->has_profile( HTML::Microformats::VoteLinks->profiles ))
+	{
+		my @vls = HTML::Microformats::VoteLinks->extract_all($clone, $self->context);
+		foreach my $votelink (@vls)
+		{
+			next if defined $votelink->data->{'voter'};
+			
+			my $ancestor = searchAncestorClass('hentry', $votelink->element)
+			            || searchAncestorClass('hnews', $votelink->element)
+							|| searchAncestorClass('hslice', $votelink->element);
+			next unless defined $ancestor;
+			next unless $ancestor->getAttribute('data-cpan-html-microformats-nodepath')
+				      eq $self->element->getAttribute('data-cpan-html-microformats-nodepath');
+			
+			$votelink->data->{'voter'} = $self->data->{'author'};
+		}
+	}
 	
 	return $clone;
 }
@@ -137,8 +155,6 @@ sub _author_parse
 			push @{ $self->{'DATA'}->{'author'} }, HTML::Microformats::hCard->new($address, $self->context);
 		}
 	}
-	
-	# TODO - reified link stuff.
 }
 
 sub _title_fallback
@@ -396,7 +412,7 @@ sub add_to_model
 			));
 		$model->add_statement(RDF::Trine::Statement->new(
 			$self->id(1, "${field}-dest"),
-			RDF::Trine::Node::Resource->new("${rdf}href"),
+			RDF::Trine::Node::Resource->new("${awol}src"),
 			RDF::Trine::Node::Resource->new($self->data->{$field}),
 			));
 	}
@@ -437,7 +453,7 @@ sub add_to_model
 				));
 			$model->add_statement(RDF::Trine::Statement->new(
 				$self->id(1, "${field}-dest.${i}"),
-				RDF::Trine::Node::Resource->new("${rdf}href"),
+				RDF::Trine::Node::Resource->new("${awol}src"),
 				RDF::Trine::Node::Resource->new($self->data->{$field}->[$i]),
 				));
 		}

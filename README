@@ -13,7 +13,7 @@ SYNOPSIS
      my $results = rdf_query($sparql, $doc->model);
 
 VERSION
-    0.00_09
+    0.00_11
 
 DESCRIPTION
     The HTML::Microformats module is a wrapper for parser and handler
@@ -151,9 +151,9 @@ WHY ANOTHER MICROFORMATS MODULE?
 
     *   It supports more formats.
 
-        Swignition (and eventually HTML::Microformats) supports hCard,
-        hCalendar, rel-tag, geo, adr, rel-enclosure, rel-license, hReview,
-        hResume, hRecipe, xFolk, XFN and more.
+        HTML::Microformats supports hCard, hCalendar, rel-tag, geo, adr,
+        rel-enclosure, rel-license, hReview, hResume, hRecipe, xFolk, XFN
+        and more.
 
     *   It supports more patterns.
 
@@ -224,7 +224,11 @@ SEE ALSO
 
     *   HTML::Microformats::species
 
+    *   HTML::Microformats::VoteLinks
+
     *   HTML::Microformats::XFN
+
+    *   HTML::Microformats::XMDP
 
     *   HTML::Microformats::XOXO
 

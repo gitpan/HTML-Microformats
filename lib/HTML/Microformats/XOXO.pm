@@ -1,3 +1,23 @@
+=head1 NAME
+
+HTML::Microformats::XOXO - the XOXO microformat
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+HTML::Microformats::XOXO inherits from HTML::Microformats::BASE. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+The C<data> method returns an HTML::Microformats::XOXO::UL,
+HTML::Microformats::XOXO::OL or HTML::Microformats::XOXO::DL
+object.
+
+=cut
+
 package HTML::Microformats::XOXO;
 
 use base qw(HTML::Microformats::BASE);
@@ -96,6 +116,14 @@ sub profiles
 
 1;
 
+=head2 HTML::Microformats::XOXO::DL
+
+Represents an HTML DL element.
+
+=over 4
+
+=cut
+
 package HTML::Microformats::XOXO::DL;
 
 use common::sense;
@@ -106,7 +134,7 @@ use HTML::Microformats::_util qw(stringify xml_stringify);
 sub parse
 {
 	my ($class, $e, $xoxo) = @_;
-	my $dict;
+	my $dict = {};
 	
 	my $term;
 	foreach my $kid ($e->childNodes)
@@ -116,10 +144,14 @@ sub parse
 		if ($kid->localname =~ /^DT$/i)
 		{
 			$term = stringify($kid);
+			if ($kid->hasAttribute('id'))
+			{
+				$dict->{$term}->{'id'} = $kid->getAttribute('id');
+			}
 		}
 		elsif (defined $term)
 		{
-			push @{ $dict->{$term} }, HTML::Microformats::XOXO::DD->parse($kid, $xoxo);
+			push @{ $dict->{$term}->{'items'} }, HTML::Microformats::XOXO::DD->parse($kid, $xoxo);
 		}
 	}
 	
@@ -128,10 +160,53 @@ sub parse
 
 sub TO_JSON
 {
-	return { %{$_[0]} };
+	my $self = shift;
+	my $rv = {};
+	while (my ($k, $v) = each %$self)
+	{
+		$rv->{$k} = $v->{'items'};
+	}
+	return $rv;
+}
+
+=item C<< $dl->get_values($key) >>
+
+Treating a DL as a key-value structure, returns a list of values for a given key.
+Each value is an HTML::Microformats::XOXO::DD object.
+
+=cut
+
+sub get_values
+{
+	my ($self, $key) = @_;
+	return @{ $self->{$key}->{'items'} }
+		if defined $self->{$key}->{'items'};
+}
+
+=item C<< $dl->as_hash >>
+
+Returns a hash of keys pointing to arrayrefs of values, where each value is an
+HTML::Microformats::XOXO::DD object.
+
+=back
+
+=cut
+
+sub as_hash
+{
+	my ($self) = @_;
+	return $self->TO_JSON;
 }
 
 1;
+
+=head2 HTML::Microformats::XOXO::UL
+
+Represents an HTML UL element.
+
+=over 4
+
+=cut
 
 package HTML::Microformats::XOXO::UL;
 
@@ -154,7 +229,35 @@ sub TO_JSON
 	return [ @{$_[0]} ];
 }
 
+=item C<< $ul->as_array >>
+
+Returns an array of values, where each is a HTML::Microformats::XOXO::LI object.
+
+=back
+
+=cut
+
+sub as_array
+{
+	my ($self) = @_;
+	return @$self;
+}
+
 1;
+
+=head2 HTML::Microformats::XOXO::OL
+
+Represents an HTML OL element.
+
+=over 4
+
+=item C<< $ol->as_array >>
+
+Returns an array of values, where each is a HTML::Microformats::XOXO::LI object.
+
+=back
+
+=cut
 
 package HTML::Microformats::XOXO::OL;
 
@@ -163,6 +266,14 @@ use common::sense;
 use 5.008;
 
 1;
+
+=head2 HTML::Microformats::XOXO::LI
+
+Represents an HTML LI element.
+
+=over 4
+
+=cut
 
 package HTML::Microformats::XOXO::LI;
 
@@ -190,8 +301,7 @@ sub parse
 			if $a->hasAttribute('type');
 		$self->{'rel'}   = $a->getAttribute('rel')
 			if $a->hasAttribute('rel');
-		$self->{'title'} = $a->getAttribute('title')
-			if $a->hasAttribute('title');
+		$self->{'title'} = $a->getAttribute('title') || stringify($a);
 	}
 	
 	if ($dl)
@@ -255,7 +365,131 @@ sub TO_JSON
 	return \%rv;
 }
 
+=item C<< $li->get_link_href >>
+
+Returns the URL linked to by the B<first> link found within the item.
+
+=cut
+
+sub get_link_href
+{
+	my ($self) = @_;
+	return $self->{'url'};
+}
+
+=item C<< $li->get_link_rel >>
+
+Returns the value of the rel attribute of the first link found within the item.
+This is an unparsed string.
+
+=cut
+
+sub get_link_rel
+{
+	my ($self) = @_;
+	return $self->{'rel'};
+}
+
+=item C<< $li->get_link_type >>
+
+Returns the value of the type attribute of the first link found within the item.
+This is an unparsed string.
+
+=cut
+
+sub get_link_type
+{
+	my ($self) = @_;
+	return $self->{'type'};
+}
+
+=item C<< $li->get_link_title >>
+
+Returns the value of the rel attribute of the first link found within the item
+if present; the link text otherwise.
+
+=cut
+
+sub get_link_title
+{
+	my ($self) = @_;
+	return $self->{'title'};
+}
+
+=item C<< $li->get_text >>
+
+Returns the value of the text in the LI element B<except> for the first DL
+element within the LI, and the first UL or OL element.
+
+=cut
+
+sub get_text
+{
+	my ($self) = @_;
+	return $self->{'text'};
+}
+
+=item C<< $li->get_html >>
+
+Returns the HTML code in the LI element B<except> for the first DL
+element within the LI, and the first UL or OL element.
+
+=cut
+
+sub get_html
+{
+	my ($self) = @_;
+	return $self->{'html'};
+}
+
+=item C<< $li->get_properties >>
+
+Returns an HTML::Microformats::XOXO::DL object representing the first
+DL element within the LI.
+
+=cut
+
+sub get_properties
+{
+	my ($self) = @_;
+	return $self->{'properties'};
+}
+
+=item C<< $li->get_children >>
+
+Returns an HTML::Microformats::XOXO::OL or HTML::Microformats::XOXO::UL
+object representing the first OL or UL element within the LI.
+
+=cut
+
+sub get_children
+{
+	my ($self) = @_;
+	return $self->{'children'};
+}
+
+=item C<< $li->get_value($key) >>
+
+A shortcut for C<< $li->get_properties->get_values($key) >>.
+
+=back
+
+=cut
+
+sub get_value
+{
+	my ($self, $key) = @_;
+	return $self->get_properties->get_values($key)
+		if $self->get_properties;
+}
+
 1;
+
+=head2 HTML::Microformats::XOXO::DD
+
+This has an identical interface to HTML::Microformats::XOXO::LI.
+
+=cut
 
 package HTML::Microformats::XOXO::DD;
 
@@ -264,3 +498,36 @@ use common::sense;
 use 5.008;
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::XOXO supports XOXO as described at
+L<http://microformats.org/wiki/xoxo>.
+
+=head1 RDF OUTPUT
+
+XOXO does not map especially naturally to RDF, so this module returns
+the data as a JSON literal using the property L<http://open.vocab.org/terms/json>.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::BASE>,
+L<HTML::Microformats>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

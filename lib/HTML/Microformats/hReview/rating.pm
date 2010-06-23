@@ -1,3 +1,39 @@
+=head1 NAME
+
+HTML::Microformats::hReview::rating- helper for hReviews; handles the rating property
+
+=head1 DESCRIPTION
+
+Technically, this inherits from HTML::Microformats::BASE, so can be used in the
+same way as any of the other microformat module, though I don't know why you'd
+want to.
+
+It does not implement the include pattern, instead relying on the hReview implementation
+to do so.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats>,
+L<HTML::Microformats::hReview>,
+L<HTML::Microformats::hReviewAggregate>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
 package HTML::Microformats::hReview::rating;
 
 use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);

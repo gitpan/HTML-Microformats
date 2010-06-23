@@ -332,6 +332,36 @@
     <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_10.tar.gz"/>
     <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_10</revision>
   </Version>
+  <Version rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_11">
+    <dcs:changeset>
+      <rdf:Description>
+        <dcs:item>
+          <rdf:Description>
+            <rdfs:label xml:lang="en">Improve calculation of representative hCard.</rdfs:label>
+          </rdf:Description>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Support for VoteLinks microformat, including special support for VoteLinks inside hAtom entries.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Find contact hCard for a page - i.e. an hCard in an &lt;address&gt; element.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:item>
+          <dcs:Addition>
+            <rdfs:label xml:lang="en">Support XMDP.</rdfs:label>
+          </dcs:Addition>
+        </dcs:item>
+        <dcs:versus rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_10"/>
+      </rdf:Description>
+    </dcs:changeset>
+    <dc:issued>2010-06-23</dc:issued>
+    <file-release rdf:resource="http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_11.tar.gz"/>
+    <revision rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.00_11</revision>
+  </Version>
   <Project rdf:about="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/project">
     <bug-database rdf:resource="http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats"/>
     <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2010-02-08</created>
@@ -354,6 +384,7 @@
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_08"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_09"/>
     <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_10"/>
+    <release rdf:resource="http://purl.org/NET/cpan-uri/dist/HTML-Microformats/v_0-00_11"/>
     <repository>
       <SVNRepository>
         <browse rdf:resource="http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/"/>

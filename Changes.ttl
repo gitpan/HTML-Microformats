@@ -183,6 +183,22 @@ my:v_0-00_10
 				[ rdfs:label "Document hCard helper modules."@en ]
 		] .
 
+my:v_0-00_11
+
+	a               :Version ;
+	dc:issued       "2010-06-23" ;
+	:revision       "0.00_11"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_11.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-00_10 ;
+			dcs:item
+				[ rdfs:label "Improve calculation of representative hCard."@en ] ,
+				[ rdfs:label "Support for VoteLinks microformat, including special support for VoteLinks inside hAtom entries."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Find contact hCard for a page - i.e. an hCard in an <address> element."@en ; a dcs:Addition ] ,
+				[ rdfs:label "Support XMDP."@en ; a dcs:Addition ]
+		] .
+
+
 #############################################################
 
 my:project
@@ -204,7 +220,7 @@ my:project
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
 	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 , my:v_0-00_07 ,
-	                my:v_0-00_08 , my:v_0-00_09 , my:v_0-00_10 .
+	                my:v_0-00_08 , my:v_0-00_09 , my:v_0-00_10 , my:v_0-00_11 .
 
 #############################################################
 

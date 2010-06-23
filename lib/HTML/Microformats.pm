@@ -43,7 +43,9 @@ use HTML::Microformats::RelEnclosure;
 use HTML::Microformats::RelLicense;
 use HTML::Microformats::RelTag;
 use HTML::Microformats::species;
+use HTML::Microformats::VoteLinks;
 use HTML::Microformats::XFN;
+use HTML::Microformats::XMDP;
 use HTML::Microformats::XOXO;
 use JSON;
 use RDF::Trine 0.117;
@@ -51,12 +53,12 @@ use XML::LibXML;
 
 =head1 VERSION
 
-0.00_09
+0.00_11
 
 =cut
 
-our $VERSION = '0.00_10';
-our @Formats = qw(adr figure geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate OpenURL_COinS RelEnclosure RelLicense RelTag species XFN XOXO);
+our $VERSION = '0.00_11';
+our @Formats = qw(adr figure geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate OpenURL_COinS RelEnclosure RelLicense RelTag species VoteLinks XFN XMDP XOXO);
 
 =head1 DESCRIPTION
 
@@ -413,9 +415,9 @@ packages:
 
 =item * It supports more formats.
 
-Swignition (and eventually HTML::Microformats) supports hCard, hCalendar,
-rel-tag, geo, adr, rel-enclosure, rel-license, hReview, hResume, hRecipe,
-xFolk, XFN and more.
+HTML::Microformats supports hCard, hCalendar, rel-tag, geo, adr,
+rel-enclosure, rel-license, hReview, hResume, hRecipe, xFolk, XFN
+and more.
 
 =item * It supports more patterns.
 
@@ -492,7 +494,11 @@ Individual microformat modules:
 
 =item * L<HTML::Microformats::species>
 
+=item * L<HTML::Microformats::VoteLinks>
+
 =item * L<HTML::Microformats::XFN>
+
+=item * L<HTML::Microformats::XMDP>
 
 =item * L<HTML::Microformats::XOXO>
 

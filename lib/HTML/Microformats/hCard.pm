@@ -560,7 +560,17 @@ sub add_to_model
 			$self->id(1),
 			));
 	}
-	
+
+	$self->context->contact_hcard;
+	if ($self->{'contact'})
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			RDF::Trine::Node::Resource->new($self->context->document_uri),
+			RDF::Trine::Node::Resource->new('http://purl.org/uF/hCard/terms/contact'),
+			$self->id(1),
+			));
+	}
+
 	return $self;
 }
 

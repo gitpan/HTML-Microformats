@@ -1,6 +1,6 @@
 =head1 NAME
 
-HTML::Microformats::hCard::label - helper for hCards; handles the email property
+HTML::Microformats::hCard::label - helper for hCards; handles the label property
 
 =head1 DESCRIPTION
 

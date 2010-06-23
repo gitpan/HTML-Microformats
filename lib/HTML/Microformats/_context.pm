@@ -17,6 +17,7 @@ use 5.008;
 
 use Data::UUID;
 use HTML::Microformats::_cache;
+use HTML::Microformats::_util qw'searchAncestorTag';
 use URI;
 use XML::LibXML qw(:all);
 
@@ -164,11 +165,11 @@ sub make_bnode
 {
 	my ($self, $elem) = @_;
 	
-	if (defined $elem && $elem->hasAttribute('id'))
-	{
-		my $uri = $self->uri('#' . $elem->getAttribute('id'));
-		return 'http://thing-described-by.org/?'.$uri;
-	}
+#	if (defined $elem && $elem->hasAttribute('id'))
+#	{
+#		my $uri = $self->uri('#' . $elem->getAttribute('id'));
+#		return 'http://thing-described-by.org/?'.$uri;
+#	}
 	
 	return sprintf('_:B%s%04d', $self->{'bnode_prefix'}, $self->{'next_bnode'}++);
 }
@@ -229,7 +230,8 @@ sub representative_hcard
 		HCARD: foreach my $hc (@hcards)
 		{
 			next unless ref $hc;
-			if ($hc->data->{'_has_relme'})
+			if (defined $hc->data->{'uid'}
+			and $hc->data->{'uid'} eq $self->document_uri)
 			{
 				$self->{'representative_hcard'} = $hc;
 				last HCARD;
@@ -240,20 +242,17 @@ sub representative_hcard
 			HCARD: foreach my $hc (@hcards)
 			{
 				next unless ref $hc;
-				foreach my $url ($hc->data->{'url'})
+				if ($hc->data->{'_has_relme'})
 				{
-					if ($url eq $self->document_uri)
-					{
-						$self->{'representative_hcard'} = $hc;
-						last HCARD;
-					}
+					$self->{'representative_hcard'} = $hc;
+					last HCARD;
 				}
 			}
 		}
-		unless ($self->{'representative_hcard'})
-		{
-			$self->{'representative_hcard'} = $hcards[0] if @hcards;
-		}
+#		unless ($self->{'representative_hcard'})
+#		{
+#			$self->{'representative_hcard'} = $hcards[0] if @hcards;
+#		}
 		if ($self->{'representative_hcard'})
 		{
 			$self->{'representative_hcard'}->{'representative'} = 1;
@@ -289,6 +288,85 @@ sub representative_person_id
 	return $self->{'representative_person_id'};
 }
 
+
+=item C<< $context->contact_hcard >>
+
+Returns the hCard for the contact person for the page, or undef if none can be found.
+
+hCards are considered potential contact hCards if they are contained within an HTML
+E<lt>addressE<gt> tag, or their root element is an E<lt>addressE<gt> tag. If there
+are several such hCards, then the one in the shallowest E<lt>addressE<gt> tag is
+used; if there are several E<lt>addressE<gt> tags equally shallow, the first is used.
+
+=cut
+
+sub contact_hcard
+{
+	my $self = shift;
+	
+	unless ($self->{'contact_hcard'})
+	{
+		my @hcards = HTML::Microformats::hCard->extract_all($self->document->documentElement, $self);
+		my ($shallowest, $shallowest_depth);
+		HCARD: foreach my $hc (@hcards)
+		{
+			next unless ref $hc;
+			
+			my $address = searchAncestorTag('address', $hc->element);
+			next unless defined $address;
+			
+			my @bits = split m'/', $address;
+			my $address_depth = scalar(@bits);
+			if ($address_depth < $shallowest_depth
+			|| !defined $shallowest)
+			{
+				$shallowest_depth = $address_depth;
+				$shallowest = $hc;
+			}
+		}
+		$self->{'contact_hcard'} = $shallowest;
+
+		if ($self->{'contact_hcard'})
+		{
+			$self->{'contact_hcard'}->{'contact'} = 1;
+		}
+	}
+
+	return $self->{'contact_hcard'};
+}
+
+=item C<< $context->contact_person_id( [$as_trine] ) >>
+
+Equivalent to calling C<< $context->contact_hcard->id($as_trine, 'holder') >>,
+however magically works even if $context->contact_hcard returns undef.
+
+=cut
+
+sub contact_person_id
+{
+	my $self     = shift;
+	my $as_trine = shift;
+	
+	my $hcard = $self->contact_hcard;
+	if ($hcard)
+	{
+		return $hcard->id($as_trine, 'holder');
+	}
+	
+	unless (defined $self->{'contact_person_id'})
+	{
+		$self->{'contact_person_id'} = $self->make_bnode;
+	}
+	
+	if ($as_trine)
+	{
+		return ($self->{'contact_person_id'}  =~ /^_:(.*)$/) ?
+				 RDF::Trine::Node::Blank->new($1) :
+				 RDF::Trine::Node::Resource->new($self->{'contact_person_id'});
+	}
+	
+	return $self->{'contact_person_id'};
+}
 
 sub _process_langs
 {

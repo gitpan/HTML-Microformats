@@ -67,6 +67,7 @@ sub format_signature
 	my $hl   = 'http://ontologi.es/hlisting-hproduct#';
 	my $rdfs = 'http://www.w3.org/2000/01/rdf-schema#';
 	my $foaf = 'http://xmlns.com/foaf/0.1/';
+	my $dc   = 'http://purl.org/dc/terms/';
 
 	return {
 		'root' => 'hproduct',
@@ -88,11 +89,11 @@ sub format_signature
 		'rdf:property' => {
 			'brand'           => { literal =>["${hl}brand"] },
 			'category'        => { resource=>['http://www.holygoat.co.uk/owl/redwood/0.1/tags/taggedWithTag'] },
-			'description'     => { literal =>["${hl}description"] },
+			'description'     => { literal =>["${dc}description"] },
 			'fn'              => { literal =>["${rdfs}label"] },
 			'photo'           => { resource=>["${foaf}depiction"] },
 			'url'             => { resource=>["${foaf}page", "${rdfs}seeAlso"] },
-			'review'          => { resource=>['http://www.purl.org/stuff/rev#hasReview'] },
+			'review'          => { resource=>['http://purl.org/stuff/rev#hasReview'] },
 			'listing'         => { rev     =>["${hl}listing"] },
 		},
 	};
@@ -190,7 +191,8 @@ If 'review' and 'listing' objects don't have an 'item' set, then their
 
 =head1 RDF OUTPUT
 
-TODO
+Product data is primarily output using GoodRelations v1
+(L<http://purl.org/goodrelations/v1#>).
 
 =head1 BUGS
 

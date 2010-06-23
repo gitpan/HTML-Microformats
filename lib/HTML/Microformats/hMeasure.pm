@@ -1,3 +1,19 @@
+=head1 NAME
+
+HTML::Microformats::hMeasure - the hMeasure microformat
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+HTML::Microformats::hMeasure inherits from HTML::Microformats::BASE. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::hMeasure;
 
 use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
@@ -454,3 +470,36 @@ sub format_signature
 }
 
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::hMeasure supports hMeasure as described at
+L<http://microformats.org/wiki/hmeasure>.
+
+=head1 RDF OUTPUT
+
+This module outputs RDF using the Extensible Measurement Ontology
+(L<http://buzzword.org.uk/rdf/measure#>).
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::BASE>,
+L<HTML::Microformats>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

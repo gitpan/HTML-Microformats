@@ -16,7 +16,7 @@ use common::sense;
 use 5.008;
 
 use Carp;
-use HTML::Microformats::_util qw(searchClass searchRel);
+use HTML::Microformats::_util qw(searchClass searchRel searchRev);
 use RDF::Trine;
 
 our $AUTOLOAD;
@@ -59,8 +59,9 @@ sub extract_all
 	
 	my $hclass = $class->format_signature->{'root'};
 	my $rel    = $class->format_signature->{'rel'};
+	my $rev    = $class->format_signature->{'rev'};
 	
-	unless (defined $rel || defined $hclass)
+	unless (defined $rel || defined $rev || defined $hclass)
 	{
 		die "extract_all failed.\n";
 	}
@@ -89,6 +90,23 @@ sub extract_all
 		foreach my $r (@$rel)
 		{
 			my @elements = searchRel($r, $dom);
+			foreach my $e (@elements)
+			{
+				my $object = $class->new($e, $context, %options);
+				next unless $object;
+				next if grep { $_->id eq $object->id } @rv; # avoid duplicates
+				push @rv, $object if ref $object;
+			}
+		}
+	}
+	
+	if (defined $rev)
+	{
+		$rev = [$rev] unless ref $rev eq 'ARRAY';
+		
+		foreach my $r (@$rev)
+		{
+			my @elements = searchRev($r, $dom);
 			foreach my $e (@elements)
 			{
 				my $object = $class->new($e, $context, %options);

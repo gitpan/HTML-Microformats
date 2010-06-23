@@ -1,3 +1,19 @@
+=head1 NAME
+
+HTML::Microformats::hNews - the hNews microformat
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+HTML::Microformats::hNews inherits from HTML::Microformats::BASE. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::hNews;
 
 use base qw(HTML::Microformats::hEntry);
@@ -71,10 +87,10 @@ sub format_signature
 	my $hnews = 'http://ontologi.es/hnews#';
 	my $iana  = 'http://www.iana.org/assignments/relation/';
 	
-	$rv->{'rdf:property'}->{'source-org'}->{'resource'}   = ["${hnews}source-org"];
-	$rv->{'rdf:property'}->{'dateline'}->{'resource'}     = ["${hnews}dateline"];
+#	$rv->{'rdf:property'}->{'source-org'}->{'resource'}   = ["${hnews}source-org"];
+#	$rv->{'rdf:property'}->{'dateline'}->{'resource'}     = ["${hnews}dateline"];
 	$rv->{'rdf:property'}->{'dateline'}->{'literal'}      = ["${hnews}dateline-literal"];
-	$rv->{'rdf:property'}->{'geo'}->{'resource'}          = ["${hnews}geo"];
+#	$rv->{'rdf:property'}->{'geo'}->{'resource'}          = ["${hnews}geo"];
 	$rv->{'rdf:property'}->{'item-license'}->{'resource'} = ["${iana}license", "http://creativecommons.org/ns#license"];
 	$rv->{'rdf:property'}->{'principles'}->{'resource'}   = ["${hnews}principles"];
 	
@@ -86,8 +102,40 @@ sub add_to_model
 	my $self  = shift;
 	my $model = shift;
 
+	my $hnews = 'http://ontologi.es/hnews#';
+	
 	$self->SUPER::add_to_model($model);
 	
+	if (UNIVERSAL::isa($self->data->{'source-org'}, 'HTML::Microformats::hCard'))
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1),
+			RDF::Trine::Node::Resource->new("${hnews}source-org"),
+			$self->data->{'source-org'}->id(1, 'holder'),
+			));
+	}
+
+	if (UNIVERSAL::isa($self->data->{'dateline'}, 'HTML::Microformats::hCard'))
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1),
+			RDF::Trine::Node::Resource->new("${hnews}dateline"),
+			$self->data->{'source-org'}->id(1, 'holder'),
+			));
+	}
+
+	foreach my $geo (@{ $self->data->{'geo'} })
+	{
+		if (UNIVERSAL::isa($geo, 'HTML::Microformats::geo'))
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new("${hnews}geo"),
+				$geo->id(1, 'location'),
+				));
+		}
+	}
+
 	return $self;
 }
 
@@ -97,5 +145,39 @@ sub profiles
 	return qw(http://purl.org/uF/hNews/0.1/);
 }
 
-
 1;
+
+=head1 MICROFORMAT
+
+HTML::Microformats::hNews supports hNews as described at
+L<http://microformats.org/wiki/hNews>.
+
+=head1 RDF OUTPUT
+
+hNews is an extension of hAtom; data is returned using the same vocabularies as hAtom,
+with additional news-specific terms from L<http://ontologi.es/hnews#>.
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::BASE>,
+L<HTML::Microformats>,
+L<HTML::Microformats::hAtom>,
+L<HTML::Microformats::hEntry>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+

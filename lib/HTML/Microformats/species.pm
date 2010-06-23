@@ -1,3 +1,19 @@
+=head1 NAME
+
+HTML::Microformats::species - the species microformat
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+HTML::Microformats::species inherits from HTML::Microformats::BASE. See the
+base class definition for a description of property getter/setter methods,
+constructors, etc.
+
+=cut
+
 package HTML::Microformats::species;
 
 use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
@@ -127,22 +143,11 @@ sub add_to_model
 	{
 		foreach my $value (@{ $self->data->{$term} })
 		{
-			if (isms($value))
-			{
-				$model->add_statement(RDF::Trine::Statement->new(
-					$self->id(1),
-					RDF::Trine::Node::Resource->new($uri{$term}),
-					RDF::Trine::Node::Literal->new($value->to_string, $value->lang),
-					));
-			}
-			else
-			{
-				$model->add_statement(RDF::Trine::Statement->new(
-					$self->id(1),
-					RDF::Trine::Node::Resource->new($uri{$term}),
-					RDF::Trine::Node::Literal->new($value),
-					));
-			}
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new($uri{$term}),
+				$self->_make_literal($value),
+				));
 		}
 	}
 	
@@ -207,7 +212,7 @@ sub _species_parse
 			{ push @{$self->{'DATA'}->{$term}}, stringify($n, 'value'); }
 	}
 
-	foreach my $term (qw(vernacular common-name cname))
+	foreach my $term (qw(vernacular common-name cname fn))
 	{
 		my @nodes = searchClass($term, $root, 'taxo');
 		next unless @nodes;
@@ -237,9 +242,143 @@ sub _species_parse
 
 sub _ranks
 {
-	my $n3 = <<ONTOLOGY
+	my $plain_n3 = '';
+	while (<DATA>)
+	{
+		chomp;
+		next unless /[A-Za-z0-9]/;
+		next if /^\s*\#/;
+		$plain_n3 .= "$_\n";
+	}
+	
+	my $data = {};
+	foreach (split /\s+\.\s+/, $plain_n3)
+	{
+		s/(^\s+|\s+$)//g;
+		s/\s+/ /g;
+		my @word = split / /;
+		
+		if ($word[0] eq '@prefix')
+		{
+			my $code = $word[1];
+			my $uri  = $word[2];
+			$code =~ s/\:$//;
+			$uri  =~ s/(^\<|\>$)//g;
+			
+			$data->{Prefixes}->{$code} = $uri;
+		}
+		
+		elsif ($word[1] eq 'a' && $word[2] eq 'owl:DatatypeProperty')
+		{
+			my ($code, $term) = split /\:/, $word[0];
+			my $uri = $data->{Prefixes}->{$code} . $term;
+			
+			my $type = 'C';
+			$type = 'B' if ($uri =~ /botany/);
+			$type = 'Z' if ($uri =~ /zoology/);
+			
+			my $hyphen = $term;
+			$hyphen =~ s/([A-Z])/'-'.lc($1)/eg;
+			
+			$data->{Terms}->{$hyphen}->{Type}       .= $type;
+			$data->{Terms}->{$hyphen}->{Camel}       = $term;
+			$data->{Terms}->{$hyphen}->{Hyphen}      = $hyphen;
+			$data->{Terms}->{$hyphen}->{"URI.$type"} = $uri;
+		}
+	}
 
-# OK - Swignition doesn't really parse all this N3 properly. It only really
+#	foreach my $term (sort keys %{$data->{Terms}})
+#	{
+#		my $classes = '';
+#		$classes .= "core " if ($data->{Terms}->{$term}->{Type} =~ /C/);
+#		$classes .= "botany " if ($data->{Terms}->{$term}->{Type} =~ /B/);
+#		$classes .= "zoology " if ($data->{Terms}->{$term}->{Type} =~ /Z/);
+#		$classes .= "botany-only " if ($data->{Terms}->{$term}->{Type} =~ /^[CB]*$/);
+#		$classes .= "zoology-only " if ($data->{Terms}->{$term}->{Type} =~ /^[CZ]*$/);
+#		print "<li><code class=\"$classes\">$term</code></li>\n";
+#	}
+	
+	return $data;
+}
+
+1;
+
+=head1 MICROFORMAT
+
+The species documentation at L<http://microformats.org/wiki/species> is very
+sketchy. This module aims to be roughly compatible with the implementation
+of species in the Operator extension for Firefox, and data published by the BBC
+and Wikipedia. Here are some brief notes on how is has been impemented:
+
+=over 4
+
+=item * The root class name is 'biota'.
+
+=item * Important properties are 'vernacular' (alias 'common-name', 'cname' or 'fn'),
+'binomial', 'trinomial', 'authority'.
+
+=item * Also recognised are 'class', 'division', 'family', 'genus', 'kingdom', 'order',
+'phylum', 'species' and various other ranks.
+
+=item * Because some of these property names are fairly generic, you can alternatively
+use them in a prefixed form: 'taxo-class', 'taxo-division', etc.
+
+=item * If an element with class 'biota' has no recognised properties within it, the
+entire contents of the element are taken to be a binomial name. This allows for
+very simple markup:
+
+  <i class="biota">Homo sapiens</i>
+
+=item * The meaning of some terminology differs when used by botanists and zoologists.
+You can add the class 'botany' or 'zoology' to the root element to clarify your usage. e.g.
+
+  <i class="biota zoology">Homo sapiens</i>
+
+=back
+
+An example:
+
+  <span class="biota zoology">
+    <i class="binomial">
+      <span class="genus">Homo</span>
+      <span class="species">sapiens</span>
+      <span class="subspecies">sapiens</span>
+    </i>
+    (<span class="authority">Linnaeus, 1758</span>)
+    a.k.a. <span class="vernacular">Humans</span>
+  </span>
+
+=head1 RDF OUTPUT
+
+RDF output uses the Biological Taxonomy Vocabulary 0.2
+(L<http://purl.org/NET/biol/ns#>).
+
+=head1 BUGS
+
+Please report any bugs to L<http://rt.cpan.org/>.
+
+=head1 SEE ALSO
+
+L<HTML::Microformats::BASE>,
+L<HTML::Microformats>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT
+
+Copyright 2008-2010 Toby Inkster
+
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+
+__DATA__
+
+# OK - the module doesn't really parse all this N3 properly. It only really
 # uses the prefixes, plus the property lists, and it's very sensitive to
 # whitespace changes.
 
@@ -473,66 +612,3 @@ zoo:supraphylum	a owl:DatatypeProperty .
 zoo:synklepton	a owl:DatatypeProperty .
 zoo:tribe	a owl:DatatypeProperty .
 zoo:variety	a owl:DatatypeProperty .
-
-ONTOLOGY
-	;
-	
-	my $plain_n3 = '';
-	foreach (split /\r?\n/, $n3)
-	{
-		next unless /[A-Za-z0-9]/;
-		next if /^\s*\#/;
-		$plain_n3 .= "$_\n";
-	}
-	
-	my $data = {};
-	foreach (split /\s+\.\s+/, $plain_n3)
-	{
-		s/(^\s+|\s+$)//g;
-		s/\s+/ /g;
-		my @word = split / /;
-		
-		if ($word[0] eq '@prefix')
-		{
-			my $code = $word[1];
-			my $uri  = $word[2];
-			$code =~ s/\:$//;
-			$uri  =~ s/(^\<|\>$)//g;
-			
-			$data->{Prefixes}->{$code} = $uri;
-		}
-		
-		elsif ($word[1] eq 'a' && $word[2] eq 'owl:DatatypeProperty')
-		{
-			my ($code, $term) = split /\:/, $word[0];
-			my $uri = $data->{Prefixes}->{$code} . $term;
-			
-			my $type = 'C';
-			$type = 'B' if ($uri =~ /botany/);
-			$type = 'Z' if ($uri =~ /zoology/);
-			
-			my $hyphen = $term;
-			$hyphen =~ s/([A-Z])/'-'.lc($1)/eg;
-			
-			$data->{Terms}->{$hyphen}->{Type}       .= $type;
-			$data->{Terms}->{$hyphen}->{Camel}       = $term;
-			$data->{Terms}->{$hyphen}->{Hyphen}      = $hyphen;
-			$data->{Terms}->{$hyphen}->{"URI.$type"} = $uri;
-		}
-	}
-
-#	foreach my $term (sort keys %{$data->{Terms}})
-#	{
-#		my $classes = '';
-#		$classes .= "core " if ($data->{Terms}->{$term}->{Type} =~ /C/);
-#		$classes .= "botany " if ($data->{Terms}->{$term}->{Type} =~ /B/);
-#		$classes .= "zoology " if ($data->{Terms}->{$term}->{Type} =~ /Z/);
-#		$classes .= "botany-only " if ($data->{Terms}->{$term}->{Type} =~ /^[CB]*$/);
-#		$classes .= "zoology-only " if ($data->{Terms}->{$term}->{Type} =~ /^[CZ]*$/);
-#		print "<li><code class=\"$classes\">$term</code></li>\n";
-#	}
-	
-	return $data;
-}
-
-1;
