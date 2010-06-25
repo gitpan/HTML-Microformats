@@ -27,6 +27,8 @@ use 5.008;
 use HTML::Microformats::_util qw(stringify xml_stringify);
 use JSON qw/to_json/;
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

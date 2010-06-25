@@ -33,6 +33,8 @@ use 5.008;
 
 use HTML::Microformats::Datatypes::String qw(isms);
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my $class = shift;

@@ -57,6 +57,7 @@ lib/HTML/Microformats/RelLicense.pm
 lib/HTML/Microformats/RelTag.pm
 lib/HTML/Microformats/species.pm
 lib/HTML/Microformats/_util.pm
+lib/HTML/Microformats/VoteLinks.pm
 lib/HTML/Microformats/XFN.pm
 lib/HTML/Microformats/XMDP.pm
 lib/HTML/Microformats/XOXO.pm

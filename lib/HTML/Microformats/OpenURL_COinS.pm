@@ -24,6 +24,8 @@ use CGI;
 use CGI::Util qw(escape);
 use HTML::Microformats::_util qw(stringify xml_stringify);
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

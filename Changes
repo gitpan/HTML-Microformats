@@ -11,29 +11,29 @@ Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
 0.00_11 [2010-06-23]
- - (Addition) Find contact hCard for a page - i.e. an hCard in an <address>
-   element.
- - (Addition) Support XMDP.
  - (Addition) Support for VoteLinks microformat, including special support
    for VoteLinks inside hAtom entries.
  - Improve calculation of representative hCard.
+ - (Addition) Find contact hCard for a page - i.e. an hCard in an <address>
+   element.
+ - (Addition) Support XMDP.
 
 0.00_10 [2010-05-13]
  - Document hCard helper modules.
  - (Bugfix) Packaging fix - include figure.pm in the distribution.
 
 0.00_09 [2010-05-12]
- - Document the ISO8601 datetime parser.
- - (Addition) XOXO support.
- - (Addition) figure support.
- - (Addition) OpenURL COinS support.
  - Document the rel-* microformat implementations and OpenURL COinS.
+ - (Addition) XOXO support.
+ - (Addition) OpenURL COinS support.
  - adr RDF output now better differentiates between the addresses and the
    places they represent.
+ - (Addition) figure support.
+ - Document the ISO8601 datetime parser.
 
 0.00_08 [2010-04-29]
- - Introduce a context-unique component to blank node identifiers.
  - Distinguish between base URI and document/context URI.
+ - Introduce a context-unique component to blank node identifiers.
 
 0.00_07 [2010-04-28]
  - (Update) Support http://microformats.org/profile/specs profile URI.
@@ -43,44 +43,44 @@ Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
  - (Bugfix) Packaging fix.
 
 0.00_05 [2010-04-16]
- - (Addition) hProduct support.
  - (Addition) hAudio support.
  - (Addition) hListing support.
+ - (Addition) hProduct support.
  - (Addition) hReview-aggregate support.
 
 0.00_04 [2010-03-20]
- - (Addition) hResume support.
- - (Bugfix) hMeasure.pm wasn't inheriting properly from BASE.pm.
  - (Addition) Implement class=value-title support.
- - (Bugfix) UTF8 fixes.
- - (Addition) Implement implied date for hCalendar dtend and hAtom updated
-   properties.
- - Improvements in natural language date parsing.
+ - (Addition) hResume support.
  - (Addition) hReview and xFolk support.
  - (Bugfix) Problems parsing hCard org properties resolved.
+ - (Addition) Implement implied date for hCalendar dtend and hAtom updated
+   properties.
+ - (Bugfix) UTF8 fixes.
+ - Improvements in natural language date parsing.
+ - (Bugfix) hMeasure.pm wasn't inheriting properly from BASE.pm.
 
 0.00_03 [2010-03-09]
- - (Addition) RecurringDateTime datatype.
  - Rename _base.pm to BASE.pm; _simple_parser.pm to Mixin/Parser.pm;
    _simple_rdf.pm to Mixin/RDF.pm; _rel.pm to BASEREL.pm.
- - Document BASE microformat class.
  - (Addition) hCalendar support.
+ - (Addition) RecurringDateTime datatype.
+ - Document BASE microformat class.
 
 0.00_02 [2010-03-01]
  - (Addition) Support for hAtom and hNews.
  - Split out some common rel-X parsing into HTML::Microformats::_rel.
- - (Addition) rel-license support.
- - Document geo, adr, XFN and hAtom support.
  - (Addition) rel-enclosure support.
+ - Document geo, adr, XFN and hAtom support.
+ - (Addition) rel-license support.
 
 0.00_01 [2010-02-24]
  - Improve hCard type+value property parsing.
- - Document HTML::Microformats::hCard.
+ - (Addition) Draft 'species' microformat support.
  - (Addition) XFN support.
+ - Document HTML::Microformats::hCard.
+ - (Addition) Draft 'hMeasure' microformat support.
  - Copyright statements now reflect the fact that much of this code comes
    from 2008.
- - (Addition) Draft 'hMeasure' microformat support.
- - (Addition) Draft 'species' microformat support.
  - (Addition) Figure out which hCard on a page is the 'representative' one
    (for the purposes of XFN).
 

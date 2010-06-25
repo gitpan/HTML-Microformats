@@ -18,6 +18,8 @@ use HTML::Microformats::species;
 use URI::URL;
 use XML::LibXML qw(:all);
 
+our $VERSION = '0.00_12';
+
 # Cleans away nested compound microformats. Any intentionally
 # nested microformats (e.g. vcard class="agent vcard") should be
 # dealt with BEFORE calling the destroyer! Because of the

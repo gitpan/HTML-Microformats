@@ -39,6 +39,8 @@ use HTML::Microformats::hCard::impp;
 
 use HTML::Microformats::_util qw(stringify searchClass);
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context, %options) = @_;

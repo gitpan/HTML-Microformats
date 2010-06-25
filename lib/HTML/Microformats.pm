@@ -57,7 +57,7 @@ use XML::LibXML;
 
 =cut
 
-our $VERSION = '0.00_11';
+our $VERSION = '0.00_12';
 our @Formats = qw(adr figure geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate OpenURL_COinS RelEnclosure RelLicense RelTag species VoteLinks XFN XMDP XOXO);
 
 =head1 DESCRIPTION

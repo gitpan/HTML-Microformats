@@ -19,6 +19,7 @@ use Carp;
 use HTML::Microformats::_util qw(searchClass searchRel searchRev);
 use RDF::Trine;
 
+our $VERSION = '0.00_12';
 our $AUTOLOAD;
 
 # Derived classes...

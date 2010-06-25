@@ -18,6 +18,8 @@ use 5.008;
 use HTML::Microformats::Datatypes::DateTime;
 use RDF::Trine;
 
+our $VERSION = '0.00_12';
+
 =head1 DESCRIPTION
 
 =head2 Constructors

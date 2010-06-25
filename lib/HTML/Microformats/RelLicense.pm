@@ -20,6 +20,8 @@ use base qw(HTML::Microformats::RELBASE);
 use common::sense;
 use 5.008;
 
+our $VERSION = '0.00_12';
+
 sub format_signature
 {
 	return {

@@ -18,6 +18,8 @@ use 5.008;
 use HTML::Microformats::Datatypes::String;
 use XML::LibXML qw(:all);
 
+our $VERSION = '0.00_12';
+
 our @EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchRev searchID searchAncestorTag stringify xml_stringify);
 
 =over 4

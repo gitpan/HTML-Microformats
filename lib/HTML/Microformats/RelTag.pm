@@ -44,6 +44,8 @@ use 5.008;
 
 use CGI::Util qw(unescape);
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my $class = shift;

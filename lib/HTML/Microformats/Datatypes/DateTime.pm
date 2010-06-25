@@ -20,6 +20,8 @@ use HTML::Microformats::Datatypes::DateTime::Parser;
 use HTML::Microformats::Datatypes::String qw(isms);
 use HTTP::Date;
 
+our $VERSION = '0.00_12';
+
 =head1 DESCRIPTION
 
 This class inherits from DateTime, so supports all of DateTime's methods.

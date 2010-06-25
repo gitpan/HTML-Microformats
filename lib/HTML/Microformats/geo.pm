@@ -32,6 +32,8 @@ use 5.008;
 
 use HTML::Microformats::_util qw(stringify);
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

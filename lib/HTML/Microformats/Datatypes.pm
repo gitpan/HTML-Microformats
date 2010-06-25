@@ -6,6 +6,8 @@ use HTML::Microformats::Datatypes::Interval;
 use HTML::Microformats::Datatypes::RecurringDateTime;
 use HTML::Microformats::Datatypes::String;
 
+our $VERSION = '0.00_12';
+
 1;
 
 __END__

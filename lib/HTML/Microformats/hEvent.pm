@@ -40,6 +40,8 @@ use 5.008;
 use HTML::Microformats::_util qw(searchClass searchRel stringify);
 use HTML::Microformats::species;
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

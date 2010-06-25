@@ -39,6 +39,8 @@ use HTML::Microformats::hCard;
 use HTML::Microformats::hEntry;
 use HTML::Microformats::hNews;
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

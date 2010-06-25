@@ -41,6 +41,8 @@ use HTML::Microformats::_util qw(searchClass stringify);
 use HTML::Microformats::Datatypes::Interval;
 use RDF::Trine;
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

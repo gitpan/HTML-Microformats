@@ -39,6 +39,8 @@ use HTML::Microformats::hTodo;
 use HTML::Microformats::hAlarm;
 use HTML::Microformats::hFreebusy;
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

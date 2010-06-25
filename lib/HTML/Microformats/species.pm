@@ -24,6 +24,8 @@ use HTML::Microformats::Datatypes::String qw(isms);
 use HTML::Microformats::_util qw(searchClass stringify);
 use RDF::Trine;
 
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

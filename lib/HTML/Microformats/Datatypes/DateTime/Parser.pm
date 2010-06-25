@@ -50,6 +50,8 @@ use DateTime;
 use DateTime::Format::Builder;
 use Params::Validate qw( validate validate_pos BOOLEAN OBJECT SCALAR );
 
+our $VERSION = '0.00_12';
+
 {
     my $default_legacy_year;
     sub DefaultLegacyYear {

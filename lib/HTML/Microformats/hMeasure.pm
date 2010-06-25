@@ -37,7 +37,9 @@ my $_number       = "($_sciNumber|$_decimal|$_integer|\\x{00BC}|\\x{00BD}|\\x{00
 my $_degree       = "($_number)(deg|\\x{00b0})";
 my $_minute       = "($_number)(min|\\x{2032}|\\\')";
 my $_second       = "($_number)(sec|\\x{2033}|\\\")";
-	
+
+our $VERSION = '0.00_12';
+
 sub new
 {
 	my ($class, $element, $context) = @_;

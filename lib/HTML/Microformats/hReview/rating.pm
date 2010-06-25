@@ -1,6 +1,6 @@
 =head1 NAME
 
-HTML::Microformats::hReview::rating- helper for hReviews; handles the rating property
+HTML::Microformats::hReview::rating - helper for hReviews; handles the rating property
 
 =head1 DESCRIPTION
 
@@ -42,6 +42,8 @@ use 5.008;
 
 use HTML::Microformats::_util qw(stringify searchClass);
 use XML::LibXML qw(:libxml);
+
+our $VERSION = '0.00_12';
 
 sub new
 {

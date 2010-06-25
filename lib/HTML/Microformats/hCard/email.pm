@@ -36,6 +36,8 @@ use base qw(HTML::Microformats::hCard::_vt);
 use common::sense;
 use 5.008;
 
+our $VERSION = '0.00_12';
+
 sub _fix_value_uri
 {
 	my $self  = shift;

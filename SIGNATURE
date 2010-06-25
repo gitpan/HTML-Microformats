@@ -14,12 +14,12 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 1e7b5e1bd2ce07c553a61a915b6523f6f1f79423 Changes
-SHA1 3b119f860d8585837eccd2f1ab69208c5e04371f Changes.ttl
-SHA1 2752217ebac359020a5f03c967121d1880642746 Changes.xml
-SHA1 a5d511959dcd33dcbf5821d70a59fd861f1f7d55 MANIFEST
+SHA1 5da3a3a32d029c03e5021f4e9d4df549b410498e Changes
+SHA1 78fef56053cc8e1834c56d1d4d64b187a864a913 Changes.ttl
+SHA1 8d1a498b900ea1ecf920f92bb778b44a2547bd52 Changes.xml
+SHA1 bd9fec84f57ea90e406a1d8860051a6603f1b294 MANIFEST
 SHA1 3a87c14f230631ea3f789001be4b57dd86ace388 MANIFEST.SKIP
-SHA1 c27ef8c452768a195362fba5900f555c0c05f76d META.yml
+SHA1 ebf7f9712617e491c710c8d2ca032bb286521d95 META.yml
 SHA1 68055b8bf2e6eba4f91978ed605478b1259a1c5a Makefile.PL
 SHA1 077e3f151eee1d51c4ed0fce11cb87840e1dbbf1 README
 SHA1 ace6fb1e74188c0d9f7462e159c220ccda74f0dd TODO
@@ -37,63 +37,64 @@ SHA1 a615bb050ca0b2d79bfa0224addcb83019a53b09 inc/Module/Install/ReadmeFromPod.p
 SHA1 5c25f1104c0038041e3b93e0660c39171e4caf2b inc/Module/Install/Win32.pm
 SHA1 94d47349c803c4bd2a9230d25e4db0b6aaf1acd8 inc/Module/Install/WriteAll.pm
 SHA1 1e6399a0585817abef500c34fce676fb9b0545f0 inc/Test/Signature.pm
-SHA1 fc180276ee93485acc5bf8a03b54239f9ef04f38 lib/HTML/Microformats.pm
-SHA1 6a872b3095b5051d3f1c18c33d1711bbae7f58cd lib/HTML/Microformats/BASE.pm
-SHA1 c61a0b7d0a5b2b798f67889d39f515eb9389c214 lib/HTML/Microformats/Datatypes.pm
-SHA1 dbd1725e54fc87f054f3080cf542db4be69261e3 lib/HTML/Microformats/Datatypes/DateTime.pm
-SHA1 9587974fbe8a41a8311386f2240574fece9bde02 lib/HTML/Microformats/Datatypes/DateTime/Parser.pm
-SHA1 fd5e87e2c7bd6bb8aafa95b03b5c322269941668 lib/HTML/Microformats/Datatypes/Duration.pm
-SHA1 08aad94d0f69791a93d3e096352d5fa529ad03e7 lib/HTML/Microformats/Datatypes/Interval.pm
-SHA1 b9660be2fa6689aaf389cc983864e701b48da3f6 lib/HTML/Microformats/Datatypes/RecurringDateTime.pm
-SHA1 cfe450ff5679da0b14d452787bcf833ece710055 lib/HTML/Microformats/Datatypes/String.pm
-SHA1 2afb0be5d6b4c8fcaca543724da47372c3973b0e lib/HTML/Microformats/Mixin/Parser.pm
-SHA1 9575c8d2c1a675cb84a68d244b757196290c11ad lib/HTML/Microformats/Mixin/RDF.pm
-SHA1 253bb507a3604a8518288d3ca4a72c260f93b641 lib/HTML/Microformats/OpenURL_COinS.pm
-SHA1 a42c68e10044a12bccf378ea943bab7fe7cef249 lib/HTML/Microformats/RELBASE.pm
-SHA1 7734339075efcd49c56e14e00de7120b4a73b97c lib/HTML/Microformats/RelEnclosure.pm
-SHA1 6dc62946b972d132d85fc6bd8e3326b001b41006 lib/HTML/Microformats/RelLicense.pm
-SHA1 c4e2406b86f648f4c205804919d9d6b113b69c78 lib/HTML/Microformats/RelTag.pm
-SHA1 2c38de05b9b42d4f72a96f7370ce56e76d24c140 lib/HTML/Microformats/XFN.pm
-SHA1 a113ea66fb28592bf7961817b6889aa1ce480f1c lib/HTML/Microformats/XMDP.pm
-SHA1 c1637a7137bc2f59aff299c7348b9e2de5d18ce2 lib/HTML/Microformats/XOXO.pm
-SHA1 20162f482b5f92a01e4714497df22077e43b85cc lib/HTML/Microformats/_cache.pm
-SHA1 d99a7b43a60096e6f2322a0cf5506813bef5ba8f lib/HTML/Microformats/_context.pm
-SHA1 925ad6806e9cc26a20976a372f35cdc56bd85d93 lib/HTML/Microformats/_util.pm
-SHA1 96d4a6fc0900dad4c6bf8030c84437c5c1fd71dd lib/HTML/Microformats/adr.pm
-SHA1 7aa39ef93c9134bfd46548d583a09e41cdbd0fe7 lib/HTML/Microformats/figure.pm
-SHA1 c592c00d2a426ec5d309bfe3465d73f1aa12f1a4 lib/HTML/Microformats/geo.pm
-SHA1 1c731578d86080306eee732328e95e94ce953462 lib/HTML/Microformats/hAlarm.pm
-SHA1 27eb740ab53fdc2e004be72348621c65f5bd49f6 lib/HTML/Microformats/hAtom.pm
-SHA1 a8a6b4251fa6bc7da1c20886c92eda375e710061 lib/HTML/Microformats/hAudio.pm
-SHA1 ab86e8479ee58c1c2ca20ccaff8266a3f9f062a2 lib/HTML/Microformats/hCalendar.pm
-SHA1 5702534bd81883a9c23f9764af0394286fb380ee lib/HTML/Microformats/hCard.pm
-SHA1 2d4418f6c5338deb700d47e994a984c11c37d994 lib/HTML/Microformats/hCard/_vt.pm
-SHA1 ff30f5420332750714d5faa5bf9dbf17cc5a6d95 lib/HTML/Microformats/hCard/email.pm
-SHA1 b12093fbb539a5d80524653f0100db463f76cf7a lib/HTML/Microformats/hCard/impp.pm
-SHA1 9c27691e6a3de4f7816e076cde61ff5d9dbf4460 lib/HTML/Microformats/hCard/label.pm
-SHA1 fcb8298f0faa6b782a4a54ec096002b641e92b1f lib/HTML/Microformats/hCard/n.pm
-SHA1 122fb6be561113ad56498a57694daed0f25e859c lib/HTML/Microformats/hCard/org.pm
-SHA1 2c449279b9c57882d54f42c40794363a619db0df lib/HTML/Microformats/hCard/tel.pm
-SHA1 106c787b57338b2a0cf1567ed6a3e8941b5aceae lib/HTML/Microformats/hEntry.pm
-SHA1 deee99d62dcdfc3dd0955e838b90efaa8ec22f54 lib/HTML/Microformats/hEvent.pm
-SHA1 ffd8f59a2d251963db09e3aeafd308835a3f5e16 lib/HTML/Microformats/hFreebusy.pm
-SHA1 7f699c373d639512cab15ebf5497bcf82c31791e lib/HTML/Microformats/hListing.pm
-SHA1 7428d7f28499af4a26d849e7eba3dcc737ed65ac lib/HTML/Microformats/hMeasure.pm
-SHA1 642b14ac5ec7f97db438f7b832e8c8acd2a12517 lib/HTML/Microformats/hNews.pm
-SHA1 217cfbb0eabb0627f06a02badfb0247712b78412 lib/HTML/Microformats/hProduct.pm
-SHA1 76fd4ca2246f44fe3b6c84bc53237234e920a410 lib/HTML/Microformats/hRecipe.pm
-SHA1 6d0e338cc43d01c1d75fc7a18a6111fd6d557a3e lib/HTML/Microformats/hResume.pm
-SHA1 766910f1d8886a582a5cbfb1db65649e723f9b80 lib/HTML/Microformats/hReview.pm
-SHA1 36cdbd8237605c669c12192740c58eee9d094365 lib/HTML/Microformats/hReview/rating.pm
-SHA1 581c37aeecf3583c471c23fd4d387b9256781aab lib/HTML/Microformats/hReviewAggregate.pm
-SHA1 58be9c1059d4e6061d3482d125f0c4660fc823cf lib/HTML/Microformats/hTodo.pm
-SHA1 cea6013381c6578f50d5fc15998a1b1d6f122fe8 lib/HTML/Microformats/species.pm
+SHA1 fe78abe615cfc7027b84f000c996567e2070335f lib/HTML/Microformats.pm
+SHA1 09b6412159d53efc7c32f2515cdebb9473fc91a6 lib/HTML/Microformats/BASE.pm
+SHA1 cb6430a00b76adbd74b32d4a5dca97e9c0bab618 lib/HTML/Microformats/Datatypes.pm
+SHA1 aa39bac8a4e8d5b825235725ce849a4171d279ce lib/HTML/Microformats/Datatypes/DateTime.pm
+SHA1 63681ea8fd75e9560f58cdcbcbc93a6178b94f68 lib/HTML/Microformats/Datatypes/DateTime/Parser.pm
+SHA1 cc6f15a15428200d078a4a4ee6808ca7bb6e3c95 lib/HTML/Microformats/Datatypes/Duration.pm
+SHA1 914422a54d9be4a1e30160ff2c0af10b5b025eda lib/HTML/Microformats/Datatypes/Interval.pm
+SHA1 4a3ad23bd8d499a5da3fb87b46fef3f42458c648 lib/HTML/Microformats/Datatypes/RecurringDateTime.pm
+SHA1 06809cf418645afefcf25bee205176e6a5216f8e lib/HTML/Microformats/Datatypes/String.pm
+SHA1 59e4d3a507bd138e47f40323e3eae7d877422e00 lib/HTML/Microformats/Mixin/Parser.pm
+SHA1 aaf4622ba22847d7fe4882575692729339531a79 lib/HTML/Microformats/Mixin/RDF.pm
+SHA1 0ff2a195578fed9d492fc86187a7a3f7d9ed579f lib/HTML/Microformats/OpenURL_COinS.pm
+SHA1 2f8a7d771bbdeabe71b685a412988b18f7c98e06 lib/HTML/Microformats/RELBASE.pm
+SHA1 99495310d3fec1c89c7e5a55f63bd30072fbf918 lib/HTML/Microformats/RelEnclosure.pm
+SHA1 c5db9cd6421b1840aa8a92b8e93a30721688913e lib/HTML/Microformats/RelLicense.pm
+SHA1 ed55480e82cf9921641ff6af914438eb46b2ba15 lib/HTML/Microformats/RelTag.pm
+SHA1 f0d3fd6acc401789d614928384929f4855963c1c lib/HTML/Microformats/VoteLinks.pm
+SHA1 ceb27df7c835516c38f308a31eea0b42d5f6ebdf lib/HTML/Microformats/XFN.pm
+SHA1 4c787bb693afd22a783df62323a4c475777cfdd3 lib/HTML/Microformats/XMDP.pm
+SHA1 ce36e0fb9b2daddc5509101bced36f7e1595f9f0 lib/HTML/Microformats/XOXO.pm
+SHA1 42dc8a726531af13283c471e2ead141fb448a4a2 lib/HTML/Microformats/_cache.pm
+SHA1 755fce779965d95803bb9103b957b613632f2455 lib/HTML/Microformats/_context.pm
+SHA1 c0cc26ebb7a46f3b95a4f181b927e2031b3bb22c lib/HTML/Microformats/_util.pm
+SHA1 6d68a8402ae4c47539d4ab8b39b8b02d1dd651ba lib/HTML/Microformats/adr.pm
+SHA1 9d3a686c9c58176b18f20f1d61eba08ff6389ec2 lib/HTML/Microformats/figure.pm
+SHA1 b29975af2ad35803703f8587d126a8331a2278cb lib/HTML/Microformats/geo.pm
+SHA1 93f8bf70565008572a8b36ab307bf89f49908335 lib/HTML/Microformats/hAlarm.pm
+SHA1 6512ce90fde4908a485fde7708e73641e215134a lib/HTML/Microformats/hAtom.pm
+SHA1 6f80df546be103541bf389f6dcd5fc43222e718f lib/HTML/Microformats/hAudio.pm
+SHA1 794651ef78809be82282149f780a2ab84e088e6f lib/HTML/Microformats/hCalendar.pm
+SHA1 ad3312fa042096618b116f9605313a07968b8a6c lib/HTML/Microformats/hCard.pm
+SHA1 34ca29f7b22cc43a93b02dc63f1d334acb98f613 lib/HTML/Microformats/hCard/_vt.pm
+SHA1 8da0c787afb6445f293a3eed3ef50a13f09ce072 lib/HTML/Microformats/hCard/email.pm
+SHA1 07a67c50bd5a8aa99068cd68ae6124a28087ef31 lib/HTML/Microformats/hCard/impp.pm
+SHA1 8a77cb3aec0930fb7aa2ddd52df9cfb4d42029d8 lib/HTML/Microformats/hCard/label.pm
+SHA1 f4fe4b09c50474a70c9aa6c4861ff4d9e47e1024 lib/HTML/Microformats/hCard/n.pm
+SHA1 ed97daa1127e4e27ff76629e71e9f0ef165026fb lib/HTML/Microformats/hCard/org.pm
+SHA1 83c86b7e2eaa85cb555edb18fd0c811b15491694 lib/HTML/Microformats/hCard/tel.pm
+SHA1 0bf96ae87d15e45f36c9292c973b1623e5df51d7 lib/HTML/Microformats/hEntry.pm
+SHA1 0d13270a1011392688e2378e736ad768fbaed280 lib/HTML/Microformats/hEvent.pm
+SHA1 ab9f77fc36e912c0f2d4c86c80e4cfc097c0d232 lib/HTML/Microformats/hFreebusy.pm
+SHA1 939e9fc0acb553fe8d00a2dd141f4a4f5de47b91 lib/HTML/Microformats/hListing.pm
+SHA1 49763a55122fcc221cd3b2be9bdf54ad142bd8d6 lib/HTML/Microformats/hMeasure.pm
+SHA1 9ed2ceb97b6d33f224a07d16323303c15c38aa84 lib/HTML/Microformats/hNews.pm
+SHA1 a536e77bc3db77ccaf9768734dee0c283838be92 lib/HTML/Microformats/hProduct.pm
+SHA1 fbbc19422550ddad913825cc82b8061a03c6c7dc lib/HTML/Microformats/hRecipe.pm
+SHA1 d942ca44f296a456d50e4bab1bd5740c04bfd4cc lib/HTML/Microformats/hResume.pm
+SHA1 355f35a14997f679e6d49321c93ae1931d6733d7 lib/HTML/Microformats/hReview.pm
+SHA1 43e697daf727d7461f30125557bddce09a6f4e6a lib/HTML/Microformats/hReview/rating.pm
+SHA1 f2dd13091466ae80f27ae8d46145a46c3f2c9773 lib/HTML/Microformats/hReviewAggregate.pm
+SHA1 426a771cd5664c31cc36100a436177991b187536 lib/HTML/Microformats/hTodo.pm
+SHA1 aafe0a735eac236652e2f5bc0d208b86992201d7 lib/HTML/Microformats/species.pm
 SHA1 bb128dce2db8ad397dbeb957d79d084cc5d2391a t/00sig.t
 SHA1 b860cbfb1804e58c949b431f70f3b18c0da4c26b t/01basic.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkwibswACgkQzr+BKGoqfTnpYwCfUJbih8xjVB+7j7h+7uB2bVNZ
-pfQAn0Fh9J/VjLUVhvZjlNUXy4B66wd9
-=z77/
+iEYEARECAAYFAkwk7toACgkQzr+BKGoqfTkTmwCeN7GTJsfSKf44TCSqvZt6Qtpc
+F0UAoKRvrxS2DRS8AP6v1m+Xizm13vd1
+=zyh6
 -----END PGP SIGNATURE-----
