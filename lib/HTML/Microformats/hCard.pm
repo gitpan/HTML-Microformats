@@ -39,7 +39,7 @@ use HTML::Microformats::hCard::impp;
 
 use HTML::Microformats::_util qw(stringify searchClass);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -57,7 +57,6 @@ sub new
 		'id.holder'  => $context->make_bnode ,
 		};
 	
-	##TODO - detect if we're inside an hCalendar component.
 	$self->{'in_hcalendar'} = $options{'in_hcalendar'};
 	
 	bless $self, $class;

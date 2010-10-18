@@ -14,7 +14,8 @@ readme_from         $fn;
 author              'Toby Inkster <tobyink@cpan.org>';
 license             'perl';
 
-test_requires       'Test::More' => '0.61';
+test_requires       'Test::More'          => '0.61';
+test_requires       'Module::Signature'   => '0.66';
 
 requires            'Carp'                => '1.00';
 requires            'CGI'                 => 0;
@@ -41,6 +42,8 @@ resources(
 	'repository' => "http://goddamn.co.uk/viewvc/perlmods/$dist/",
 	'bugtracker' => "http://rt.cpan.org/Dist/Display.html?Queue=$dist",
 	);
+
+keywords('XHTML', 'HTML', 'Semantic Web', 'Microformats', 'POSH', 'RDF', 'JSON');
 	
 write_doap_changes;
 write_doap_changes_xml;

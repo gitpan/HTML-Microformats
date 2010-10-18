@@ -4,7 +4,16 @@ HTML::Microformats::hNews - the hNews microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::hNews;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::hNews->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $article (@objects)
+ {
+   printf("%s %s\n", $article->get_link, $article->get_dateline);
+ }
 
 =head1 DESCRIPTION
 
@@ -23,7 +32,7 @@ use 5.008;
 use HTML::Microformats::_util qw(searchClass);
 use HTML::Microformats::hCard;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -61,7 +70,7 @@ sub _source_org_fallback
 	
 	unless (@{ $self->{'DATA'}->{'source-org'} })
 	{
-		##TODO: Should really only use the nearest-in-parent
+		##TODO: Should really only use the nearest-in-parent.    post-0.001
 		my @so_elements = searchClass('source-org', $self->context->document->documentElement);
 		foreach my $so (@so_elements)
 		{

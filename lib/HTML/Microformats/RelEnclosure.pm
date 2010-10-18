@@ -4,7 +4,13 @@ HTML::Microformats::RelEnclosure - the rel-enclosure microformat
 
 =head1 SYNOPSIS
 
-TODO
+ my @enclosures = HTML::Microformats::RelEnclosure->extract_all(
+                   $doc->documentElement, $context);
+ foreach my $e (@enclosures)
+ {
+   my $type = $l->get_type || 'unknown';
+   printf("%s (%s)\n"), $l->get_href, $type);
+ }
 
 =head1 DESCRIPTION
 
@@ -33,7 +39,7 @@ use 5.008;
 
 use HTML::Microformats::Datatypes::String qw(isms);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -92,39 +98,17 @@ sub add_to_model
 		))
 		if defined $self->data->{'type'};
 
-	if (isms($self->data->{'label'}))
-	{
-		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new($self->data->{'href'}),
-			RDF::Trine::Node::Resource->new("http://www.w3.org/2000/01/rdf-schema#label"),
-			RDF::Trine::Node::Literal->new($self->data->{'label'}->to_string, $self->data->{'label'}->lang),
-			));
-	}
-	elsif (defined $self->data->{'label'})
-	{
-		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new($self->data->{'href'}),
-			RDF::Trine::Node::Resource->new("http://www.w3.org/2000/01/rdf-schema#label"),
-			RDF::Trine::Node::Literal->new($self->data->{'label'}),
-			));
-	}
+	$model->add_statement(RDF::Trine::Statement->new(
+		RDF::Trine::Node::Resource->new($self->data->{'href'}),
+		RDF::Trine::Node::Resource->new("http://www.w3.org/2000/01/rdf-schema#label"),
+		$self->_make_literal($self->data->{'label'}),
+		));
 
-	if (isms($self->data->{'title'}))
-	{
-		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new($self->data->{'href'}),
-			RDF::Trine::Node::Resource->new("http://purl.org/dc/terms/title"),
-			RDF::Trine::Node::Literal->new($self->data->{'title'}->to_string, $self->data->{'title'}->lang),
-			));
-	}
-	elsif (defined $self->data->{'title'})
-	{
-		$model->add_statement(RDF::Trine::Statement->new(
-			RDF::Trine::Node::Resource->new($self->data->{'href'}),
-			RDF::Trine::Node::Resource->new("http://purl.org/dc/terms/title"),
-			RDF::Trine::Node::Literal->new($self->data->{'title'}),
-			));
-	}
+	$model->add_statement(RDF::Trine::Statement->new(
+		RDF::Trine::Node::Resource->new($self->data->{'href'}),
+		RDF::Trine::Node::Resource->new("http://purl.org/dc/terms/title"),
+		$self->_make_literal($self->data->{'title'}),
+		));
 
 	return $self;
 }

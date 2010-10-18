@@ -210,6 +210,19 @@ my:v_0-00_12
 				[ rdfs:label "VoteLinks.pm wasn't included in the 0.00_11 distribution."@en ; a dcs:Bugfix ]
 		] .
 
+my:v_0-00_13
+
+	a               :Version ;
+	dc:issued       "2010-10-18" ;
+	:revision       "0.00_13"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.00_13.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-00_12 ;
+			dcs:item
+				[ rdfs:label "Minor bugfixes, cleanups and documentation improvements."@en ] ,
+				[ rdfs:label "Add serialise_model method to HTML::Microformats and HTML::Microformats::BASE."@en ; a dcs:Addition ]
+		] .
+
 #############################################################
 
 my:project
@@ -232,7 +245,7 @@ my:project
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
 	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 , my:v_0-00_07 ,
 	                my:v_0-00_08 , my:v_0-00_09 , my:v_0-00_10 , my:v_0-00_11 ,
-	                my:v_0-00-12 .
+	                my:v_0-00-12 , my:v_0-00-13 .
 
 #############################################################
 

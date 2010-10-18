@@ -53,11 +53,11 @@ use XML::LibXML;
 
 =head1 VERSION
 
-0.00_11
+0.00_13
 
 =cut
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 our @Formats = qw(adr figure geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate OpenURL_COinS RelEnclosure RelLicense RelTag species VoteLinks XFN XMDP XOXO);
 
 =head1 DESCRIPTION
@@ -369,6 +369,25 @@ sub model
 	my $model = RDF::Trine::Model->temporary_model;
 	$self->add_to_model($model);
 	return $model;
+}
+
+=item C<< $object->serialise_model(as => $format) >> 
+
+As C<model> but returns a string.
+
+=back
+
+=cut
+
+sub serialise_model
+{
+	my $self = shift;
+	
+	my %opts = ref $_[0] ? %{ $_[0] } : @_;
+	$opts{as} ||= 'Turtle';
+	
+	my $ser = RDF::Trine::Serializer->new(delete $opts{as}, %opts);
+	return $ser->serialize_model_to_string($self->model);
 }
 
 =item C<< $doc->add_to_model($model) >>

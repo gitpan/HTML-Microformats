@@ -4,7 +4,27 @@ HTML::Microformats::hProduct - the hProduct microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::hProduct;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::hProduct->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $p (@objects)
+ {
+   printf("%s\n", $m->get_fn);
+   if ($p->get_review)
+   {
+     foreach my $r ($p->get_review)
+     {
+       printf("  - reviewed by %s\n", $r->get_reviewer->get_fn);
+     }
+   }
+   else
+   {
+     print "    (no reviews yet)\n";
+   }
+ }
 
 =head1 DESCRIPTION
 
@@ -20,7 +40,7 @@ use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -55,7 +75,7 @@ sub new
 			unless $listing->{'DATA'}->{'item'};
 	}
 
-	##TODO: class=identifier (type+value)
+	##TODO: class=identifier (type+value)    post-0.001
 
 	$cache->set($context, $element, $class, $self)
 		if defined $cache;

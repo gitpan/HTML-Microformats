@@ -30,7 +30,7 @@ use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {

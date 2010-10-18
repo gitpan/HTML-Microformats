@@ -4,7 +4,16 @@ HTML::Microformats::species - the species microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::hCard;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::species->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $species (@objects)
+ {
+   print $species->get_binomial . "\n";
+ }
 
 =head1 DESCRIPTION
 
@@ -24,7 +33,7 @@ use HTML::Microformats::Datatypes::String qw(isms);
 use HTML::Microformats::_util qw(searchClass stringify);
 use RDF::Trine;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -83,8 +92,8 @@ sub format_signature
 
 sub profiles
 {
-	# place holder
-	return qw('http://purl.org/NET/cpan-uri/dist/HTML-Microformats/profile-species');
+	# placeholder
+	return qw(http://purl.org/NET/cpan-uri/dist/HTML-Microformats/profile-species);
 }
 
 sub add_to_model

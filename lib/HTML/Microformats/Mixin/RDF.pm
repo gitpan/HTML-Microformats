@@ -6,7 +6,7 @@ use 5.008;
 use Encode qw(encode);
 use RDF::Trine;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub _simple_rdf
 {

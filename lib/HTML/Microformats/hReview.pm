@@ -32,7 +32,7 @@ use 5.008;
 use HTML::Microformats::_util qw(stringify searchClass);
 use HTML::Microformats::hReview::rating;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -61,15 +61,15 @@ sub new
 	
 	$self->{'DATA'}->{'version'} ||= '0.3'
 		if $element->getAttribute('class') =~ /\b(hreview)\b/;
-
-	##TODO
+		
+	##TODO post-0.001
 	# If no "reviewer" is found inside the hReview, parsers should look 
 	# outside the hReview, in the context of the page, for the "reviewer". 
 	# If there is no "reviewer" outside either, then parsers should use the
 	# author defined by the containing document language, e.g. for HTML
 	# documents, the <address> contact info for the page (which is ideally
 	# marked up as an hCard as well)
-	
+
 	$self->_fallback_item($clone)->_auto_detect_type;
 
 	$self->{'DATA'}->{'rating'} =
@@ -382,6 +382,19 @@ L<http://www.purl.org/stuff/rev#>, L<http://ontologi.es/hreview#>.
 =head1 BUGS
 
 Please report any bugs to L<http://rt.cpan.org/>.
+
+Known limitations:
+
+=over 4
+
+=item * If no "reviewer" is found inside the hReview, parsers should look 
+outside the hReview, in the context of the page, for the "reviewer". 
+If there is no "reviewer" outside either, then parsers should use the
+author defined by the containing document language, e.g. for HTML
+documents, the <address> contact info for the page (which is ideally
+marked up as an hCard as well).
+
+=back
 
 =head1 SEE ALSO
 

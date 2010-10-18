@@ -18,7 +18,7 @@ use HTML::Microformats::species;
 use URI::URL;
 use XML::LibXML qw(:all);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 # Cleans away nested compound microformats. Any intentionally
 # nested microformats (e.g. vcard class="agent vcard") should be
@@ -473,13 +473,13 @@ sub _simple_parse
 				elsif ($node->getAttribute('class') =~ /\b($uf_class)\b/)
 				{
 					my $pkg = 'HTML::Microformats::'.$uf;
-					my $obj = eval "${pkg}->new(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-ical'});";
+					my $obj = eval "${pkg}->new(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-cal'});";
 					push @node_parsed_objects, $obj;
 				}
 				else
 				{
 					my $pkg = 'HTML::Microformats::'.$uf;
-					my @all = eval "${pkg}->extract_all(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-ical'});";
+					my @all = eval "${pkg}->extract_all(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-cal'});";
 					push @node_parsed_objects, @all if @all;
 				}
 				
@@ -555,6 +555,7 @@ sub _simple_parse
 	foreach my $root (@{ $options->{'no-destroy'} })
 		{ $do_destroy->{$root} = 0; }
 
+	# embedded hmeasure
 	if (defined $options->{'hmeasure'})
 	{
 		my @measures = HTML::Microformats::hMeasure->extract_all($root, $self->context);
@@ -569,7 +570,7 @@ sub _simple_parse
 		}
 	}
 	
-	# rel-tag
+	# embedded rel-tag
 	if (defined $options->{'rel-tag'})
 	{
 		my $key  = $options->{'rel-tag'};
@@ -577,16 +578,15 @@ sub _simple_parse
 		push @{ $self->{'DATA'}->{$key} }, @tags if @tags;
 	}
 
-##TODO
-#	# rel-license
-#	if (defined $options->{'rel-license'})
-#	{
-#		my @licenses = Swignition::uF::RelLicense::parse_all($page, $root);
-#		foreach my $l (@licenses)
-#			{ push @{ $self->{$options->{'rel-license'}} }, $l; }
-#	}
-	
-	# rel-enclosure
+	# embedded rel-license
+	if (defined $options->{'rel-license'})
+	{
+		my $key  = $options->{'rel-license'};
+		my @licences = HTML::Microformats::RelLicense->extract_all($root, $self->context);
+		push @{ $self->{'DATA'}->{$key} }, @licences if @licences;
+	}
+
+	# embedded rel-enclosure
 	if (defined $options->{'rel-enclosure'})
 	{
 		my $key  = $options->{'rel-enclosure'};
@@ -672,7 +672,8 @@ sub _simple_parse
 				{
 					if ($type =~ /MM/)
 					{
-						##TODO
+						##TODO: post-0.001
+						die "Not implemented!";
 						# my $px = { uri => $page->uri($u) };
 						# bless $px, "Swignition::uF::Pseudo";
 						# push @parsed_values, $px;

@@ -4,7 +4,16 @@ HTML::Microformats::hMeasure - the hMeasure microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::hMeasure;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::hMeasure->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $m (@objects)
+ {
+   printf("%s %s\n", $m->get_number, $m->get_unit);
+ }
 
 =head1 DESCRIPTION
 
@@ -38,7 +47,7 @@ my $_degree       = "($_number)(deg|\\x{00b0})";
 my $_minute       = "($_number)(min|\\x{2032}|\\\')";
 my $_second       = "($_number)(sec|\\x{2033}|\\\")";
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -104,7 +113,7 @@ sub _extract_item
 		$h->setAttribute('class', $newClass);
 	}
 	
-	return (defined $self->{'DATA'}->{'item'})?1:0;
+	return (defined $self->{'DATA'}->{'item'}) ? 1 : 0;
 }
 
 sub _hmeasure_parse
@@ -431,7 +440,7 @@ sub add_to_model
 		}
 	}
 	
-	# TODO: handle tolerances.
+	# TODO: handle tolerances. post-0.001
 
 	return $model;
 }

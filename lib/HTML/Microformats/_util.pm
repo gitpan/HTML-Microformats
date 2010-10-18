@@ -18,7 +18,7 @@ use 5.008;
 use HTML::Microformats::Datatypes::String;
 use XML::LibXML qw(:all);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 our @EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchRev searchID searchAncestorTag stringify xml_stringify);
 

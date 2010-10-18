@@ -4,7 +4,12 @@ HTML::Microformats::VoteLinks - the VoteLinks microformat
 
 =head1 SYNOPSIS
 
-TODO
+ my @vlinks = HTML::Microformats::RelTag->extract_all(
+                   $doc->documentElement, $context);
+ foreach my $link (@vlinks)
+ {
+   printf("%s (%s)\n", $link->get_href, $link->get_vote;
+ }
 
 =head1 DESCRIPTION
 
@@ -38,7 +43,7 @@ use 5.008;
 
 use CGI::Util qw(unescape);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {

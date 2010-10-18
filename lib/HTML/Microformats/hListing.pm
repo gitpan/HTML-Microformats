@@ -4,7 +4,16 @@ HTML::Microformats::hListing - the hListing microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::hListing;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::hListing->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $x (@objects)
+ {
+   printf("%s <%s>\n", $x->get_summary, $x->get_permalink);
+ }
 
 =head1 DESCRIPTION
 
@@ -22,7 +31,7 @@ use 5.008;
 
 use HTML::Microformats::_util qw(searchClass);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -257,7 +266,8 @@ in from 'dtlisted'. This is similar to the behaviour of 'dtstart' and
 
 =head1 RDF OUTPUT
 
-TODO
+Listing data is primarily output using GoodRelations v1
+(L<http://purl.org/goodrelations/v1#>).
 
 =head1 BUGS
 

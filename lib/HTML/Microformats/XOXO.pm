@@ -4,7 +4,37 @@ HTML::Microformats::XOXO - the XOXO microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::hMeasure;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::XOXO->extract_all(
+                   $dom->documentElement, $context);
+ my $list = $objects[0];
+ 
+ # Let's assume this structure:
+ #
+ # <ol class="xoxo people">
+ #   <li>
+ #     <a href="http://tobyinkster.co.uk/">Toby Inkster</a>
+ #     <dl>
+ #       <dt>Eye colour</dt>
+ #       <dd>Blue</dt>
+ #       <dt>Hair colour</dt>
+ #       <dd>Blonde</dt>
+ #       <dd>Brown</dt>
+ #     </dl>
+ #   </li>
+ # </ol>
+ 
+ print $list->data->as_array->[0]->get_link_title;
+ # Toby Inkster
+ print $list->data->as_array->[0]->get_properties
+      ->get_value('Eye colour')->[0];
+ # Blue
+ print join '-', $list->data->as_array->[0]
+      ->get_value('Hair colour');
+ # Blonde-Brown
 
 =head1 DESCRIPTION
 
@@ -12,9 +42,10 @@ HTML::Microformats::XOXO inherits from HTML::Microformats::BASE. See the
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
-The C<data> method returns an HTML::Microformats::XOXO::UL,
+Unlike most of the modules in the HTML::Microformats suite,
+the C<data> method returns an HTML::Microformats::XOXO::UL,
 HTML::Microformats::XOXO::OL or HTML::Microformats::XOXO::DL
-object.
+object, rather than a plain hashref.
 
 =cut
 
@@ -27,7 +58,7 @@ use 5.008;
 use HTML::Microformats::_util qw(stringify xml_stringify);
 use JSON qw/to_json/;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -118,16 +149,62 @@ sub profiles
 
 1;
 
+package HTML::Microformats::XOXO::AbstractList;
+
+use common::sense;
+use 5.008;
+
+sub parse
+{
+	my ($class, $e, $xoxo) = @_;
+	my @items;
+	
+	foreach my $li ($e->getChildrenByTagName('li'))
+		{ push @items, HTML::Microformats::XOXO::LI->parse($li, $xoxo); }
+	
+	bless \@items, $class;
+}
+
+sub TO_JSON
+{
+	return [ @{$_[0]} ];
+}
+
+sub as_array
+{
+	my ($self) = @_;
+	return wantarray ? @$self : $self;
+}
+
+1;
+
 =head2 HTML::Microformats::XOXO::DL
 
 Represents an HTML DL element.
 
 =over 4
 
+=item C<< $dl->get_values($key) >>
+
+Treating a DL as a key-value structure, returns a list of values for a given key.
+Each value is an HTML::Microformats::XOXO::DD object.
+
+=item C<< $dl->as_hash >>
+
+Returns a hash of keys pointing to arrayrefs of values, where each value is an
+HTML::Microformats::XOXO::DD object.
+
+=item C<< $dl->as_array >>
+
+Logically what you think get_values("*") might do.
+
+=back
+
 =cut
 
 package HTML::Microformats::XOXO::DL;
 
+use base qw[HTML::Microformats::XOXO::AbstractList];
 use common::sense;
 use 5.008;
 
@@ -171,33 +248,28 @@ sub TO_JSON
 	return $rv;
 }
 
-=item C<< $dl->get_values($key) >>
-
-Treating a DL as a key-value structure, returns a list of values for a given key.
-Each value is an HTML::Microformats::XOXO::DD object.
-
-=cut
-
 sub get_values
 {
 	my ($self, $key) = @_;
-	return @{ $self->{$key}->{'items'} }
+	return wantarray ? @{ $self->{$key}->{'items'} } : $self->{$key}->{'items'}
 		if defined $self->{$key}->{'items'};
 }
-
-=item C<< $dl->as_hash >>
-
-Returns a hash of keys pointing to arrayrefs of values, where each value is an
-HTML::Microformats::XOXO::DD object.
-
-=back
-
-=cut
 
 sub as_hash
 {
 	my ($self) = @_;
 	return $self->TO_JSON;
+}
+
+sub as_array
+{
+	my ($self, $key) = @_;
+	my @rv;
+	foreach my $key (sort keys %$self)
+	{
+		push @rv, @{ $self->{$key}->{'items'} };
+	}
+	return wantarray ? @rv : \@rv;
 }
 
 1;
@@ -208,29 +280,6 @@ Represents an HTML UL element.
 
 =over 4
 
-=cut
-
-package HTML::Microformats::XOXO::UL;
-
-use common::sense;
-use 5.008;
-
-sub parse
-{
-	my ($class, $e, $xoxo) = @_;
-	my @items;
-	
-	foreach my $li ($e->getChildrenByTagName('li'))
-		{ push @items, HTML::Microformats::XOXO::LI->parse($li, $xoxo); }
-	
-	bless \@items, $class;
-}
-
-sub TO_JSON
-{
-	return [ @{$_[0]} ];
-}
-
 =item C<< $ul->as_array >>
 
 Returns an array of values, where each is a HTML::Microformats::XOXO::LI object.
@@ -239,11 +288,11 @@ Returns an array of values, where each is a HTML::Microformats::XOXO::LI object.
 
 =cut
 
-sub as_array
-{
-	my ($self) = @_;
-	return @$self;
-}
+package HTML::Microformats::XOXO::UL;
+
+use base qw(HTML::Microformats::XOXO::AbstractList);
+use common::sense;
+use 5.008;
 
 1;
 
@@ -263,21 +312,13 @@ Returns an array of values, where each is a HTML::Microformats::XOXO::LI object.
 
 package HTML::Microformats::XOXO::OL;
 
-use base qw(HTML::Microformats::XOXO::UL);
+use base qw(HTML::Microformats::XOXO::AbstractList);
 use common::sense;
 use 5.008;
 
 1;
 
-=head2 HTML::Microformats::XOXO::LI
-
-Represents an HTML LI element.
-
-=over 4
-
-=cut
-
-package HTML::Microformats::XOXO::LI;
+package HTML::Microformats::XOXO::AbstractListItem;
 
 use common::sense;
 use 5.008;
@@ -367,24 +408,11 @@ sub TO_JSON
 	return \%rv;
 }
 
-=item C<< $li->get_link_href >>
-
-Returns the URL linked to by the B<first> link found within the item.
-
-=cut
-
 sub get_link_href
 {
 	my ($self) = @_;
 	return $self->{'url'};
 }
-
-=item C<< $li->get_link_rel >>
-
-Returns the value of the rel attribute of the first link found within the item.
-This is an unparsed string.
-
-=cut
 
 sub get_link_rel
 {
@@ -392,25 +420,11 @@ sub get_link_rel
 	return $self->{'rel'};
 }
 
-=item C<< $li->get_link_type >>
-
-Returns the value of the type attribute of the first link found within the item.
-This is an unparsed string.
-
-=cut
-
 sub get_link_type
 {
 	my ($self) = @_;
 	return $self->{'type'};
 }
-
-=item C<< $li->get_link_title >>
-
-Returns the value of the rel attribute of the first link found within the item
-if present; the link text otherwise.
-
-=cut
 
 sub get_link_title
 {
@@ -418,25 +432,11 @@ sub get_link_title
 	return $self->{'title'};
 }
 
-=item C<< $li->get_text >>
-
-Returns the value of the text in the LI element B<except> for the first DL
-element within the LI, and the first UL or OL element.
-
-=cut
-
 sub get_text
 {
 	my ($self) = @_;
 	return $self->{'text'};
 }
-
-=item C<< $li->get_html >>
-
-Returns the HTML code in the LI element B<except> for the first DL
-element within the LI, and the first UL or OL element.
-
-=cut
 
 sub get_html
 {
@@ -444,31 +444,71 @@ sub get_html
 	return $self->{'html'};
 }
 
-=item C<< $li->get_properties >>
-
-Returns an HTML::Microformats::XOXO::DL object representing the first
-DL element within the LI.
-
-=cut
-
 sub get_properties
 {
 	my ($self) = @_;
 	return $self->{'properties'};
 }
 
-=item C<< $li->get_children >>
-
-Returns an HTML::Microformats::XOXO::OL or HTML::Microformats::XOXO::UL
-object representing the first OL or UL element within the LI.
-
-=cut
-
 sub get_children
 {
 	my ($self) = @_;
 	return $self->{'children'};
 }
+
+sub get_value
+{
+	my ($self, $key) = @_;
+	return $self->get_properties->get_values($key)
+		if $self->get_properties;
+}
+
+1;
+
+=head2 HTML::Microformats::XOXO::LI
+
+Represents an HTML LI element.
+
+=over 4
+
+=item C<< $li->get_link_href >>
+
+Returns the URL linked to by the B<first> link found within the item.
+
+=item C<< $li->get_link_rel >>
+
+Returns the value of the rel attribute of the first link found within the item.
+This is an unparsed string.
+
+=item C<< $li->get_link_type >>
+
+Returns the value of the type attribute of the first link found within the item.
+This is an unparsed string.
+
+=item C<< $li->get_link_title >>
+
+Returns the value of the rel attribute of the first link found within the item
+if present; the link text otherwise.
+
+=item C<< $li->get_text >>
+
+Returns the value of the text in the LI element B<except> for the first DL
+element within the LI, and the first UL or OL element.
+
+=item C<< $li->get_html >>
+
+Returns the HTML code in the LI element B<except> for the first DL
+element within the LI, and the first UL or OL element.
+
+=item C<< $li->get_properties >>
+
+Returns an HTML::Microformats::XOXO::DL object representing the first
+DL element within the LI.
+
+=item C<< $li->get_children >>
+
+Returns an HTML::Microformats::XOXO::OL or HTML::Microformats::XOXO::UL
+object representing the first OL or UL element within the LI.
 
 =item C<< $li->get_value($key) >>
 
@@ -478,12 +518,11 @@ A shortcut for C<< $li->get_properties->get_values($key) >>.
 
 =cut
 
-sub get_value
-{
-	my ($self, $key) = @_;
-	return $self->get_properties->get_values($key)
-		if $self->get_properties;
-}
+package HTML::Microformats::XOXO::LI;
+
+use base qw(HTML::Microformats::XOXO::AbstractListItem);
+use common::sense;
+use 5.008;
 
 1;
 
@@ -495,7 +534,7 @@ This has an identical interface to HTML::Microformats::XOXO::LI.
 
 package HTML::Microformats::XOXO::DD;
 
-use base qw(HTML::Microformats::XOXO::LI);
+use base qw(HTML::Microformats::XOXO::AbstractListItem);
 use common::sense;
 use 5.008;
 

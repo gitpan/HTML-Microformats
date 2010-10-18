@@ -40,7 +40,7 @@ use base qw(HTML::Microformats::BASE HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -83,8 +83,7 @@ sub format_signature
 			['description',  '?'],
 			['duration',     'D?'],
 			['repeat',       'n?', {'value-title'=>'allow'}],
-			['trigger',      'D?'] # TODO: should really allow 'related' 
-			                       # subproperty and allow datetime values too.
+			['trigger',      'D?'] # TODO: should really allow 'related' subproperty and allow datetime values too. post-0.001
 		],
 		'options' => {
 			'rel-enclosure'  => 'attach',

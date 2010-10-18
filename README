@@ -13,7 +13,7 @@ SYNOPSIS
      my $results = rdf_query($sparql, $doc->model);
 
 VERSION
-    0.00_11
+    0.00_13
 
 DESCRIPTION
     The HTML::Microformats module is a wrapper for parser and handler
@@ -135,6 +135,9 @@ DESCRIPTION
         Returns data as an RDF::Trine::Model, suitable for serialising as
         RDF or running SPARQL queries.
 
+    "$object->serialise_model(as => $format)"
+        As "model" but returns a string.
+
     "$doc->add_to_model($model)"
         Adds data to an existing RDF::Trine::Model.
 
@@ -240,4 +243,11 @@ COPYRIGHT
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
+
+POD ERRORS
+    Hey! The above document had some coding errors, which are explained
+    below:
+
+    Around line 393:
+        '=item' outside of any '=over'
 

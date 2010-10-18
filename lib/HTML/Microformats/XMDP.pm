@@ -4,13 +4,36 @@ HTML::Microformats::XMDP - the XMDP microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats;
+ use LWP::Simple qw[get];
+ use RDF::TrineShortcuts;
+ 
+ my $uri  = 'http://microformats.org/profile/hcard';
+ my $html = get($uri);
+ my $doc  = HTML::Microformats->new_document($html, $uri);
+ $doc->assume_all_profiles;
+ 
+ my @xmdp_objects = $doc->objects('XMDP');
+ foreach my $xo (@xmdp_objects)
+ {
+   print $xo->serialise_model(
+       as         => 'Turtle',
+       namespaces => {
+           rdfs  => 'http://www.w3.org/2000/01/rdf-schema#',
+           hcard => 'http://microformats.org/profile/hcard#',
+           },
+       );
+   print "########\n\n";
+ }
 
 =head1 DESCRIPTION
 
 HTML::Microformats::XMDP inherits from HTML::Microformats::BASE. See the
 base class definition for a description of property getter/setter methods,
 constructors, etc.
+
+HTML::Microformats::XMDP also inherits from HTML::Microformats::XOXO, and
+the C<data> method returns the same structure.
 
 =cut
 
@@ -20,7 +43,7 @@ use base qw(HTML::Microformats::XOXO);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -33,9 +56,9 @@ sub new
 sub format_signature
 {
 	return {
-		'root'     => ['profile'] ,
-		'classes'  => [] ,
-		'rdf:type' => [] ,
+		'root'         => ['profile'] ,
+		'classes'      => [] ,
+		'rdf:type'     => [] ,
 		'rdf:property' => {} ,
 		}
 }

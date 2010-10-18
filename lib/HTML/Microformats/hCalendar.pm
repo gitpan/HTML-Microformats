@@ -39,7 +39,7 @@ use HTML::Microformats::hTodo;
 use HTML::Microformats::hAlarm;
 use HTML::Microformats::hFreebusy;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {

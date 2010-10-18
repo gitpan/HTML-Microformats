@@ -4,7 +4,12 @@ HTML::Microformats::RelLicense - the rel-license microformat
 
 =head1 SYNOPSIS
 
-TODO
+ my @licences = HTML::Microformats::RelLicense->extract_all(
+                   $doc->documentElement, $context);
+ foreach my $licence (@licences)
+ {
+   print $licence->get_href . "\n";
+ }
 
 =head1 DESCRIPTION
 
@@ -20,7 +25,7 @@ use base qw(HTML::Microformats::RELBASE);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub format_signature
 {

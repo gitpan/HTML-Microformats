@@ -4,11 +4,20 @@ author:
   - 'Toby Inkster <tobyink@cpan.org>'
 build_requires:
   ExtUtils::MakeMaker: 6.42
+  Module::Signature: 0.66
   Test::More: 0.61
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
 generated_by: 'Module::Install version 0.95'
+keywords:
+  - XHTML
+  - HTML
+  - 'Semantic Web'
+  - Microformats
+  - POSH
+  - RDF
+  - JSON
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -44,4 +53,4 @@ resources:
   homepage: http://search.cpan.org/dist/HTML-Microformats/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/
-version: 0.00_12
+version: 0.00_13

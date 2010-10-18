@@ -4,7 +4,15 @@ HTML::Microformats::OpenURL_COinS - the OpenURL COinS poshformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::OpenURL_COinS;
+ use Data::Dumper;
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::OpenURL_COinS->extract_all(
+                   $dom->documentElement, $context);
+ my $object = $objects[0];
+ print Dumper($object->data);
 
 =head1 DESCRIPTION
 
@@ -24,7 +32,7 @@ use CGI;
 use CGI::Util qw(escape);
 use HTML::Microformats::_util qw(stringify xml_stringify);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {

@@ -19,7 +19,7 @@ use Carp;
 use HTML::Microformats::_util qw(searchClass searchRel searchRev);
 use RDF::Trine;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 our $AUTOLOAD;
 
 # Derived classes...
@@ -288,8 +288,6 @@ sub add_to_model
 
 Creates a fresh, new RDF::Trine::Model object, containing relevant data.
 
-=back
-
 =cut
 
 sub model
@@ -298,6 +296,25 @@ sub model
 	my $model = RDF::Trine::Model->temporary_model;
 	$self->add_to_model($model);
 	return $model;
+}
+
+=item C<< $object->serialise_model(as => $format) >> 
+
+As C<model> but returns a string.
+
+=back
+
+=cut
+
+sub serialise_model
+{
+	my $self = shift;
+	
+	my %opts = ref $_[0] ? %{ $_[0] } : @_;
+	$opts{as} ||= 'Turtle';
+	
+	my $ser = RDF::Trine::Serializer->new(delete $opts{as}, %opts);
+	return $ser->serialize_model_to_string($self->model);
 }
 
 sub AUTOLOAD

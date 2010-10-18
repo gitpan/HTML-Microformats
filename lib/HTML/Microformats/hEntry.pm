@@ -43,7 +43,7 @@ use HTML::Microformats::hCard;
 use HTML::Microformats::hEvent;
 use HTML::Microformats::hNews;
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -147,7 +147,7 @@ sub _author_parse
 	
 	unless (@{ $self->{'DATA'}->{'author'} })
 	{
-		##TODO: Should really only use the nearest-in-parent
+		##TODO: Should really only use the nearest-in-parent.   post-0.001
 		my @address_elements = $self->context->document->getElementsByTagName('address');
 		foreach my $address (@address_elements)
 		{

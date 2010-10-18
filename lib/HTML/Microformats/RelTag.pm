@@ -4,7 +4,12 @@ HTML::Microformats::RelTag - the rel-tag microformat
 
 =head1 SYNOPSIS
 
-TODO
+ my @tags = HTML::Microformats::RelTag->extract_all(
+                   $doc->documentElement, $context);
+ foreach my $tag (@tags)
+ {
+   print $tag->get_href . "\n";
+ }
 
 =head1 DESCRIPTION
 
@@ -44,7 +49,7 @@ use 5.008;
 
 use CGI::Util qw(unescape);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {

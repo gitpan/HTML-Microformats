@@ -4,7 +4,28 @@ HTML::Microformats::figure - the figure microformat
 
 =head1 SYNOPSIS
 
-TODO
+ use HTML::Microformats::_context;
+ use HTML::Microformats::figure;
+ use Scalar::Util qw(blessed);
+
+ my $context = HTML::Microformats::_context->new($dom, $uri);
+ my @objects = HTML::Microformats::figure->extract_all(
+                   $dom->documentElement, $context);
+ foreach my $fig (@objects)
+ {
+   printf("<%s> %s\n", $fig->get_image, $fig->get_legend->[0]);
+   foreach my $maker ($p->get_credit)
+   {
+     if (blessed($maker))
+     {
+       printf("  - by %s\n", $maker->get_fn);
+     }
+     else
+     {
+       printf("  - by %s\n", $maker);
+     }
+   }
+ }
 
 =head1 DESCRIPTION
 
@@ -24,7 +45,7 @@ use HTML::Microformats::_util qw(searchClass searchID stringify);
 use HTML::Microformats::Datatypes::String qw(ms);
 use Locale::Country qw(country2code LOCALE_CODE_ALPHA_2);
 
-our $VERSION = '0.00_12';
+our $VERSION = '0.00_13';
 
 sub new
 {
@@ -188,6 +209,7 @@ sub add_to_model
 
 	$self->_simple_rdf($model);
 	
+	my $i = 0;
 	foreach my $subject (@{ $self->{'DATA'}->{'subject'} })
 	{
 		if (UNIVERSAL::isa($subject, 'HTML::Microformats::hCard'))
@@ -225,10 +247,22 @@ sub add_to_model
 				$subject->id(1, 'event'),
 				));
 		}
-
-		# TODO: handle plain text
+		else
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/depicts'),
+				$self->id(1, "subject.${i}"),
+				));
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, "subject.${i}"),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/name'),
+				$self->_make_literal($subject)));
+		}
+		$i++;
 	}
 
+	$i = 0;
 	foreach my $credit (@{ $self->{'DATA'}->{'credit'} })
 	{
 		if (UNIVERSAL::isa($credit, 'HTML::Microformats::hCard'))
@@ -239,8 +273,19 @@ sub add_to_model
 				$credit->id(1, 'holder'),
 				));
 		}
-
-		# TODO: handle plain text
+		else
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new('http://purl.org/dc/terms/contributor'),
+				$self->id(1, "credit.${i}"),
+				));
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, "credit.${i}"),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/name'),
+				$self->_make_literal($credit)));
+		}
+		$i++;
 	}
 
 	return $self;
