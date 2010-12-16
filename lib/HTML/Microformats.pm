@@ -23,48 +23,26 @@ use 5.008;
 
 use HTML::HTML5::Parser;
 use HTML::HTML5::Sanity qw(fix_document);
-use HTML::Microformats::_context;
-use HTML::Microformats::adr;
-use HTML::Microformats::geo;
-use HTML::Microformats::figure;
-use HTML::Microformats::hAtom;
-use HTML::Microformats::hAudio;
-use HTML::Microformats::hCard;
-use HTML::Microformats::hCalendar;
-use HTML::Microformats::hListing;
-use HTML::Microformats::hMeasure;
-use HTML::Microformats::hProduct;
-use HTML::Microformats::hRecipe;
-use HTML::Microformats::hResume;
-use HTML::Microformats::hReview;
-use HTML::Microformats::hReviewAggregate;
-use HTML::Microformats::OpenURL_COinS;
-use HTML::Microformats::RelEnclosure;
-use HTML::Microformats::RelLicense;
-use HTML::Microformats::RelTag;
-use HTML::Microformats::species;
-use HTML::Microformats::VoteLinks;
-use HTML::Microformats::XFN;
-use HTML::Microformats::XMDP;
-use HTML::Microformats::XOXO;
+use HTML::Microformats::DocumentContext;
+use HTML::Microformats::Datatype;
+use HTML::Microformats::Format;
 use JSON;
-use RDF::Trine 0.117;
+use RDF::Trine 0.130;
 use XML::LibXML;
 
 =head1 VERSION
 
-0.00_13
+0.100
 
 =cut
 
-our $VERSION = '0.00_13';
-our @Formats = qw(adr figure geo hAtom hAudio hCalendar hCard hListing hMeasure hProduct hRecipe hResume hReview hReviewAggregate OpenURL_COinS RelEnclosure RelLicense RelTag species VoteLinks XFN XMDP XOXO);
+our $VERSION = '0.100';
 
 =head1 DESCRIPTION
 
 The HTML::Microformats module is a wrapper for parser and handler
 modules of various individual microformats (each of those modules
-has a name like HTML::Microformats::Foo).
+has a name like HTML::Microformats::Format::Foo).
 
 The general pattern of usage is to create an HTML::Microformats
 object (which corresponds to an HTML document) using the
@@ -114,7 +92,7 @@ sub new_document
 		$document  = fix_document( $parser->parse_string($document) );
 	}
 	
-	$self->{'context'} = HTML::Microformats::_context->new($document, $uri);
+	$self->{'context'} = HTML::Microformats::DocumentContext->new($document, $uri);
 	
 	return $self;
 }
@@ -169,12 +147,15 @@ For example:
 This is useful for adding profile URIs declared outside the document itself
 (e.g. in HTTP headers).
 
+Returns a reference to the document.
+
 =cut
 
 sub add_profile
 {
 	my $self = shift;
-	return $self->{'context'}->add_profile(@_);
+	$self->{'context'}->add_profile(@_);
+	return $self;
 }
 
 =item C<< $doc->assume_profile(@microformats) >>
@@ -187,7 +168,9 @@ This method acts similarly to C<add_profile> but allows you to use
 names of microformats rather than URIs.
 
 Microformat names are case sensitive, and must match
-HTML::Microformats::Foo module names.
+HTML::Microformats::Format::Foo module names.
+
+Returns	a reference to the document.
 
 =cut
 
@@ -198,7 +181,7 @@ sub assume_profile
 	foreach my $fmt (@_)
 	{
 		my $profile = $fmt;
-		($profile) = "HTML::Microformats::${fmt}"->profiles
+		($profile) = "HTML::Microformats::Format::${fmt}"->profiles
 			if $fmt !~ ':';
 		$self->add_profile($profile);
 	}
@@ -211,14 +194,17 @@ sub assume_profile
 This method is equivalent to calling C<assume_profile> for
 all known microformats.
 
+Returns	a reference to the document.
+
 =back
 
 =cut
 
 sub assume_all_profiles
 {
-   my $self = shift;
-   $self->assume_profile(@Formats, 'hNews');
+ 	my $self = shift;
+ 	$self->assume_profile($self->formats);
+	return $self;
 }
 
 =head2 Parsing Microformats
@@ -234,6 +220,8 @@ Scans through the document, finding microformat objects.
 
 On subsequent calls, does nothing (as everything is already parsed).
 
+Returns	a reference to the document.
+
 =cut
 
 sub parse_microformats
@@ -241,13 +229,13 @@ sub parse_microformats
 	my $self = shift;
 	return if $self->{'parsed'};
 	
-	foreach my $fmt (@Formats)
+	foreach my $fmt ($self->formats)
 	{
-		my @profiles = "HTML::Microformats::${fmt}"->profiles;
+		my @profiles = "HTML::Microformats::Format::${fmt}"->profiles;
 		
 		if ($self->has_profile(@profiles))
 		{
-			my @objects = "HTML::Microformats::${fmt}"->extract_all(
+			my @objects = "HTML::Microformats::Format::${fmt}"->extract_all(
 				$self->{'context'}->document->documentElement,
 				$self->{'context'});
 			$self->{'objects'}->{$fmt} = \@objects;
@@ -264,16 +252,19 @@ Forgets information gleaned by C<parse_microformats> and thus allows
 C<parse_microformats> to be run again. This is useful if you've modified
 added some profiles between runs of C<parse_microformats>.
 
+Returns	a reference to the document.
+
 =back
 
 =cut
 
 sub clear_microformats
 {
-   my $self = shift;
-   $self->{'objects'} = undef;
-   $self->{'context'}->cache->clear;
-   $self->{'parsed'}  = 0;
+ 	my $self = shift;
+ 	$self->{'objects'} = undef;
+ 	$self->{'context'}->cache->clear;
+ 	$self->{'parsed'}  = 0;
+	return $self;
 }
 
 =head2 Retrieving Data
@@ -299,11 +290,11 @@ for details.
 sub objects
 {
 	my $self = shift;
-   my $fmt  = shift;
+	my $fmt  = shift;
 	$self->parse_microformats;
-   return @{ $self->{'objects'}->{$fmt} }
-      if wantarray;
-   return $self->{'objects'}->{$fmt};
+	return @{ $self->{'objects'}->{$fmt} }
+		if wantarray;
+	return $self->{'objects'}->{$fmt};
 }
 
 =item C<< $doc->all_objects >>
@@ -362,7 +353,7 @@ Returns data as an RDF::Trine::Model, suitable for serialising as
 RDF or running SPARQL queries.
 
 =cut
-
+ 
 sub model
 {
 	my $self  = shift;
@@ -394,6 +385,8 @@ sub serialise_model
 
 Adds data to an existing RDF::Trine::Model.
 
+Returns a reference to the document.
+
 =back
 
 =cut
@@ -402,8 +395,9 @@ sub add_to_model
 {
 	my $self  = shift;
 	my $model = shift;
+	$self->parse_microformats;
 	
-	foreach my $fmt (@Formats)
+	foreach my $fmt ($self->formats)
 	{
 		foreach my $object (@{ $self->{'objects'}->{$fmt} })
 		{
@@ -412,6 +406,43 @@ sub add_to_model
 	}
 	
 	return $self;
+}
+
+=head2 Utility Functions
+
+=over 4
+
+=item C<< HTML::Microformats->modules >>
+
+Returns a list of Perl modules, each of which implements a specific
+microformat.
+
+=cut
+
+use Module::Pluggable
+	require     => 1,
+	inner       => 0,
+	search_path => ['HTML::Microformats::Format'],
+	only        => qr/^HTML::Microformats::Format::[^:]+$/,
+	sub_name    => 'modules',
+	;
+
+=item C<< HTML::Microformats->formats >>
+
+As per C<modules>, but strips 'HTML::Microformats::Format::' off the
+module name, and sorts alphabetically.
+
+=back
+
+=cut
+
+sub formats
+{
+	my $class = shift || __PACKAGE__;
+	return
+		sort { lc $a cmp lc $b }
+		map { s/^HTML::Microformats::Format:://; $_ }
+		$class->modules;
 }
 
 1;
@@ -435,8 +466,8 @@ packages:
 =item * It supports more formats.
 
 HTML::Microformats supports hCard, hCalendar, rel-tag, geo, adr,
-rel-enclosure, rel-license, hReview, hResume, hRecipe, xFolk, XFN
-and more.
+rel-enclosure, rel-license, hReview, hResume, hRecipe, xFolk, XFN,
+hAtom, hNews and more.
 
 =item * It supports more patterns.
 
@@ -463,65 +494,71 @@ Please report any bugs to L<http://rt.cpan.org/>.
 
 =head1 SEE ALSO
 
-L<RDF::RDFa::Parser>,
-L<HTML::HTML5::Microdata::Parser>,
-L<XML::Atom::Microformats>.
+L<HTML::Microformats::Documentation::Notes>.
 
-L<http://microformats.org/>, L<http://www.perlrdf.org/>.
-
-Individual microformat modules:
+Individual format modules:
 
 =over 4
 
-=item * L<HTML::Microformats::adr>
+=item * L<HTML::Microformats::Format::adr>
 
-=item * L<HTML::Microformats::figure>
+=item * L<HTML::Microformats::Format::figure>
 
-=item * L<HTML::Microformats::geo>
+=item * L<HTML::Microformats::Format::geo>
 
-=item * L<HTML::Microformats::hAtom>
+=item * L<HTML::Microformats::Format::hAtom>
 
-=item * L<HTML::Microformats::hAudio>
+=item * L<HTML::Microformats::Format::hAudio>
 
-=item * L<HTML::Microformats::hCalendar>
+=item * L<HTML::Microformats::Format::hCalendar>
 
-=item * L<HTML::Microformats::hCard>
+=item * L<HTML::Microformats::Format::hCard>
 
-=item * L<HTML::Microformats::hListing>
+=item * L<HTML::Microformats::Format::hListing>
 
-=item * L<HTML::Microformats::hMeasure>
+=item * L<HTML::Microformats::Format::hMeasure>
 
-=item * L<HTML::Microformats::hNews>
+=item * L<HTML::Microformats::Format::hNews>
 
-=item * L<HTML::Microformats::hProduct>
+=item * L<HTML::Microformats::Format::hProduct>
 
-=item * L<HTML::Microformats::hRecipe>
+=item * L<HTML::Microformats::Format::hRecipe>
 
-=item * L<HTML::Microformats::hResume>
+=item * L<HTML::Microformats::Format::hResume>
 
-=item * L<HTML::Microformats::hReview>
+=item * L<HTML::Microformats::Format::hReview>
 
-=item * L<HTML::Microformats::hReviewAggregate>
+=item * L<HTML::Microformats::Format::hReviewAggregate>
 
-=item * L<HTML::Microformats::OpenURL_COinS>
+=item * L<HTML::Microformats::Format::OpenURL_COinS>
 
-=item * L<HTML::Microformats::RelEnclosure>
+=item * L<HTML::Microformats::Format::RelEnclosure>
 
-=item * L<HTML::Microformats::RelLicense>
+=item * L<HTML::Microformats::Format::RelLicense>
 
-=item * L<HTML::Microformats::RelTag>
+=item * L<HTML::Microformats::Format::RelTag>
 
-=item * L<HTML::Microformats::species>
+=item * L<HTML::Microformats::Format::species>
 
-=item * L<HTML::Microformats::VoteLinks>
+=item * L<HTML::Microformats::Format::VoteLinks>
 
-=item * L<HTML::Microformats::XFN>
+=item * L<HTML::Microformats::Format::XFN>
 
-=item * L<HTML::Microformats::XMDP>
+=item * L<HTML::Microformats::Format::XMDP>
 
-=item * L<HTML::Microformats::XOXO>
+=item * L<HTML::Microformats::Format::XOXO>
 
 =back
+
+Similar modules:
+L<RDF::RDFa::Parser>,
+L<HTML::HTML5::Microdata::Parser>,
+L<XML::Atom::Microformats>,
+L<Text::Microformat>,
+L<Data::Microformats>.
+
+Related web sites:
+L<http://microformats.org/>, L<http://www.perlrdf.org/>.
 
 =head1 AUTHOR
 

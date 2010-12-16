@@ -9,7 +9,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.95'
+generated_by: 'Module::Install version 1.00'
 keywords:
   - XHTML
   - HTML
@@ -42,7 +42,8 @@ requires:
   HTTP::Date: 0
   JSON: 0
   Locale::Country: 0
-  RDF::Trine: 0.117
+  Module::Pluggable: 0
+  RDF::Trine: 0.130
   URI: 1.30
   URI::URL: 0
   XML::LibXML: 1.60
@@ -53,4 +54,4 @@ resources:
   homepage: http://search.cpan.org/dist/HTML-Microformats/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/
-version: 0.00_13
+version: 0.100

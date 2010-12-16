@@ -5,8 +5,9 @@ use 5.008;
 
 use Encode qw(encode);
 use RDF::Trine;
+use Scalar::Util qw();
 
-our $VERSION = '0.00_13';
+our $VERSION = '0.100';
 
 sub _simple_rdf
 {
@@ -38,7 +39,7 @@ sub _simple_rdf
 
 		foreach my $val (@$vals)
 		{
-			my $can_id      = ref $val && $val->can('id');
+			my $can_id      = Scalar::Util::blessed($val) && $val->can('id');
 			my $seems_bnode = ($val =~ /^_:\S+$/);
 			my $seems_uri   = ($val =~ /^[a-z0-9\.\+\-]{1,20}:\S+$/);
 
@@ -75,7 +76,7 @@ sub _simple_rdf
 						));
 				}
 				
-				if ($can_id && $val->can('add_to_model'))
+				if ($can_id and Scalar::Util::blessed($val) and $val->can('add_to_model'))
 				{
 					$val->add_to_model($model);
 				}
@@ -100,14 +101,16 @@ sub _make_literal
 {
 	my ($self, $val, $dt) = @_;
 	
-	if (UNIVERSAL::can($val, 'to_string')
-	and UNIVERSAL::can($val, 'datatype'))
+	if (Scalar::Util::blessed($val)
+	and $val->can('to_string')
+	and $val->can('datatype'))
 	{
 		return RDF::Trine::Node::Literal->new(
 			encode('utf8', $val->to_string), undef, $val->datatype);
 	}
-	elsif (UNIVERSAL::can($val, 'to_string')
-		and UNIVERSAL::can($val, 'lang'))
+	elsif (Scalar::Util::blessed($val)
+	and $val->can('to_string')
+	and $val->can('lang'))
 	{
 		return RDF::Trine::Node::Literal->new(
 			encode('utf8', $val->to_string), $val->lang);
@@ -141,10 +144,10 @@ HTML::Microformats::Mixin::RDF provides some utility code for microformat
 modules to more easily output RDF. It includes methods C<_simple_rdf> which
 takes an RDF::Trine model as a parameter and adds some basic triples to it
 based on the object's format signature; and C<_make_literal> taking either
-a string plus datatype as parameters, or any of the HTML::Microformats::Datatypes
+a string plus datatype as parameters, or any of the HTML::Microformats::Datatype
 objects, returning an RDF::Trine::Node::Literal.
 
-HTML::Microformats::BASE inherits from this module, so by extension, all the
+HTML::Microformats::Format inherits from this module, so by extension, all the
 microformat modules do too.
 
 =head1 BUGS

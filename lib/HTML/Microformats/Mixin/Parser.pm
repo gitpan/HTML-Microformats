@@ -3,22 +3,22 @@ package HTML::Microformats::Mixin::Parser;
 use common::sense;
 use 5.008;
 
-use HTML::Microformats::_util qw(/^search/);
-use HTML::Microformats::adr;
-use HTML::Microformats::Datatypes;
-use HTML::Microformats::geo;
-use HTML::Microformats::hAtom;
-use HTML::Microformats::hCalendar;
-use HTML::Microformats::hCard;
-use HTML::Microformats::hMeasure;
-use HTML::Microformats::RelEnclosure;
-use HTML::Microformats::RelLicense;
-use HTML::Microformats::RelTag;
-use HTML::Microformats::species;
+use HTML::Microformats::Utilities qw(/^search/);
+use HTML::Microformats::Format::adr;
+use HTML::Microformats::Datatype;
+use HTML::Microformats::Format::geo;
+use HTML::Microformats::Format::hAtom;
+use HTML::Microformats::Format::hCalendar;
+use HTML::Microformats::Format::hCard;
+use HTML::Microformats::Format::hMeasure;
+use HTML::Microformats::Format::RelEnclosure;
+use HTML::Microformats::Format::RelLicense;
+use HTML::Microformats::Format::RelTag;
+use HTML::Microformats::Format::species;
 use URI::URL;
 use XML::LibXML qw(:all);
 
-our $VERSION = '0.00_13';
+our $VERSION = '0.100';
 
 # Cleans away nested compound microformats. Any intentionally
 # nested microformats (e.g. vcard class="agent vcard") should be
@@ -467,18 +467,18 @@ sub _simple_parse
 				if ($uf eq '!person')
 				{
 					# This is used as a last-ditch attempt to parse a person.
-					my $obj = HTML::Microformats::hCard->new_fallback($node, $self->context);
+					my $obj = HTML::Microformats::Format::hCard->new_fallback($node, $self->context);
 					push @node_parsed_objects, $obj;
 				}
 				elsif ($node->getAttribute('class') =~ /\b($uf_class)\b/)
 				{
-					my $pkg = 'HTML::Microformats::'.$uf;
+					my $pkg = 'HTML::Microformats::Format::'.$uf;
 					my $obj = eval "${pkg}->new(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-cal'});";
 					push @node_parsed_objects, $obj;
 				}
 				else
 				{
-					my $pkg = 'HTML::Microformats::'.$uf;
+					my $pkg = 'HTML::Microformats::Format::'.$uf;
 					my @all = eval "${pkg}->extract_all(\$node, \$self->context, in_hcalendar => \$class_options->{'is-in-cal'});";
 					push @node_parsed_objects, @all if @all;
 				}
@@ -498,6 +498,7 @@ sub _simple_parse
 					my $new_class_attr = $node->getAttribute('class');
 					$new_class_attr =~ s/\b($class)\b//;
 					$node->setAttribute('class', $new_class_attr);
+					$node->removeAttribute('class') unless $new_class_attr;
 				}
 
 				# If $type contains '**' then allow
@@ -558,7 +559,7 @@ sub _simple_parse
 	# embedded hmeasure
 	if (defined $options->{'hmeasure'})
 	{
-		my @measures = HTML::Microformats::hMeasure->extract_all($root, $self->context);
+		my @measures = HTML::Microformats::Format::hMeasure->extract_all($root, $self->context);
 		foreach my $m (@measures)
 		{
 			push @{ $self->{$options->{'hmeasure'}} }, $m
@@ -574,7 +575,7 @@ sub _simple_parse
 	if (defined $options->{'rel-tag'})
 	{
 		my $key  = $options->{'rel-tag'};
-		my @tags = HTML::Microformats::RelTag->extract_all($root, $self->context);
+		my @tags = HTML::Microformats::Format::RelTag->extract_all($root, $self->context);
 		push @{ $self->{'DATA'}->{$key} }, @tags if @tags;
 	}
 
@@ -582,7 +583,7 @@ sub _simple_parse
 	if (defined $options->{'rel-license'})
 	{
 		my $key  = $options->{'rel-license'};
-		my @licences = HTML::Microformats::RelLicense->extract_all($root, $self->context);
+		my @licences = HTML::Microformats::Format::RelLicense->extract_all($root, $self->context);
 		push @{ $self->{'DATA'}->{$key} }, @licences if @licences;
 	}
 
@@ -590,7 +591,7 @@ sub _simple_parse
 	if (defined $options->{'rel-enclosure'})
 	{
 		my $key  = $options->{'rel-enclosure'};
-		my @encs = HTML::Microformats::RelEnclosure->extract_all($root, $self->context);
+		my @encs = HTML::Microformats::Format::RelEnclosure->extract_all($root, $self->context);
 		push @{ $self->{'DATA'}->{$key} }, @encs if @encs;
 	}
 	
@@ -771,7 +772,7 @@ sub _simple_parse
 			# Check date values are OK
 			if ($type =~ /d/)
 			{
-				$value = HTML::Microformats::Datatypes::DateTime->parse($value);
+				$value = HTML::Microformats::Datatype::DateTime->parse($value);
 				if ($value)
 				{
 					if ($parsed_values_nodes[$i]->getAttribute('class') =~ /\b(approx)\b/)
@@ -794,13 +795,13 @@ sub _simple_parse
 			elsif ($type =~ /D/)
 			{
 				my $D = undef;
-				if (HTML::Microformats::Datatypes::String::isms($value))
+				if (HTML::Microformats::Datatype::String::isms($value))
 				{
-					$D = HTML::Microformats::Datatypes::Duration->parse($value->{string}, $value->{dom}, $page)
+					$D = HTML::Microformats::Datatype::Duration->parse($value->{string}, $value->{dom}, $page)
 				}
 				else
 				{
-					$D = HTML::Microformats::Datatypes::Duration->parse($value, undef, $page)
+					$D = HTML::Microformats::Datatype::Duration->parse($value, undef, $page)
 				}
 				if (defined $D)
 				{
@@ -817,13 +818,13 @@ sub _simple_parse
 			elsif ($type =~ /i/)
 			{
 				my $D;
-				if (HTML::Microformats::Datatypes::String::isms($value))
+				if (HTML::Microformats::Datatype::String::isms($value))
 				{
-					$D = HTML::Microformats::Datatypes::Interval->parse($value->{string}, $value->{dom}, $page)
+					$D = HTML::Microformats::Datatype::Interval->parse($value->{string}, $value->{dom}, $page)
 				}
 				else
 				{
-					$D = HTML::Microformats::Datatypes::Interval->parse($value, undef, $page)
+					$D = HTML::Microformats::Datatype::Interval->parse($value, undef, $page)
 				}
 				if ($D)
 				{
@@ -840,13 +841,13 @@ sub _simple_parse
 			elsif ($type =~ /e/)
 			{
 				my $D;
-				if (HTML::Microformats::Datatypes::String::isms($value))
+				if (HTML::Microformats::Datatype::String::isms($value))
 				{
-					$D = HTML::Microformats::Datatypes::RecurringDateTime->parse($value->{string}, $value->{dom}, $page)
+					$D = HTML::Microformats::Datatype::RecurringDateTime->parse($value->{string}, $value->{dom}, $page)
 				}
 				else
 				{
-					$D = HTML::Microformats::Datatypes::RecurringDateTime->parse($value, undef, $page)
+					$D = HTML::Microformats::Datatype::RecurringDateTime->parse($value, undef, $page)
 				}
 				if ($D)
 				{
@@ -926,13 +927,13 @@ sub _simple_parse
 sub _stringify
 {
 	my $self = shift;
-	return HTML::Microformats::_util::stringify(@_);
+	return HTML::Microformats::Utilities::stringify(@_);
 }
 
 sub _xml_stringify
 {
 	my $self = shift;
-	return HTML::Microformats::_util::xml_stringify(@_);
+	return HTML::Microformats::Utilities::xml_stringify(@_);
 }
 
 1;

@@ -13,12 +13,12 @@ SYNOPSIS
      my $results = rdf_query($sparql, $doc->model);
 
 VERSION
-    0.00_13
+    0.100
 
 DESCRIPTION
     The HTML::Microformats module is a wrapper for parser and handler
     modules of various individual microformats (each of those modules has a
-    name like HTML::Microformats::Foo).
+    name like HTML::Microformats::Format::Foo).
 
     The general pattern of usage is to create an HTML::Microformats object
     (which corresponds to an HTML document) using the "new_document" method;
@@ -68,6 +68,8 @@ DESCRIPTION
         This is useful for adding profile URIs declared outside the document
         itself (e.g. in HTTP headers).
 
+        Returns a reference to the document.
+
     "$doc->assume_profile(@microformats)"
         For example:
 
@@ -77,11 +79,15 @@ DESCRIPTION
         names of microformats rather than URIs.
 
         Microformat names are case sensitive, and must match
-        HTML::Microformats::Foo module names.
+        HTML::Microformats::Format::Foo module names.
+
+        Returns a reference to the document.
 
     "$doc->assume_all_profiles"
         This method is equivalent to calling "assume_profile" for all known
         microformats.
+
+        Returns a reference to the document.
 
   Parsing Microformats
     Generally speaking, you can skip this. The "data", "json" and "model"
@@ -92,10 +98,14 @@ DESCRIPTION
 
         On subsequent calls, does nothing (as everything is already parsed).
 
+        Returns a reference to the document.
+
     "$doc->clear_microformats"
         Forgets information gleaned by "parse_microformats" and thus allows
         "parse_microformats" to be run again. This is useful if you've
         modified added some profiles between runs of "parse_microformats".
+
+        Returns a reference to the document.
 
   Retrieving Data
     These methods allow you to retrieve the document's data, and do things
@@ -141,6 +151,17 @@ DESCRIPTION
     "$doc->add_to_model($model)"
         Adds data to an existing RDF::Trine::Model.
 
+        Returns a reference to the document.
+
+  Utility Functions
+    "HTML::Microformats->modules"
+        Returns a list of Perl modules, each of which implements a specific
+        microformat.
+
+    "HTML::Microformats->formats"
+        As per "modules", but strips 'HTML::Microformats::Format::' off the
+        module name, and sorts alphabetically.
+
 WHY ANOTHER MICROFORMATS MODULE?
     There already exist two microformats packages on CPAN (see
     Text::Microformat and Data::Microformat), so why create another?
@@ -155,8 +176,8 @@ WHY ANOTHER MICROFORMATS MODULE?
     *   It supports more formats.
 
         HTML::Microformats supports hCard, hCalendar, rel-tag, geo, adr,
-        rel-enclosure, rel-license, hReview, hResume, hRecipe, xFolk, XFN
-        and more.
+        rel-enclosure, rel-license, hReview, hResume, hRecipe, xFolk, XFN,
+        hAtom, hNews and more.
 
     *   It supports more patterns.
 
@@ -180,60 +201,63 @@ BUGS
     Please report any bugs to <http://rt.cpan.org/>.
 
 SEE ALSO
-    RDF::RDFa::Parser, HTML::HTML5::Microdata::Parser,
-    XML::Atom::Microformats.
+    HTML::Microformats::Documentation::Notes.
 
-    <http://microformats.org/>, <http://www.perlrdf.org/>.
+    Individual format modules:
 
-    Individual microformat modules:
+    *   HTML::Microformats::Format::adr
 
-    *   HTML::Microformats::adr
+    *   HTML::Microformats::Format::figure
 
-    *   HTML::Microformats::figure
+    *   HTML::Microformats::Format::geo
 
-    *   HTML::Microformats::geo
+    *   HTML::Microformats::Format::hAtom
 
-    *   HTML::Microformats::hAtom
+    *   HTML::Microformats::Format::hAudio
 
-    *   HTML::Microformats::hAudio
+    *   HTML::Microformats::Format::hCalendar
 
-    *   HTML::Microformats::hCalendar
+    *   HTML::Microformats::Format::hCard
 
-    *   HTML::Microformats::hCard
+    *   HTML::Microformats::Format::hListing
 
-    *   HTML::Microformats::hListing
+    *   HTML::Microformats::Format::hMeasure
 
-    *   HTML::Microformats::hMeasure
+    *   HTML::Microformats::Format::hNews
 
-    *   HTML::Microformats::hNews
+    *   HTML::Microformats::Format::hProduct
 
-    *   HTML::Microformats::hProduct
+    *   HTML::Microformats::Format::hRecipe
 
-    *   HTML::Microformats::hRecipe
+    *   HTML::Microformats::Format::hResume
 
-    *   HTML::Microformats::hResume
+    *   HTML::Microformats::Format::hReview
 
-    *   HTML::Microformats::hReview
+    *   HTML::Microformats::Format::hReviewAggregate
 
-    *   HTML::Microformats::hReviewAggregate
+    *   HTML::Microformats::Format::OpenURL_COinS
 
-    *   HTML::Microformats::OpenURL_COinS
+    *   HTML::Microformats::Format::RelEnclosure
 
-    *   HTML::Microformats::RelEnclosure
+    *   HTML::Microformats::Format::RelLicense
 
-    *   HTML::Microformats::RelLicense
+    *   HTML::Microformats::Format::RelTag
 
-    *   HTML::Microformats::RelTag
+    *   HTML::Microformats::Format::species
 
-    *   HTML::Microformats::species
+    *   HTML::Microformats::Format::VoteLinks
 
-    *   HTML::Microformats::VoteLinks
+    *   HTML::Microformats::Format::XFN
 
-    *   HTML::Microformats::XFN
+    *   HTML::Microformats::Format::XMDP
 
-    *   HTML::Microformats::XMDP
+    *   HTML::Microformats::Format::XOXO
 
-    *   HTML::Microformats::XOXO
+    Similar modules: RDF::RDFa::Parser, HTML::HTML5::Microdata::Parser,
+    XML::Atom::Microformats, Text::Microformat, Data::Microformats.
+
+    Related web sites: <http://microformats.org/>,
+    <http://www.perlrdf.org/>.
 
 AUTHOR
     Toby Inkster <tobyink@cpan.org>.
@@ -248,6 +272,6 @@ POD ERRORS
     Hey! The above document had some coding errors, which are explained
     below:
 
-    Around line 393:
+    Around line 384:
         '=item' outside of any '=over'
 

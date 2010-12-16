@@ -10,6 +10,24 @@ Home page:    <http://search.cpan.org/dist/HTML-Microformats/>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
+0.100 [2010-12-16]
+ - Avoid UNIVERSAL::can and UNIVERSAL::isa.
+ - Rename loads of modules - in fact every module except the mixins and
+   HTML::Microformats itself.
+ - (Addition) HTML::Microformats->formats and HTML::Microformats->modules.
+   (use Module::Pluggable)
+ - (Addition) Lots of test cases.
+ - (Bugfix) Handle dates like 1pm - i.e with am/pm designator but without
+   minutes.
+
+0.00_13 [2010-10-18]
+ - Minor bugfixes, cleanups and documentation improvements.
+ - (Addition) Add serialise_model method to HTML::Microformats and
+   HTML::Microformats::BASE.
+
+0.00_12 [2010-06-25]
+ - (Bugfix) VoteLinks.pm wasn't included in the 0.00_11 distribution.
+
 0.00_11 [2010-06-23]
  - Improve calculation of representative hCard.
  - (Addition) Find contact hCard for a page - i.e. an hCard in an <address>
