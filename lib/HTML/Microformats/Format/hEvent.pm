@@ -40,7 +40,7 @@ use 5.008;
 use HTML::Microformats::Utilities qw(searchClass searchRel stringify);
 use HTML::Microformats::Format::species;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {

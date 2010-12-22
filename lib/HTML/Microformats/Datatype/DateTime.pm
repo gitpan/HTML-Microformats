@@ -20,7 +20,7 @@ use HTML::Microformats::Datatype::DateTime::Parser;
 use HTML::Microformats::Datatype::String qw();
 use HTTP::Date;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 =head1 DESCRIPTION
 

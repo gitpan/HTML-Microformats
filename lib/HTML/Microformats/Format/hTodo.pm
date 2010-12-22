@@ -39,7 +39,7 @@ use 5.008;
 
 use HTML::Microformats::Utilities qw(stringify searchClass);
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {

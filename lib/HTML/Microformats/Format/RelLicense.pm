@@ -25,7 +25,7 @@ use base qw(HTML::Microformats::Format_Rel);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub format_signature
 {

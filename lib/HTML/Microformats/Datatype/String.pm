@@ -21,7 +21,7 @@ our @EXPORT_OK = qw(ms isms concat compare);
 
 use Encode;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 =head1 DESCRIPTION
 

@@ -18,7 +18,7 @@ use HTML::Microformats::Format::species;
 use URI::URL;
 use XML::LibXML qw(:all);
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 # Cleans away nested compound microformats. Any intentionally
 # nested microformats (e.g. vcard class="agent vcard") should be

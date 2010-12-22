@@ -20,7 +20,7 @@ use HTML::Microformats::Utilities qw(searchClass searchRel searchRev);
 use RDF::Trine;
 use Scalar::Util qw[];
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 our $AUTOLOAD;
 
 # Derived classes...
@@ -223,7 +223,8 @@ sub AUTOLOAD
 	}
 	else
 	{
-		croak "No function '$func' defined.\n";
+		croak "No function '$func' defined.\n"
+			unless $func =~ /::(DESTROY|no|import)$/;
 	}
 }
 

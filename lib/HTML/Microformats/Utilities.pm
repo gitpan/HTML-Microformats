@@ -15,7 +15,7 @@ use common::sense;
 use utf8;
 use 5.008;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 our @EXPORT_OK;
 BEGIN {
 	@EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchRev searchID searchAncestorTag stringify xml_stringify);

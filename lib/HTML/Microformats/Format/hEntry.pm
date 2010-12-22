@@ -43,7 +43,7 @@ use HTML::Microformats::Format::hCard;
 use HTML::Microformats::Format::hEvent;
 use HTML::Microformats::Format::hNews;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {

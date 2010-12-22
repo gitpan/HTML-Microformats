@@ -32,7 +32,7 @@ use 5.008;
 use HTML::Microformats::Utilities qw(stringify searchClass);
 use HTML::Microformats::Format::hReview::rating;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {

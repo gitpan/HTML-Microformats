@@ -239,6 +239,19 @@ my:v_0-100
 				[ rdfs:label "Handle dates like 1pm - i.e with am/pm designator but without minutes."@en ; a dcs:Bugfix ]
 		] .
 
+my:v_0-101
+
+	a               :Version ;
+	dc:issued       "2010-12-22" ;
+	:revision       "0.101"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.101.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-100 ;
+			dcs:item
+				[ rdfs:label "Stop printing warnings about DESTROY method not being defined."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "Don't assume each rel=me link refers to a different 'me'!"@en ; a dcs:Bugfix  ]
+		] .
+
 
 #############################################################
 
@@ -262,7 +275,7 @@ my:project
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 ,
 	                my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 , my:v_0-00_07 ,
 	                my:v_0-00_08 , my:v_0-00_09 , my:v_0-00_10 , my:v_0-00_11 ,
-	                my:v_0-00_12 , my:v_0-00_13 , my:v_0-100 .
+	                my:v_0-00_12 , my:v_0-00_13 , my:v_0-100 ,   my:v_0-101 .
 
 #############################################################
 

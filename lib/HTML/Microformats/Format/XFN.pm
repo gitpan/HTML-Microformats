@@ -34,7 +34,7 @@ use HTML::Microformats::Utilities qw(stringify searchAncestorClass);
 use HTML::Microformats::Format::hCard;
 use RDF::Trine;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {
@@ -294,6 +294,22 @@ sub profiles
 		http://ufs.cc/x/specs
 		http://xen.adactio.com/
 		http://purl.org/vocab/relationship/);
+}
+
+sub id
+{
+	my ($self, $trine, $relation) = @_;
+	
+	if ($relation eq 'person')
+	{
+		if (grep /^me$/i, @{ $self->data->{'rel'} }
+		or  grep /^me$/i, @{ $self->data->{'rev'} })
+		{
+			return $self->context->representative_person_id($trine);
+		}
+	}
+	
+	$self->SUPER::id($trine, $relation);
 }
 
 

@@ -13,7 +13,7 @@ SYNOPSIS
      my $results = rdf_query($sparql, $doc->model);
 
 VERSION
-    0.100
+    0.101
 
 DESCRIPTION
     The HTML::Microformats module is a wrapper for parser and handler

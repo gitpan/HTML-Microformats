@@ -40,7 +40,7 @@ use HTML::Microformats::Format::hCard::impp;
 use HTML::Microformats::Utilities qw(stringify searchClass);
 use Scalar::Util qw();
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {

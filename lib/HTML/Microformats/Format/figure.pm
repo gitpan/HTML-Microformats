@@ -45,7 +45,7 @@ use HTML::Microformats::Utilities qw(searchClass searchID stringify);
 use HTML::Microformats::Datatype::String qw(ms);
 use Locale::Country qw(country2code LOCALE_CODE_ALPHA_2);
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {

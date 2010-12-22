@@ -33,7 +33,7 @@ use HTML::Microformats::Datatype::String qw(isms);
 use HTML::Microformats::Utilities qw(searchClass stringify);
 use RDF::Trine;
 
-our $VERSION = '0.100';
+our $VERSION = '0.101';
 
 sub new
 {
