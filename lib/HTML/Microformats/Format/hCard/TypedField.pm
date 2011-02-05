@@ -23,7 +23,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -39,7 +39,7 @@ use 5.008;
 use HTML::Microformats::Format::hCard;
 use HTML::Microformats::Utilities qw(searchClass stringify);
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub new
 {
@@ -106,11 +106,13 @@ sub format_signature
 	my $hclass = 'tel';
 	$hclass = $1 if $package =~ /::([^:]+)$/;
 
+	my $u = $hclass =~ m'^(tel|email)$'i ? 'u' : '';
+
 	return {
 		'root' => $hclass,
 		'classes' => [
 			['type',  '*',  {'value-title'=>'allow'}],
-			['value', '&v', {'value-title'=>($hclass eq 'tel' ? 'allow' : undef)}],
+			['value', '&v'.$u, {'value-title'=>($hclass eq 'tel' ? 'allow' : undef)}],
 		],
 		'options' => {
 			'no-destroy' => ['adr', 'geo']

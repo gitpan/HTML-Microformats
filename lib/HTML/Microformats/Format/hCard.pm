@@ -21,6 +21,27 @@ HTML::Microformats::Format::hCard inherits from HTML::Microformats::Format. See 
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
+=head2 Additional Method
+
+=over
+
+=item * C<< to_vcard >>
+
+This method exports the hCard as a vCard 3.0. It requires L<RDF::vCard> to work,
+and will throw an error at run-time if it's not available.
+
+=item * C<< to_vcard4 >>
+
+This method exports the hCard as a vCard 3.0. It requires L<RDF::vCard> to work,
+and will throw an error at run-time if it's not available.
+
+=item * C<< to_vcard4_xml >>
+
+This method exports the hCard as a vCard XML. It requires L<RDF::vCard> and
+L<XML::LibXML> to work, and will throw an error at run-time if it's not available.
+
+=back
+
 =cut
 
 package HTML::Microformats::Format::hCard;
@@ -40,7 +61,20 @@ use HTML::Microformats::Format::hCard::impp;
 use HTML::Microformats::Utilities qw(stringify searchClass);
 use Scalar::Util qw();
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
+our $HAS_VCARD_EXPORT;
+our $HAS_VCARD_XML_EXPORT;
+BEGIN
+{
+	local $@ = undef;
+	eval 'use RDF::vCard;';
+	$HAS_VCARD_EXPORT = 1
+		if RDF::vCard::Exporter->can('new');
+	eval {
+		$HAS_VCARD_XML_EXPORT = 1
+			if RDF::vCard::Exporter->can('new') && $RDF::vCard::WITH_XML;
+	};
+}
 
 sub new
 {
@@ -308,7 +342,7 @@ sub format_signature
 	my $vcard = 'http://www.w3.org/2006/vcard/ns#';
 	my $vx    = 'http://buzzword.org.uk/rdf/vcardx#';
 	my $ical  = 'http://www.w3.org/2002/12/cal/icaltzd#';
-	my $ix    = 'http://buzzword.org.uk/rdf/icalx#';
+	my $ix    = 'http://buzzword.org.uk/rdf/icaltzdx#';
 	my $geo   = 'http://www.w3.org/2003/01/geo/wgs84_pos#';
 
 	# vCard 4.0 introduces CLIENTPIDMAP - best to ignore?
@@ -418,8 +452,8 @@ sub format_signature
 			['cutype',      '?'],
 			['member',      '?'],
 			['rsvp',        '?'],
-			['delegated-from', 'Mu?',{'embedded'=>'hCard'}],
-			['sent-by',     'Mu?',   {'embedded'=>'hCard'}],
+			['delegated-from', 'Mu*',{'embedded'=>'hCard'}],
+			['sent-by',     'Mu*',   {'embedded'=>'hCard'}],
 			);
 		$rv->{'rdf:property'}->{'member'} = { 'resource' => ["${ix}member"] , 'literal' => ["${ix}member"] };
 	}
@@ -524,7 +558,17 @@ sub add_to_model
 				))
 				if $tel->get_value =~ /^(tel|fax|modem):\S+$/i;
 		}
-		
+
+		foreach my $e (@{ $self->data->{'email'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new('http://xmlns.com/foaf/0.1/mbox'),
+				RDF::Trine::Node::Resource->new($e->get_value),
+				))
+				if $e->get_value =~ /^(mailto):\S+$/i;
+		}
+
 		foreach my $photo (@{ $self->data->{'photo'} })
 		{
 			$model->add_statement(RDF::Trine::Statement->new(
@@ -574,6 +618,30 @@ sub add_to_model
 	}
 
 	return $self;
+}
+
+sub to_vcard
+{
+	my ($self) = @_;
+	die "Need RDF::vCard to export vCard.\n" unless $HAS_VCARD_EXPORT;
+	my $exporter = RDF::vCard::Exporter->new();
+	return $exporter->export_card($self->model, $self->id(1))->to_string;
+}
+
+sub to_vcard4
+{
+	my ($self) = @_;
+	die "Need RDF::vCard to export vCard.\n" unless $HAS_VCARD_EXPORT;
+	my $exporter = RDF::vCard::Exporter->new( vcard_version => 4 );
+	return $exporter->export_card($self->model, $self->id(1))->to_string;
+}
+
+sub to_vcard4_xml
+{
+	my ($self) = @_;
+	die "Need RDF::vCard and XML::LibXML to export vCard.\n" unless $HAS_VCARD_XML_EXPORT;
+	my $exporter = RDF::vCard::Exporter->new( vcard_version => 4 );
+	return $exporter->export_card($self->model, $self->id(1))->to_xml;
 }
 
 sub profiles
@@ -651,7 +719,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

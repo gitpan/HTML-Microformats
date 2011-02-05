@@ -32,6 +32,18 @@ HTML::Microformats::Format::hAlarm inherits from HTML::Microformats::Format. See
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
+=head2 Additional Method
+
+=over
+
+=item * C<< to_icalendar >>
+
+This method exports the data in iCalendar format. It requires
+L<RDF::iCalendar> to work, and will throw an error at run-time
+if it's not available.
+
+=back
+
 =cut
 
 package HTML::Microformats::Format::hAlarm;
@@ -40,7 +52,7 @@ use base qw(HTML::Microformats::Format HTML::Microformats::Mixin::Parser);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub new
 {
@@ -83,6 +95,7 @@ sub format_signature
 			['description',  '?'],
 			['duration',     'D?'],
 			['repeat',       'n?', {'value-title'=>'allow'}],
+			['summary',      '1'],
 			['trigger',      'D?'] # TODO: should really allow 'related' subproperty and allow datetime values too. post-0.001
 		],
 		'options' => {
@@ -91,19 +104,51 @@ sub format_signature
 		'rdf:type' => ["${ical}Valarm"] ,
 		'rdf:property' => {
 			'action'           => { 'literal'  => ["${ical}action"] } ,
-			'attach'           => { 'resource' => ["${ical}attach"] } ,
+#			'attach'           => { 'resource' => ["${ical}attach"] } ,
 			'attendee'         => { 'resource' => ["${ical}attendee"], 'literal'  => ["${icalx}attendee"] } ,
 			'description'      => { 'literal'  => ["${ical}description"] } ,
 			'duration'         => { 'literal'  => ["${ical}duration"] } ,
 			'repeat'           => { 'literal'  => ["${ical}repeat"] , 'literal_datatype'=>'integer' } ,
+			'summary'          => { 'literal'  => ["${ical}summary"] } ,
 			'trigger'          => { 'literal'  => ["${ical}trigger"] } ,
 		},
 	};
 }
 
+sub add_to_model
+{
+	my $self  = shift;
+	my $model = shift;
+
+	my $ical  = 'http://www.w3.org/2002/12/cal/icaltzd#';
+	
+	$self->_simple_rdf($model);
+
+	foreach my $val ( @{ $self->data->{attach} } )
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1),
+			RDF::Trine::Node::Resource->new("${ical}attach"),
+			RDF::Trine::Node::Resource->new($val->data->{href}),
+			));
+		$val->add_to_model($model);
+	}
+
+	return $self;
+}
+
 sub profiles
 {
 	return HTML::Microformats::Format::hCalendar::profiles(@_);
+}
+
+sub to_icalendar
+{
+	my ($self) = @_;
+	die "Need RDF::iCalendar to export iCalendar data.\n"
+		unless $HTML::Microformats::Format::hCalendar::HAS_ICAL_EXPORT;
+	my $exporter = RDF::iCalendar::Exporter->new;
+	return $exporter->export_component($self->model, $self->id(1))->to_string;
 }
 
 1;
@@ -125,7 +170,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

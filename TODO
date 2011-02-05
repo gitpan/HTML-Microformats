@@ -1,11 +1,8 @@
 * Documentation is pretty sketchy.
 * More test cases.
-* AUTOLOADed get/set/add/clear methods
+* AUTOLOADed get methods:
 	- document them better
 		+ can auto-generate much of this using ->format_signature 
 	- ensure they can be called as get_X and get_Y where X is the microformat class/rel name, and Y is the hash key from ->data
 	  which sometimes differ.
 		+ make sure any such differences are clearly documented
-	- when adding/setting dates, durations, etc, try to create a datatyped object
-	- add get1_X methods which only get the first value in the case of plural properties
-* rel=me seems broken

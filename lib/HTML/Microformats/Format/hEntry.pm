@@ -29,6 +29,24 @@ HTML::Microformats::Format::hEntry inherits from HTML::Microformats::Format. See
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
+=head2 Additional Method
+
+=over
+
+=item * C<< to_atom >>
+
+This method exports the data as an XML file containing an Atom <entry>.
+It requires L<XML::Atom::FromOWL> to work, and will throw an error at
+run-time if it's not available.
+
+=item * C<< to_icalendar >>
+
+This method exports the data in iCalendar format (as a VJOURNAL). It
+requires L<RDF::iCalendar> to work, and will throw an error at run-time
+if it's not available.
+
+=back
+
 =cut
 
 package HTML::Microformats::Format::hEntry;
@@ -43,7 +61,15 @@ use HTML::Microformats::Format::hCard;
 use HTML::Microformats::Format::hEvent;
 use HTML::Microformats::Format::hNews;
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
+our $HAS_ATOM_EXPORT;
+BEGIN
+{
+	local $@ = undef;
+	eval 'use XML::Atom::FromOWL;';
+	$HAS_ATOM_EXPORT = 1
+		if XML::Atom::FromOWL->can('new'); 
+}
 
 sub new
 {
@@ -251,7 +277,7 @@ sub format_signature
 			'published'   => { literal  => ["${awol}published"] } ,
 			'updated'     => { literal  => ["${awol}updated"] } ,
 			'category'    => { resource => ["${awol}category"] } ,
-			'enclosure'   => { resource => ["${iana}enclosure"] } ,
+#			'enclosure'   => { resource => ["${iana}enclosure"] } ,
 			},
 	};
 }
@@ -377,6 +403,38 @@ sub add_to_model
 			RDF::Trine::Node::Resource->new("${awol}author"),
 			$author->id(1, 'holder'),
 			));
+		
+		$model->add_statement(RDF::Trine::Statement->new(
+			$author->id(1, 'holder'),
+			RDF::Trine::Node::Resource->new("${rdf}type"),
+			RDF::Trine::Node::Resource->new("${awol}Person"),
+			));
+
+		$model->add_statement(RDF::Trine::Statement->new(
+			$author->id(1, 'holder'),
+			RDF::Trine::Node::Resource->new("${awol}name"),
+			$self->_make_literal($author->data->{fn})
+			)) if $author->data->{fn};
+
+		foreach my $u (@{ $author->data->{'url'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$author->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new("${awol}uri"),
+				RDF::Trine::Node::Resource->new($u),
+				));
+		}
+		
+		foreach my $e (@{ $author->data->{'email'} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1, 'holder'),
+				RDF::Trine::Node::Resource->new("${awol}email"),
+				RDF::Trine::Node::Resource->new($e->get_value),
+				))
+				if $e->get_value =~ /^(mailto):\S+$/i;
+		}
+
 		$author->add_to_model($model);
 	}
 
@@ -423,6 +481,12 @@ sub add_to_model
 	{
 		for (my $i=0; defined $self->data->{$field}->[$i]; $i++)
 		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new("${iana}enclosure"),
+				RDF::Trine::Node::Resource->new($self->data->{$field}->[$i]->data->{href}),
+				));
+				
 			$self->{'id.'.$field.'.'.$i} = $self->context->make_bnode
 				unless defined $self->{'id.'.$field.'.'.$i};
 			$self->{'id.'.$field.'-dest.'.$i} = $self->context->make_bnode
@@ -460,10 +524,133 @@ sub add_to_model
 				));
 		}
 	}
+
+	return $self;
+}
+
+sub get_uid
+{
+	my $self = shift;
+	return defined $self->data->{link} ? $self->data->{link} : undef;
+}
+
+sub add_to_model_ical
+{
+	my $self  = shift;
+	my $model = shift;
+
+	my $rdf  = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+	my $rdfs = 'http://www.w3.org/2000/01/rdf-schema#';
+	my $ical = 'http://www.w3.org/2002/12/cal/icaltzd#';
+	my $icalx= 'http://buzzword.org.uk/rdf/icaltzdx#';
+	
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new("${rdf}type"),
+		RDF::Trine::Node::Resource->new("${ical}Vjournal"),
+		));
+
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new("${ical}summary"),
+		$self->_make_literal($self->data->{title}),
+		))
+		if $self->data->{title};
+
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new("${ical}comment"),
+		$self->_make_literal($self->data->{summary}),
+		))
+		if $self->data->{summary};
+
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new("${ical}description"),
+		$self->_make_literal($self->data->{content}),
+		))
+		if $self->data->{content};
+
+	foreach my $author (@{ $self->data->{'author'} })
+	{
+		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1),
+			RDF::Trine::Node::Resource->new("${icalx}organizer"),
+			$author->id(1),
+			));
+		
+		$author->add_to_model($model);
+	}
+
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new("${ical}uid"),
+		$self->_make_literal($self->data->{link} => 'anyURI'),
+		))
+		if $self->data->{link};			
+
+	foreach my $field (qw(enclosure))
+	{
+		for (my $i=0; defined $self->data->{$field}->[$i]; $i++)
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new("${ical}attach"),
+				RDF::Trine::Node::Resource->new($self->data->{$field}->[$i]->data->{href}),
+				));
+		}
+	}
+
+	$model->add_statement(RDF::Trine::Statement->new(
+		$self->id(1),
+		RDF::Trine::Node::Resource->new("${ical}created"),
+		$self->_make_literal($self->data->{published}),
+		))
+		if $self->data->{published};
+
+	if ($self->data->{updated})
+	{
+		foreach my $u (@{ $self->data->{updated} })
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new("${ical}dtstamp"),
+				$self->_make_literal($u),
+				));
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new("${ical}last-modified"),
+				$self->_make_literal($u),
+				));
+		}
+	}
+
+	# todo - CATEGORIES
 	
 	HTML::Microformats::Format::hEvent::_add_to_model_related($self, $model);
 
 	return $self;
+}
+
+sub to_atom
+{
+	my ($self) = @_;
+	die "Need XML::Atom::FromOWL to export Atom.\n" unless $HAS_ATOM_EXPORT;
+	my $exporter = XML::Atom::FromOWL->new;
+	return $exporter->export_entry($self->model, $self->id(1))->as_xml;
+}
+
+sub to_icalendar
+{
+	my ($self) = @_;
+	die "Need RDF::iCalendar to export iCalendar data.\n"
+		unless $HTML::Microformats::Format::hCalendar::HAS_ICAL_EXPORT;
+	
+	my $model = $self->model;
+	$self->add_to_model_ical($model);
+	
+	my $exporter = RDF::iCalendar::Exporter->new;
+	return $exporter->export_component($model, $self->id(1))->to_string;
 }
 
 sub profiles
@@ -494,7 +681,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

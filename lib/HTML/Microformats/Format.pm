@@ -20,7 +20,7 @@ use HTML::Microformats::Utilities qw(searchClass searchRel searchRev);
 use RDF::Trine;
 use Scalar::Util qw[];
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 our $AUTOLOAD;
 
 # Derived classes...
@@ -134,19 +134,26 @@ list of values if called in list context, or the first value otherwise.
 
 C<set_X>: for singular properties, sets the value of property X to the first given parameter.
 For plural properties, sets the values of property X to the list of parameters.
+B<This feature is deprecated and will be removed in a future release.>
 
 C<add_X>: for singular properties, sets the value of property X to the first given parameter,
 but croaks if X is already set. For concatenated singular properties, concatenates to the
 end of any existing value of X. For plural properties, adds any given parameters to the
 list of values of property X.
+B<This feature is deprecated and will be removed in a future release.>
 
 C<clear_X>: removes any values of property X, but croaks if the property is a required
 property.
+B<This feature is deprecated and will be removed in a future release.>
 
 For example, an HTML::Microformats::hCard object will have a method called get_fn which
 gets the value of the hCard's "fn" property, a method called set_fn which sets it, a
 method called add_fn which also sets it (but croaks if it's already set), and a method
 called clear_fn which croaks if called (because "fn" is a required property).
+
+B<Deprecated features:> the C<set_X>, C<add_X> and C<clear_X> methods are 
+deprecated and will be removed soon. In general you should treat objects which are
+instances of HTML::Microformats::Format as read-only.
 
 =cut
 
@@ -419,7 +426,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

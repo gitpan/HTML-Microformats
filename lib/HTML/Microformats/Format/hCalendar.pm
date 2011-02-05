@@ -24,6 +24,18 @@ HTML::Microformats::Format::hCalendar inherits from HTML::Microformats::Format. 
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
+=head2 Additional Method
+
+=over
+
+=item * C<< to_icalendar >>
+
+This method exports the data in iCalendar format. It requires
+L<RDF::iCalendar> to work, and will throw an error at run-time
+if it's not available.
+
+=back
+
 =cut
 
 package HTML::Microformats::Format::hCalendar;
@@ -39,7 +51,15 @@ use HTML::Microformats::Format::hTodo;
 use HTML::Microformats::Format::hAlarm;
 use HTML::Microformats::Format::hFreebusy;
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
+our $HAS_ICAL_EXPORT;
+BEGIN
+{
+	local $@ = undef;
+	eval 'use RDF::iCalendar;';
+	$HAS_ICAL_EXPORT = 1
+		if RDF::iCalendar::Exporter->can('new'); 
+}
 
 sub new
 {
@@ -204,7 +224,7 @@ sub extract_all
 		my $orphans = 0;
 		foreach my $c (@components)
 		{
-			$orphans++ unless searchAncestorClass('hfeed', $c->element);
+			$orphans++ unless searchAncestorClass('hcalendar', $c->element);
 		}
 		if ($orphans)
 		{
@@ -244,6 +264,21 @@ sub format_signature
 	};
 }
 
+sub add_to_model
+{
+	my $self  = shift;
+	my $model = shift;
+	
+	$self->_simple_rdf($model);
+
+	foreach my $journal (@{ $self->data->{vjournal} })
+	{
+		$journal->add_to_model_ical($model);
+	}
+	
+	return $self;
+}
+
 sub profiles
 {
 	return qw(http://purl.org/uF/hCalendar/1.1/
@@ -257,6 +292,13 @@ sub profiles
 		http://purl.org/uF/2008/03/);
 }
 
+sub to_icalendar
+{
+	my ($self) = @_;
+	die "Need RDF::iCalendar to export iCalendar data.\n" unless $HAS_ICAL_EXPORT;
+	my $exporter = RDF::iCalendar::Exporter->new;
+	return $exporter->export_calendar($self->model, $self->id(1))->to_string;
+}
 
 1;
 
@@ -287,7 +329,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

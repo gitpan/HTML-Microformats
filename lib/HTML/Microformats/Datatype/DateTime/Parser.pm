@@ -34,7 +34,7 @@ Based on DateTime::Format::ISO8601 by Joshua Hoblitt.
 
 Copyright 2003-2005 Joshua Hoblitt
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -50,7 +50,7 @@ use DateTime;
 use DateTime::Format::Builder;
 use Params::Validate qw( validate validate_pos BOOLEAN OBJECT SCALAR );
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 {
     my $default_legacy_year;

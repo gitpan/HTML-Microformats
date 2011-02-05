@@ -29,6 +29,18 @@ HTML::Microformats::Format::hTodo inherits from HTML::Microformats::Format. See 
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
+=head2 Additional Method
+
+=over
+
+=item * C<< to_icalendar >>
+
+This method exports the data in iCalendar format. It requires
+L<RDF::iCalendar> to work, and will throw an error at run-time
+if it's not available.
+
+=back
+
 =cut
 
 package HTML::Microformats::Format::hTodo;
@@ -39,7 +51,7 @@ use 5.008;
 
 use HTML::Microformats::Utilities qw(stringify searchClass);
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub new
 {
@@ -140,7 +152,7 @@ sub format_signature
 		},
 		'rdf:type' => ["${ical}Vtodo"] ,
 		'rdf:property' => {
-			'attach'           => { 'resource' => ["${ical}attach"] } ,
+#			'attach'           => { 'resource' => ["${ical}attach"] } ,
 			'attendee'         => { 'resource' => ["${ical}attendee"],  'literal'  => ["${icalx}attendee-literal"] } ,
 			'categories'       => { 'resource' => ["${icalx}category"], 'literal'  => ["${ical}category"] },
 			'class'            => { 'literal'  => ["${ical}class"] ,    'literal_datatype' => 'string'} ,
@@ -259,6 +271,15 @@ sub extract_all_xoxo_item
 	return @rv;
 }
 
+sub to_icalendar
+{
+	my ($self) = @_;
+	die "Need RDF::iCalendar to export iCalendar data.\n"
+		unless $HTML::Microformats::Format::hCalendar::HAS_ICAL_EXPORT;
+	my $exporter = RDF::iCalendar::Exporter->new;
+	return $exporter->export_component($self->model, $self->id(1))->to_string;
+}
+
 1;
 
 =head1 BUGS
@@ -277,7 +298,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

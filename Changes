@@ -10,6 +10,21 @@ Home page:    <http://search.cpan.org/dist/HTML-Microformats/>
 Bug tracker:  <http://rt.cpan.org/Dist/Display.html?Queue=HTML-Microformats>
 Maintainer:   Toby Inkster <mailto:tobyink@cpan.org>
 
+0.102 [2011-02-23]
+ - Deprecated set_X/add_X/clear_X property accessors for microformat
+   objects.
+ - Include awol:Person, awol:name, awol:email and awol:uri in RDF output
+   for hAtom entries.
+ - Prefer to parse tel and email in hCard as URLs.
+ - Provide hEntry output using RDF iCalendar vocabulary, as a
+   ical:Vjournal.
+ - (Addition) Export geo in KML format.
+ - (Addition) Export hAtom as Atom feeds.
+ - (Addition) Export hCalendar in iCalendar format.
+ - (Addition) Export hCards in vCard 3.0 format.
+ - (Addition) Export hCards in vCard 4.0 format.
+ - (Addition) Export hCards in vCard XML format.
+
 0.101 [2010-12-22]
  - (Bugfix) Don't assume each rel=me link refers to a different 'me'!
  - (Bugfix) Stop printing warnings about DESTROY method not being defined.

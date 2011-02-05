@@ -23,7 +23,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -36,7 +36,7 @@ use base qw(HTML::Microformats::Format::hCard::TypedField);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub _fix_value_uri
 {
@@ -49,13 +49,11 @@ sub _fix_value_uri
 	$number =~ s/[^\+\*\#x0-9]//gi;
 	($number, my $extension) = split /x/i, $number, 2;
 	
-	if ($number =~ /^\+/) # global number
+	if ($number =~ /^\+/ and $number !~ /[\*\#]/) # global number
 	{
-		return if $number =~ /[\*\#]/;  # cannot contain * or #
-		
 		if (length $extension)
 		{
-			$uri = sprintf('tel:%s;extension=%s', $number, $extension);
+			$uri = sprintf('tel:%s;ext=%s', $number, $extension);
 		}
 		else
 		{
@@ -66,7 +64,7 @@ sub _fix_value_uri
 	{
 		if (length $extension)
 		{
-			$uri = sprintf('tel:%s;extension=%s;phone-context=localhost.localdomain', $number, $extension);
+			$uri = sprintf('tel:%s;ext=%s;phone-context=localhost.localdomain', $number, $extension);
 		}
 		else
 		{

@@ -74,3 +74,10 @@ ok($model->count_statements(
 		),
 	"mailto: links treated as mbox rather than page."
 	);
+
+#use RDF::TrineShortcuts;
+#$RDF::TrineShortcuts::Namespaces->{'vx'}    = 'http://buzzword.org.uk/rdf/vcardx#';
+#$RDF::TrineShortcuts::Namespaces->{'hcard'} = 'http://purl.org/uF/hCard/terms/';
+#$RDF::TrineShortcuts::Namespaces->{'xfn'}   = 'http://vocab.sindice.com/xfn#';
+#$RDF::TrineShortcuts::Namespaces->{'xen'}   = 'http://buzzword.org.uk/rdf/xen#';
+#diag rdf_string($model => 'rdfxml');

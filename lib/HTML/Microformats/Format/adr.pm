@@ -32,7 +32,7 @@ use 5.008;
 
 use Locale::Country qw(country2code LOCALE_CODE_ALPHA_2);
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub new
 {
@@ -136,6 +136,11 @@ sub add_to_model
 	foreach my $geo (@{ $self->data->{'geo'} })
 	{
 		$model->add_statement(RDF::Trine::Statement->new(
+			$self->id(1),
+			RDF::Trine::Node::Resource->new('http://buzzword.org.uk/rdf/vcardx#geo'),
+			$geo->id(1),
+			));
+		$model->add_statement(RDF::Trine::Statement->new(
 			$self->id(1, 'place'),
 			RDF::Trine::Node::Resource->new('http://www.w3.org/2003/01/geo/wgs84_pos#location'),
 			$geo->id(1, 'location'),
@@ -228,7 +233,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

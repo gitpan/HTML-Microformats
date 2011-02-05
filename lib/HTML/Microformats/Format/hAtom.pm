@@ -25,6 +25,18 @@ HTML::Microformats::Format::hAtom inherits from HTML::Microformats::Format. See 
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
+=head2 Additional Method
+
+=over
+
+=item * C<< to_atom >>
+
+This method exports the data as an XML file containing an Atom <feed>.
+It requires L<XML::Atom::FromOWL> to work, and will throw an error at
+run-time if it's not available.
+
+=back
+
 =cut
 
 package HTML::Microformats::Format::hAtom;
@@ -39,7 +51,15 @@ use HTML::Microformats::Format::hCard;
 use HTML::Microformats::Format::hEntry;
 use HTML::Microformats::Format::hNews;
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
+our $HAS_ATOM_EXPORT;
+BEGIN
+{
+	local $@ = undef;
+	eval 'use XML::Atom::FromOWL;';
+	$HAS_ATOM_EXPORT = 1
+		if XML::Atom::FromOWL->can('new'); 
+}
 
 sub new
 {
@@ -141,6 +161,14 @@ sub add_to_model
 	return $self;
 }
 
+sub to_atom
+{
+	my ($self) = @_;
+	die "Need XML::Atom::FromOWL to export Atom.\n" unless $HAS_ATOM_EXPORT;
+	my $exporter = XML::Atom::FromOWL->new;
+	return $exporter->export_feed($self->model, $self->id(1))->as_xml;
+}
+
 sub profiles
 {
 	my @p = qw();
@@ -195,7 +223,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

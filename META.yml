@@ -18,6 +18,9 @@ keywords:
   - POSH
   - RDF
   - JSON
+  - vCard
+  - iCalendar
+  - Atom
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -27,6 +30,11 @@ no_index:
   directory:
     - inc
     - t
+recommends:
+  RDF::KML::Exporter: 0
+  RDF::iCalendar::Exporter: 0.002
+  RDF::vCard::Exporter: 0.006
+  XML::Atom::FromOWL: 0
 requires:
   CGI: 0
   CGI::Util: 0
@@ -54,4 +62,4 @@ resources:
   homepage: http://search.cpan.org/dist/HTML-Microformats/
   license: http://dev.perl.org/licenses/
   repository: http://goddamn.co.uk/viewvc/perlmods/HTML-Microformats/
-version: 0.101
+version: 0.102

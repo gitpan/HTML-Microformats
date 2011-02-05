@@ -33,7 +33,7 @@ use HTML::Microformats::Datatype::String qw(isms);
 use HTML::Microformats::Utilities qw(searchClass stringify);
 use RDF::Trine;
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub new
 {
@@ -379,7 +379,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

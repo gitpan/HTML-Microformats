@@ -7,7 +7,7 @@ use Encode qw(encode);
 use RDF::Trine;
 use Scalar::Util qw();
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub _simple_rdf
 {

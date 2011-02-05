@@ -34,7 +34,7 @@ use HTML::Microformats::Utilities qw(stringify searchAncestorClass);
 use HTML::Microformats::Format::hCard;
 use RDF::Trine;
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
 
 sub new
 {
@@ -110,14 +110,17 @@ sub _extract_xfn_relationships
 	my $R = $self->_xfn_relationship_types;
 	
 	my $regexp = join '|', keys %$R;
-	$regexp = "\\b($regexp)\\b";
+	$regexp = "($regexp)";
 
-	foreach my $direction (qw(rel rev))
+	DIR: foreach my $direction (qw(rel rev))
 	{
 		if ($self->{'element'}->hasAttribute($direction))
 		{
-			my @matches = ($self->{'element'}->getAttribute($direction) =~ /$regexp/gi);
-			$self->{'DATA'}->{$direction} = \@matches if @matches;
+			my @matches = 
+				grep { $_ =~ /^($regexp)$/ }
+				split /\s+/, $self->{'element'}->getAttribute($direction);
+			next DIR unless @matches;
+			$self->{'DATA'}->{$direction} = [ map { lc $_ } @matches ];
 		}
 	}
 }
@@ -130,16 +133,17 @@ sub add_to_model
 	
 	foreach my $r (@{ $self->data->{'rel'} })
 	{
-		next if $r =~ /^me$/i;
+		next if lc $r eq 'me';
 
 		my ($page_link, $person_link);
+		my ($flags, $other) = split /\:/, $R->{$r}, 2;
 		
-		if ($R->{$r} =~ /^[^:]*E/)
+		if ($flags =~ /E/i)
 		{
 			$page_link   = "http://buzzword.org.uk/rdf/xen#${r}-hyperlink";
 			$person_link = "http://buzzword.org.uk/rdf/xen#${r}";
 		}
-		elsif ($R->{$r} =~ /^[^:]*R/)
+		elsif ($flags =~ /R/i)
 		{
 			$page_link   = "http://vocab.sindice.com/xfn#human-relationship-hyperlink";
 			$person_link = "http://purl.org/vocab/relationship/${r}";
@@ -162,7 +166,7 @@ sub add_to_model
 			$self->id(1, 'person'),
 			));
 		
-		if ($R->{$r} =~ /^[^:]*K/)
+		if ($flags =~ /K/i)
 		{
 			$model->add_statement(RDF::Trine::Statement->new(
 				$self->context->representative_person_id(1),
@@ -174,7 +178,7 @@ sub add_to_model
 				RDF::Trine::Node::Resource->new( 'http://xmlns.com/foaf/0.1/knows' ),
 				$self->context->representative_person_id(1),
 				))
-				if $R->{$r} =~ /^[^:]*S/;
+				if $flags =~ /S/i;
 		}
 		
 		$model->add_statement(RDF::Trine::Statement->new(
@@ -182,27 +186,28 @@ sub add_to_model
 			RDF::Trine::Node::Resource->new( $person_link ),
 			$self->context->representative_person_id(1),
 			))
-			if $R->{$r} =~ /^[^:]*S/;
+			if $flags =~ /S/i;
 		
 		$model->add_statement(RDF::Trine::Statement->new(
 			$self->id(1, 'person'),
-			RDF::Trine::Node::Resource->new( $1 ),
+			RDF::Trine::Node::Resource->new($other),
 			$self->context->representative_person_id(1),
 			))
-			if $R->{$r} =~ /^[^:]*I\:(.*)$/;
+			if $flags =~ /I/i && length $other;
 	}
 
 	foreach my $r (@{ $self->data->{'rev'} })
 	{
-		next if $r =~ /^me$/i;
+		next if lc $r eq 'me';
 		
 		my $person_link;
+		my ($flags, $other) = split /\:/, $R->{$r}, 2;
 		
-		if ($R->{$r} =~ /^[^:]*E/)
+		if ($flags =~ /E/i)
 		{
 			$person_link = "http://buzzword.org.uk/rdf/xen#${r}";
 		}
-		elsif ($R->{$r} =~ /^[^:]*R/)
+		elsif ($flags =~ /R/i)
 		{
 			$person_link = "http://purl.org/vocab/relationship/${r}";
 		}
@@ -217,7 +222,7 @@ sub add_to_model
 			$self->context->representative_person_id(1),
 			));
 
-		if ($R->{$r} =~ /^[^:]*K/)
+		if ($flags =~ /K/i)
 		{
 			$model->add_statement(RDF::Trine::Statement->new(
 				$self->id(1, 'person'),
@@ -229,7 +234,7 @@ sub add_to_model
 				RDF::Trine::Node::Resource->new( 'http://xmlns.com/foaf/0.1/knows' ),
 				$self->id(1, 'person'),
 				))
-				if $R->{$r} =~ /^[^:]*S/;
+				if $flags =~ /S/i;
 		}
 		
 		$model->add_statement(RDF::Trine::Statement->new(
@@ -237,14 +242,14 @@ sub add_to_model
 			RDF::Trine::Node::Resource->new( $person_link ),
 			$self->id(1, 'person'),
 			))
-			if $R->{$r} =~ /^[^:]*S/;
+			if $flags =~ /S/i;
 		
 		$model->add_statement(RDF::Trine::Statement->new(
 			$self->context->representative_person_id(1),
-			RDF::Trine::Node::Resource->new( $1 ),
+			RDF::Trine::Node::Resource->new($other),
 			$self->id(1, 'person'),
 			))
-			if $R->{$r} =~ /^[^:]*I\:(.*)$/;
+			if $flags =~ /I/i && length $other;
 	}
 
 	$model->add_statement(RDF::Trine::Statement->new(
@@ -316,6 +321,17 @@ sub id
 sub _xfn_relationship_types
 {
 	my ($self) = @_;
+	
+	# FLAGS
+	# =====
+	#
+	# S = symmetric
+	# K = foaf:knows
+	# I = has inverse
+	# T = transitive
+	# E = enemies vocab
+	# R = relationship vocab
+	#
 	
 	my %xfn11 = (
 		'contact'       => ':',
@@ -492,7 +508,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

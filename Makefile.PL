@@ -17,26 +17,30 @@ license             'perl';
 test_requires       'Test::More'          => '0.61';
 test_requires       'Module::Signature'   => '0.66';
 
-requires            'Carp'                => '1.00';
-requires            'CGI'                 => 0;
-requires            'CGI::Util'           => 0;
-requires            'common::sense'       => 0;
-requires            'DateTime'            => 0;
-requires            'DateTime::Duration'  => 0;
+requires            'Carp'                 => '1.00';
+requires            'CGI'                  => 0;
+requires            'CGI::Util'            => 0;
+requires            'common::sense'        => 0;
+requires            'DateTime'             => 0;
+requires            'DateTime::Duration'   => 0;
 requires            'DateTime::Format::Builder'  => 0;
 requires            'DateTime::Format::Natural'  => 0;
 requires            'DateTime::Format::Strptime' => 0;
-requires            'DateTime::Span'      => 0;
-requires            'HTML::HTML5::Parser' => 0;
-requires            'HTML::HTML5::Sanity' => 0;
-requires            'HTTP::Date'          => 0;
-requires            'JSON'                => 0;
-requires            'Locale::Country'     => 0;
-requires            'Module::Pluggable'   => 0;
-requires            'RDF::Trine'          => '0.130';
-requires            'XML::LibXML'         => '1.60';
-requires            'URI'                 => '1.30';
-requires            'URI::URL'            => 0;
+requires            'DateTime::Span'       => 0;
+requires            'HTML::HTML5::Parser'  => 0;
+requires            'HTML::HTML5::Sanity'  => 0;
+requires            'HTTP::Date'           => 0;
+requires            'JSON'                 => 0;
+requires            'Locale::Country'      => 0;
+requires            'Module::Pluggable'    => 0;
+recommends          'RDF::iCalendar::Exporter'  => '0.002';
+recommends          'RDF::KML::Exporter'   => 0;
+requires            'RDF::Trine'           => '0.130';
+recommends          'RDF::vCard::Exporter' => '0.006';
+recommends          'XML::Atom::FromOWL'   => 0;
+requires            'XML::LibXML'          => '1.60';
+requires            'URI'                  => '1.30';
+requires            'URI::URL'             => 0;
 
 resources(
 	'homepage'   => "http://search.cpan.org/dist/$dist/",
@@ -44,7 +48,7 @@ resources(
 	'bugtracker' => "http://rt.cpan.org/Dist/Display.html?Queue=$dist",
 	);
 
-keywords('XHTML', 'HTML', 'Semantic Web', 'Microformats', 'POSH', 'RDF', 'JSON');
+keywords('XHTML', 'HTML', 'Semantic Web', 'Microformats', 'POSH', 'RDF', 'JSON', 'vCard', 'iCalendar', 'Atom');
 	
 write_doap_changes;
 write_doap_changes_xml;

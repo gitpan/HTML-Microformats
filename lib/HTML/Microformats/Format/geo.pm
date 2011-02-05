@@ -22,6 +22,17 @@ HTML::Microformats::Format::geo inherits from HTML::Microformats::Format. See th
 base class definition for a description of property getter/setter methods,
 constructors, etc.
 
+=head2 Additional Method
+
+=over
+
+=item * C<< to_kml >>
+
+This method exports the geo object as KML. It requires L<RDF::KML::Exporter> to work,
+and will throw an error at run-time if it's not available.
+
+=back
+
 =cut
 
 package HTML::Microformats::Format::geo;
@@ -32,7 +43,15 @@ use 5.008;
 
 use HTML::Microformats::Utilities qw(stringify);
 
-our $VERSION = '0.101';
+our $VERSION = '0.102';
+our $HAS_KML_EXPORT;
+BEGIN
+{
+	local $@ = undef;
+	eval 'use RDF::KML::Exporter;';
+	$HAS_KML_EXPORT = 1
+		if RDF::KML::Exporter->can('new'); 
+}
 
 sub new
 {
@@ -206,6 +225,14 @@ sub add_to_model
 	return $self;
 }
 
+sub to_kml
+{
+	my ($self) = @_;
+	die "Need RDF::KML::Exporter to export KML.\n" unless $HAS_KML_EXPORT;
+	my $exporter = RDF::KML::Exporter->new;
+	return $exporter->export_kml($self->model)->render;
+}
+
 sub profiles
 {
 	my $class = shift;
@@ -282,7 +309,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT
 
-Copyright 2008-2010 Toby Inkster
+Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
