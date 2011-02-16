@@ -61,7 +61,7 @@ use HTML::Microformats::Format::hCard::impp;
 use HTML::Microformats::Utilities qw(stringify searchClass);
 use Scalar::Util qw();
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 our $HAS_VCARD_EXPORT;
 our $HAS_VCARD_XML_EXPORT;
 BEGIN

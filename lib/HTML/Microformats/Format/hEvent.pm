@@ -51,8 +51,9 @@ use 5.008;
 
 use HTML::Microformats::Utilities qw(searchClass searchRel stringify);
 use HTML::Microformats::Format::species;
+use Scalar::Util qw[blessed];
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {
@@ -262,12 +263,23 @@ sub add_to_model
 
 	foreach my $val ( @{ $self->data->{attach} } )
 	{
-		$model->add_statement(RDF::Trine::Statement->new(
-			$self->id(1),
-			RDF::Trine::Node::Resource->new("${ical}attach"),
-			RDF::Trine::Node::Resource->new($val->data->{href}),
-			));
-		$val->add_to_model($model);
+		if (blessed($val) and $val->can('add_to_model'))
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new("${ical}attach"),
+				RDF::Trine::Node::Resource->new($val->data->{href}),
+				));
+			$val->add_to_model($model);
+		}
+		else
+		{
+			$model->add_statement(RDF::Trine::Statement->new(
+				$self->id(1),
+				RDF::Trine::Node::Resource->new("${ical}attach"),
+				RDF::Trine::Node::Resource->new($val),
+				));
+		}
 	}
 
 	return $self;

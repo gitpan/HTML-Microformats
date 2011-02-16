@@ -32,7 +32,7 @@ use 5.008;
 
 use Locale::Country qw(country2code LOCALE_CODE_ALPHA_2);
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

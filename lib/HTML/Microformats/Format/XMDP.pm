@@ -43,7 +43,7 @@ use base qw(HTML::Microformats::Format::XOXO);
 use common::sense;
 use 5.008;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

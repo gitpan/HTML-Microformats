@@ -38,7 +38,7 @@ use 5.008;
 
 use HTML::Microformats::Format::hCard;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

@@ -32,7 +32,7 @@ use CGI;
 use CGI::Util qw(escape);
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

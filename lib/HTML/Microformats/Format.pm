@@ -20,7 +20,7 @@ use HTML::Microformats::Utilities qw(searchClass searchRel searchRev);
 use RDF::Trine;
 use Scalar::Util qw[];
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 our $AUTOLOAD;
 
 # Derived classes...

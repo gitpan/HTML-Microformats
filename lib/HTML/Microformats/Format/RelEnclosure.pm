@@ -39,7 +39,7 @@ use 5.008;
 
 use HTML::Microformats::Datatype::String qw(isms);
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

@@ -22,7 +22,7 @@ use DateTime;
 use DateTime::Duration;
 use HTML::Microformats::Utilities qw(searchClass stringify);
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 =head1 DESCRIPTION
 

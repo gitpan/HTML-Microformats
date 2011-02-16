@@ -51,7 +51,7 @@ use HTML::Microformats::Format::hCard;
 use HTML::Microformats::Format::hEntry;
 use HTML::Microformats::Format::hNews;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 our $HAS_ATOM_EXPORT;
 BEGIN
 {

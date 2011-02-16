@@ -54,7 +54,7 @@ use HTML::Microformats::Utilities qw(searchClass stringify);
 use HTML::Microformats::Datatype::Interval;
 use RDF::Trine;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

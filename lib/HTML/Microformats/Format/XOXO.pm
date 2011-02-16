@@ -58,7 +58,7 @@ use 5.008;
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
 use JSON qw/to_json/;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

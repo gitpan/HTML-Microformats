@@ -43,7 +43,7 @@ use 5.008;
 
 use HTML::Microformats::Utilities qw(stringify);
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 our $HAS_KML_EXPORT;
 BEGIN
 {

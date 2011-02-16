@@ -36,7 +36,7 @@ use XML::LibXML;
 
 =cut
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 =head1 DESCRIPTION
 
@@ -77,6 +77,7 @@ sub new_document
 	my %opts     = @_;
 	
 	my $self = bless {}, $class;
+	$self->modules; # force modules to be loaded
 	
 	if (ref $document && $document->isa('XML::LibXML::Document'))
 	{

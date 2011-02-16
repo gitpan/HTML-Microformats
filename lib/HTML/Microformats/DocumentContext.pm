@@ -21,7 +21,7 @@ use HTML::Microformats::Utilities qw'searchAncestorTag';
 use URI;
 use XML::LibXML qw(:all);
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 =head2 Constructor
 

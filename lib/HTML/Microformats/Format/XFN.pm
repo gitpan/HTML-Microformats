@@ -34,7 +34,7 @@ use HTML::Microformats::Utilities qw(stringify searchAncestorClass);
 use HTML::Microformats::Format::hCard;
 use RDF::Trine;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

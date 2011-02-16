@@ -43,7 +43,7 @@ use 5.008;
 
 use CGI::Util qw(unescape);
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 sub new
 {

@@ -255,7 +255,7 @@ my:v_0-101
 my:v_0-102
 
 	a               :Version ;
-	dc:issued       "2011-02-23" ;
+	dc:issued       "2011-02-05" ;
 	:revision       "0.102"^^xsd:string ;
 	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.102.tar.gz> ;
 	dcs:changeset [
@@ -271,6 +271,19 @@ my:v_0-102
 				[ rdfs:label "Export hAtom as Atom feeds."@en ; a dcs:Addition ] ,
 				[ rdfs:label "Export geo in KML format."@en ; a dcs:Addition ] ,
 				[ rdfs:label "Export hCalendar in iCalendar format."@en ; a dcs:Addition ]
+		] .
+
+my:v_0-103
+
+	a               :Version ;
+	dc:issued       "2011-02-16" ;
+	:revision       "0.103"^^xsd:string ;
+	:file-release   <http://backpan.cpan.org/authors/id/T/TO/TOBYINK/HTML-Microformats-0.103.tar.gz> ;
+	dcs:changeset [
+			dcs:versus my:v_0-102 ;
+			dcs:item
+				[ rdfs:label "hCalendar attachments."@en ; a dcs:Bugfix ] ,
+				[ rdfs:label "Profile management."@en ; a dcs:Bugfix ]
 		] .
 
 #############################################################
@@ -294,7 +307,7 @@ my:project
 	:license        <http://dev.perl.org/licenses/> ;
 	:release        my:v_0-00_00 , my:v_0-00_01 , my:v_0-00_02 , my:v_0-00_03 , my:v_0-00_04 , my:v_0-00_05 , my:v_0-00_06 , 
 	                my:v_0-00_07 , my:v_0-00_08 , my:v_0-00_09 , my:v_0-00_10 , my:v_0-00_11 , my:v_0-00_12 , my:v_0-00_13 ,
-	                my:v_0-100 ,   my:v_0-101 ,   my:v_0-102 .
+	                my:v_0-100 ,   my:v_0-101 ,   my:v_0-102 ,   my:v_0-103 .
 
 #############################################################
 

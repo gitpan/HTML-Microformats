@@ -19,7 +19,7 @@ use 5.008;
 use HTML::Microformats::Datatype::DateTime;
 use RDF::Trine;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 
 =head1 DESCRIPTION
 

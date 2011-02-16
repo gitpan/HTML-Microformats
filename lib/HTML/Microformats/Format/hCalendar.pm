@@ -51,7 +51,7 @@ use HTML::Microformats::Format::hTodo;
 use HTML::Microformats::Format::hAlarm;
 use HTML::Microformats::Format::hFreebusy;
 
-our $VERSION = '0.102';
+our $VERSION = '0.103';
 our $HAS_ICAL_EXPORT;
 BEGIN
 {
