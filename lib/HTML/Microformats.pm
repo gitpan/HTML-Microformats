@@ -19,7 +19,7 @@ HTML::Microformats - parse microformats in HTML
 package HTML::Microformats;
 
 use common::sense;
-use 5.008;
+use 5.010;
 
 use HTML::HTML5::Parser;
 use HTML::HTML5::Sanity qw(fix_document);
@@ -30,13 +30,12 @@ use JSON;
 use RDF::Trine 0.130;
 use XML::LibXML;
 
-=head1 VERSION
+use Object::AUTHORITY;
 
-0.102
-
-=cut
-
-our $VERSION = '0.103';
+BEGIN {
+	$HTML::Microformats::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::VERSION   = '0.104';
+}
 
 =head1 DESCRIPTION
 
@@ -571,6 +570,13 @@ Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut
 

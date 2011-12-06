@@ -14,9 +14,14 @@ makes sure identifiers are used consistently.
 package HTML::Microformats::ObjectCache;
 
 use common::sense;
-use 5.008;
+use 5.010;
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::ObjectCache::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::ObjectCache::VERSION   = '0.104';
+}
 
 =head2 Constructor
 
@@ -136,5 +141,12 @@ Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut

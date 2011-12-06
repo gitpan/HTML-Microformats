@@ -1,7 +1,7 @@
 package HTML::Microformats::Mixin::Parser;
 
 use common::sense;
-use 5.008;
+use 5.010;
 
 use HTML::Microformats::Utilities qw(/^search/);
 use HTML::Microformats::Format::adr;
@@ -18,7 +18,12 @@ use HTML::Microformats::Format::species;
 use URI::URL;
 use XML::LibXML qw(:all);
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Mixin::Parser::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Mixin::Parser::VERSION   = '0.104';
+}
 
 # Cleans away nested compound microformats. Any intentionally
 # nested microformats (e.g. vcard class="agent vcard") should be
@@ -969,5 +974,12 @@ Copyright 2008-2010 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut

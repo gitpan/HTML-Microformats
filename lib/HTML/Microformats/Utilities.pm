@@ -13,9 +13,14 @@ package HTML::Microformats::Utilities;
 use base qw(Exporter);
 use common::sense;
 use utf8;
-use 5.008;
+use 5.010;
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Utilities::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Utilities::VERSION   = '0.104';
+}
 our @EXPORT_OK;
 BEGIN {
 	@EXPORT_OK = qw(searchClass searchAncestorClass searchRel searchRev searchID searchAncestorTag stringify xml_stringify);
@@ -727,5 +732,12 @@ Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut

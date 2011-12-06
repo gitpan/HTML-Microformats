@@ -1,13 +1,18 @@
 package HTML::Microformats::Mixin::RDF;
 
 use common::sense;
-use 5.008;
+use 5.010;
 
 use Encode qw(encode);
 use RDF::Trine;
 use Scalar::Util qw();
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Mixin::RDF::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Mixin::RDF::VERSION   = '0.104';
+}
 
 sub _simple_rdf
 {
@@ -168,5 +173,12 @@ Copyright 2008-2010 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut

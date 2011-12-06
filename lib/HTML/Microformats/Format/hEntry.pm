@@ -53,7 +53,7 @@ package HTML::Microformats::Format::hEntry;
 
 use base qw(HTML::Microformats::Format HTML::Microformats::Mixin::Parser);
 use common::sense;
-use 5.008;
+use 5.010;
 
 use HTML::Microformats::Utilities qw(searchClass searchAncestorClass stringify);
 use HTML::Microformats::Datatype::String qw(isms);
@@ -61,7 +61,12 @@ use HTML::Microformats::Format::hCard;
 use HTML::Microformats::Format::hEvent;
 use HTML::Microformats::Format::hNews;
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Format::hEntry::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Format::hEntry::VERSION   = '0.104';
+}
 our $HAS_ATOM_EXPORT;
 BEGIN
 {
@@ -685,5 +690,12 @@ Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut

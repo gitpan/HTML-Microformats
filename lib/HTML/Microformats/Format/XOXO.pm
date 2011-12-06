@@ -53,12 +53,17 @@ package HTML::Microformats::Format::XOXO;
 
 use base qw(HTML::Microformats::Format);
 use common::sense;
-use 5.008;
+use 5.010;
 
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
 use JSON qw/to_json/;
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Format::XOXO::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Format::XOXO::VERSION   = '0.104';
+}
 
 sub new
 {
@@ -152,7 +157,7 @@ sub profiles
 package HTML::Microformats::Format::XOXO::AbstractList;
 
 use common::sense;
-use 5.008;
+use 5.010;
 
 sub parse
 {
@@ -206,7 +211,7 @@ package HTML::Microformats::Format::XOXO::DL;
 
 use base qw[HTML::Microformats::Format::XOXO::AbstractList];
 use common::sense;
-use 5.008;
+use 5.010;
 
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
 
@@ -292,7 +297,7 @@ package HTML::Microformats::Format::XOXO::UL;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractList);
 use common::sense;
-use 5.008;
+use 5.010;
 
 1;
 
@@ -314,14 +319,14 @@ package HTML::Microformats::Format::XOXO::OL;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractList);
 use common::sense;
-use 5.008;
+use 5.010;
 
 1;
 
 package HTML::Microformats::Format::XOXO::AbstractListItem;
 
 use common::sense;
-use 5.008;
+use 5.010;
 
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
 
@@ -522,7 +527,7 @@ package HTML::Microformats::Format::XOXO::LI;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractListItem);
 use common::sense;
-use 5.008;
+use 5.010;
 
 1;
 
@@ -536,7 +541,7 @@ package HTML::Microformats::Format::XOXO::DD;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractListItem);
 use common::sense;
-use 5.008;
+use 5.010;
 
 1;
 
@@ -569,6 +574,13 @@ Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut
 

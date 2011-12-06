@@ -12,9 +12,6 @@ SYNOPSIS
      use RDF::TrineShortcuts qw(rdf_query);
      my $results = rdf_query($sparql, $doc->model);
 
-VERSION
-    0.102
-
 DESCRIPTION
     The HTML::Microformats module is a wrapper for parser and handler
     modules of various individual microformats (each of those modules has a
@@ -268,10 +265,15 @@ COPYRIGHT
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
 
+DISCLAIMER OF WARRANTIES
+    THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+    WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+    MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 POD ERRORS
     Hey! The above document had some coding errors, which are explained
     below:
 
-    Around line 385:
+    Around line 384:
         '=item' outside of any '=over'
 

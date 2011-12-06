@@ -22,7 +22,12 @@ use DateTime::Span;
 use HTML::Microformats::Utilities qw(stringify searchClass);
 use HTML::Microformats::Datatype::Duration;
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Datatype::Interval::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Datatype::Interval::VERSION   = '0.104';
+}
 
 =head1 DESCRIPTION
 
@@ -301,5 +306,12 @@ Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut

@@ -39,6 +39,13 @@ Copyright 2008-2011 Toby Inkster
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+
 =cut
 
 package HTML::Microformats::Datatype::DateTime::Parser;
@@ -50,7 +57,12 @@ use DateTime;
 use DateTime::Format::Builder;
 use Params::Validate qw( validate validate_pos BOOLEAN OBJECT SCALAR );
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Datatype::DateTime::Parser::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Datatype::DateTime::Parser::VERSION   = '0.104';
+}
 
 {
     my $default_legacy_year;

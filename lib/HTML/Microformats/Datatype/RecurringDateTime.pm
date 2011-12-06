@@ -14,12 +14,17 @@ package HTML::Microformats::Datatype::RecurringDateTime;
 use HTML::Microformats::Utilities qw(searchClass stringify);
 use base qw(HTML::Microformats::Datatype);
 use common::sense;
-use 5.008;
+use 5.010;
 
 use HTML::Microformats::Datatype::DateTime;
 use RDF::Trine;
 
-our $VERSION = '0.103';
+use Object::AUTHORITY;
+
+BEGIN {
+	$HTML::Microformats::Datatype::RecurringDateTime::AUTHORITY = 'cpan:TOBYINK';
+	$HTML::Microformats::Datatype::RecurringDateTime::VERSION   = '0.104';
+}
 
 =head1 DESCRIPTION
 
@@ -290,5 +295,12 @@ Copyright 2008-2011 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
 
 =cut
