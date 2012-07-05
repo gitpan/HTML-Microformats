@@ -21,9 +21,9 @@ L<HTML::Microformats::Format::hCard>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -40,14 +40,14 @@ MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 package HTML::Microformats::Format::hCard::label;
 
 use base qw(HTML::Microformats::Format::hCard::TypedField);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Format::hCard::label::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Format::hCard::label::VERSION   = '0.104';
+	$HTML::Microformats::Format::hCard::label::VERSION   = '0.105';
 }
 
 1;

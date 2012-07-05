@@ -11,7 +11,7 @@ HTML::Microformats::Datatype::Duration - floating periods of time
 
 package HTML::Microformats::Datatype::Duration;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use overload '""'=>\&to_string, '+'=>\&add, '-'=>\&subtract, '<=>'=>\&compare, 'cmp'=>\&compare;
 
 use base qw(Exporter HTML::Microformats::Datatype);
@@ -26,7 +26,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Datatype::Duration::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Datatype::Duration::VERSION   = '0.104';
+	$HTML::Microformats::Datatype::Duration::VERSION   = '0.105';
 }
 
 =head1 DESCRIPTION
@@ -135,7 +135,7 @@ sub parse
 				$X->{$big}    =  $int_part;
 				$X->{$small} += ($mult * $frac_part);
 			}
-			use strict;
+			use strict qw(subs vars); no warnings;
 			$X->{'n'} = int($X->{'n'});
 	
 			# Construct and return object.
@@ -199,7 +199,7 @@ sub parse
 			$X->{$big}    =  $int_part;
 			$X->{$small} += ($mult * $frac_part);
 		}
-		use strict;
+		use strict qw(subs vars); no warnings;
 		$X->{'n'} = int($X->{'n'});
 		
 		# Construct and return object.
@@ -516,9 +516,9 @@ L<DateTime::Duration>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

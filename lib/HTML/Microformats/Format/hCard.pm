@@ -47,7 +47,7 @@ L<XML::LibXML> to work, and will throw an error at run-time if it's not availabl
 package HTML::Microformats::Format::hCard;
 
 use base qw(HTML::Microformats::Format HTML::Microformats::Mixin::Parser);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use HTML::Microformats::Datatype::String;
@@ -65,7 +65,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Format::hCard::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Format::hCard::VERSION   = '0.104';
+	$HTML::Microformats::Format::hCard::VERSION   = '0.105';
 }
 our $HAS_VCARD_EXPORT;
 our $HAS_VCARD_XML_EXPORT;
@@ -125,7 +125,7 @@ sub new
 	foreach my $p (qw(n org tel email impp label adr))
 	{
 		delete $self->{'DATA'}->{$p}
-			unless @{ $self->{'DATA'}->{$p} };
+			unless @{ $self->{'DATA'}->{$p} || [] };
 	}
 	
 	# Fallback if no 'org' is found.
@@ -722,9 +722,9 @@ L<HTML::Microformats>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -42,7 +42,7 @@ or the same as C<< $relfoo->get_label() >> if the attribute is not set.
 package HTML::Microformats::Format_Rel;
 
 use base qw(HTML::Microformats::Format);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use HTML::Microformats::Utilities qw(stringify);
@@ -51,7 +51,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Format_Rel::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Format_Rel::VERSION   = '0.104';
+	$HTML::Microformats::Format_Rel::VERSION   = '0.105';
 }
 
 sub new
@@ -98,9 +98,9 @@ L<HTML::Microformats>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

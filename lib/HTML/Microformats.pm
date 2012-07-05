@@ -1,24 +1,6 @@
-=head1 NAME
-
-HTML::Microformats - parse microformats in HTML
-
-=head1 SYNOPSIS
-
- use HTML::Microformats;
- 
- my $doc = HTML::Microformats
-             ->new_document($html, $uri)
-             ->assume_profile(qw(hCard hCalendar));
- print $doc->json(pretty => 1);
- 
- use RDF::TrineShortcuts qw(rdf_query);
- my $results = rdf_query($sparql, $doc->model);
- 
-=cut
-
 package HTML::Microformats;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use HTML::HTML5::Parser;
@@ -34,39 +16,8 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::VERSION   = '0.104';
+	$HTML::Microformats::VERSION   = '0.105';
 }
-
-=head1 DESCRIPTION
-
-The HTML::Microformats module is a wrapper for parser and handler
-modules of various individual microformats (each of those modules
-has a name like HTML::Microformats::Format::Foo).
-
-The general pattern of usage is to create an HTML::Microformats
-object (which corresponds to an HTML document) using the
-C<new_document> method; then ask for the data, as a Perl hashref,
-a JSON string, or an RDF::Trine model.
-
-=head2 Constructor
-
-=over 4
-
-=item C<< $doc = HTML::Microformats->new_document($html, $uri, %opts) >>
-
-Constructs a document object.
-
-$html is the HTML or XHTML source (string) or an XML::LibXML::Document.
-
-$uri is the document URI, important for resolving relative URL references.
-
-%opts are additional parameters; currently only one option is defined:
-$opts{'type'} is set to 'text/html' or 'application/xhtml+xml', to
-control how $html is parsed.
-
-=back
-
-=cut
 
 sub new_document
 {
@@ -97,37 +48,11 @@ sub new_document
 	return $self;
 }
 
-=head2 Profile Management
-
-HTML::Microformats uses HTML profiles (i.e. the profile attribute on the
-HTML <head> element) to detect which Microformats are used on a page. Any
-microformats which do not have a profile URI declared will not be parsed.
-
-Because many pages fail to properly declare which profiles they use, there
-are various profile management methods to tell HTML::Microformats to
-assume the presence of particular profile URIs, even if they're actually
-missing.
-
-=over 4
-
-=item C<< $doc->profiles >>
-
-This method returns a list of profile URIs declared by the document.
-
-=cut
-
 sub profiles
 {
 	my $self = shift;
 	return $self->{'context'}->profiles(@_);
 }
-
-=item C<< $doc->has_profile(@profiles) >>
-
-This method returns true if and only if one or more of the profile URIs
-in @profiles is declared by the document.
-
-=cut
 
 sub has_profile
 {
@@ -135,44 +60,12 @@ sub has_profile
 	return $self->{'context'}->has_profile(@_);
 }
 
-=item C<< $doc->add_profile(@profiles) >>
-
-Using C<add_profile> you can add one or more profile URIs, and they are
-treated as if they were found on the document.
-
-For example:
-
- $doc->add_profile('http://microformats.org/profile/rel-tag')
-
-This is useful for adding profile URIs declared outside the document itself
-(e.g. in HTTP headers).
-
-Returns a reference to the document.
-
-=cut
-
 sub add_profile
 {
 	my $self = shift;
 	$self->{'context'}->add_profile(@_);
 	return $self;
 }
-
-=item C<< $doc->assume_profile(@microformats) >>
-
-For example:
-
- $doc->assume_profile(qw(hCard adr geo))
-
-This method acts similarly to C<add_profile> but allows you to use
-names of microformats rather than URIs.
-
-Microformat names are case sensitive, and must match
-HTML::Microformats::Format::Foo module names.
-
-Returns	a reference to the document.
-
-=cut
 
 sub assume_profile
 {
@@ -189,40 +82,12 @@ sub assume_profile
 	return $self;
 }
 
-=item C<< $doc->assume_all_profiles >>
-
-This method is equivalent to calling C<assume_profile> for
-all known microformats.
-
-Returns	a reference to the document.
-
-=back
-
-=cut
-
 sub assume_all_profiles
 {
  	my $self = shift;
  	$self->assume_profile($self->formats);
 	return $self;
 }
-
-=head2 Parsing Microformats
-
-Generally speaking, you can skip this. The C<data>, C<json> and
-C<model> methods will automatically do this for you.
-
-=over 4
-
-=item C<< $doc->parse_microformats >>
-
-Scans through the document, finding microformat objects.
-
-On subsequent calls, does nothing (as everything is already parsed).
-
-Returns	a reference to the document.
-
-=cut
 
 sub parse_microformats
 {
@@ -246,6 +111,227 @@ sub parse_microformats
 	return $self;
 }
 
+sub clear_microformats
+{
+ 	my $self = shift;
+ 	$self->{'objects'} = undef;
+ 	$self->{'context'}->cache->clear;
+ 	$self->{'parsed'}  = 0;
+	return $self;
+}
+
+sub objects
+{
+	my $self = shift;
+	my $fmt  = shift;
+	$self->parse_microformats;
+	return @{ $self->{'objects'}->{$fmt} }
+		if wantarray;
+	return $self->{'objects'}->{$fmt};
+}
+
+sub all_objects
+{
+	my $self = shift;
+	$self->parse_microformats;	
+	return $self->{'objects'};
+}
+
+sub TO_JSON
+{
+	return $_[0]->all_objects;
+}
+
+sub json
+{
+	my $self = shift;
+	my %opts = @_;
+	
+	$opts{'convert_blessed'} = 1
+		unless defined $opts{'convert_blessed'};
+
+	$opts{'utf8'} = 1
+		unless defined $opts{'utf8'};
+
+	return to_json($self->all_objects, \%opts);
+}
+ 
+sub model
+{
+	my $self  = shift;
+	my $model = RDF::Trine::Model->temporary_model;
+	$self->add_to_model($model);
+	return $model;
+}
+
+sub serialise_model
+{
+	my $self = shift;
+	
+	my %opts = ref $_[0] ? %{ $_[0] } : @_;
+	$opts{as} ||= 'Turtle';
+	
+	my $ser = RDF::Trine::Serializer->new(delete $opts{as}, %opts);
+	return $ser->serialize_model_to_string($self->model);
+}
+
+sub add_to_model
+{
+	my $self  = shift;
+	my $model = shift;
+	$self->parse_microformats;
+	
+	foreach my $fmt ($self->formats)
+	{
+		foreach my $object (@{ $self->{'objects'}->{$fmt} })
+		{
+			$object->add_to_model($model);
+		}
+	}
+	
+	return $self;
+}
+
+use Module::Pluggable
+	require     => 1,
+	inner       => 0,
+	search_path => ['HTML::Microformats::Format'],
+	only        => qr/^HTML::Microformats::Format::[^:]+$/,
+	sub_name    => 'modules',
+	;
+
+sub formats
+{
+	my $class = shift || __PACKAGE__;
+	return
+		sort { lc $a cmp lc $b }
+		map { s/^HTML::Microformats::Format:://; $_ }
+		$class->modules;
+}
+
+1;
+
+__END__
+
+=head1 NAME
+
+HTML::Microformats - parse microformats in HTML
+
+=head1 SYNOPSIS
+
+ use HTML::Microformats;
+ 
+ my $doc = HTML::Microformats
+             ->new_document($html, $uri)
+             ->assume_profile(qw(hCard hCalendar));
+ print $doc->json(pretty => 1);
+ 
+ use RDF::TrineShortcuts qw(rdf_query);
+ my $results = rdf_query($sparql, $doc->model);
+ 
+=head1 DESCRIPTION
+
+The HTML::Microformats module is a wrapper for parser and handler
+modules of various individual microformats (each of those modules
+has a name like HTML::Microformats::Format::Foo).
+
+The general pattern of usage is to create an HTML::Microformats
+object (which corresponds to an HTML document) using the
+C<new_document> method; then ask for the data, as a Perl hashref,
+a JSON string, or an RDF::Trine model.
+
+=head2 Constructor
+
+=over 4
+
+=item C<< $doc = HTML::Microformats->new_document($html, $uri, %opts) >>
+
+Constructs a document object.
+
+$html is the HTML or XHTML source (string) or an XML::LibXML::Document.
+
+$uri is the document URI, important for resolving relative URL references.
+
+%opts are additional parameters; currently only one option is defined:
+$opts{'type'} is set to 'text/html' or 'application/xhtml+xml', to
+control how $html is parsed.
+
+=back
+
+=head2 Profile Management
+
+HTML::Microformats uses HTML profiles (i.e. the profile attribute on the
+HTML <head> element) to detect which Microformats are used on a page. Any
+microformats which do not have a profile URI declared will not be parsed.
+
+Because many pages fail to properly declare which profiles they use, there
+are various profile management methods to tell HTML::Microformats to
+assume the presence of particular profile URIs, even if they're actually
+missing.
+
+=over 4
+
+=item C<< $doc->profiles >>
+
+This method returns a list of profile URIs declared by the document.
+
+=item C<< $doc->has_profile(@profiles) >>
+
+This method returns true if and only if one or more of the profile URIs
+in @profiles is declared by the document.
+
+=item C<< $doc->add_profile(@profiles) >>
+
+Using C<add_profile> you can add one or more profile URIs, and they are
+treated as if they were found on the document.
+
+For example:
+
+ $doc->add_profile('http://microformats.org/profile/rel-tag')
+
+This is useful for adding profile URIs declared outside the document itself
+(e.g. in HTTP headers).
+
+Returns a reference to the document.
+
+=item C<< $doc->assume_profile(@microformats) >>
+
+For example:
+
+ $doc->assume_profile(qw(hCard adr geo))
+
+This method acts similarly to C<add_profile> but allows you to use
+names of microformats rather than URIs.
+
+Microformat names are case sensitive, and must match
+HTML::Microformats::Format::Foo module names.
+
+Returns	a reference to the document.
+
+=item C<< $doc->assume_all_profiles >>
+
+This method is equivalent to calling C<assume_profile> for
+all known microformats.
+
+Returns	a reference to the document.
+
+=back
+
+=head2 Parsing Microformats
+
+Generally speaking, you can skip this. The C<data>, C<json> and
+C<model> methods will automatically do this for you.
+
+=over 4
+
+=item C<< $doc->parse_microformats >>
+
+Scans through the document, finding microformat objects.
+
+On subsequent calls, does nothing (as everything is already parsed).
+
+Returns	a reference to the document.
+
 =item C<< $doc->clear_microformats >>
 
 Forgets information gleaned by C<parse_microformats> and thus allows
@@ -255,17 +341,6 @@ added some profiles between runs of C<parse_microformats>.
 Returns	a reference to the document.
 
 =back
-
-=cut
-
-sub clear_microformats
-{
- 	my $self = shift;
- 	$self->{'objects'} = undef;
- 	$self->{'context'}->cache->clear;
- 	$self->{'parsed'}  = 0;
-	return $self;
-}
 
 =head2 Retrieving Data
 
@@ -285,18 +360,6 @@ Each object is, for example, an HTML::Microformat::hCard object, or an
 HTML::Microformat::RelTag object, etc. See the relevent documentation
 for details.
 
-=cut
-
-sub objects
-{
-	my $self = shift;
-	my $fmt  = shift;
-	$self->parse_microformats;
-	return @{ $self->{'objects'}->{$fmt} }
-		if wantarray;
-	return $self->{'objects'}->{$fmt};
-}
-
 =item C<< $doc->all_objects >>
 
 Returns a hashref of data. Each hashref key is the name of a microformat
@@ -305,20 +368,6 @@ Returns a hashref of data. Each hashref key is the name of a microformat
 Each object is, for example, an HTML::Microformat::hCard object, or an
 HTML::Microformat::RelTag object, etc. See the relevent documentation
 for details.
-
-=cut
-
-sub all_objects
-{
-	my $self = shift;
-	$self->parse_microformats;	
-	return $self->{'objects'};
-}
-
-sub TO_JSON
-{
-	return $_[0]->all_objects;
-}
 
 =item C<< $doc->json(%opts) >>
 
@@ -331,55 +380,14 @@ enabled by default, but can be disabled by explicitly setting them to 0, e.g.
 
   print $doc->json( pretty=>1, canonical=>1, utf8=>0 );
 
-=cut
-
-sub json
-{
-	my $self = shift;
-	my %opts = @_;
-	
-	$opts{'convert_blessed'} = 1
-		unless defined $opts{'convert_blessed'};
-
-	$opts{'utf8'} = 1
-		unless defined $opts{'utf8'};
-
-	return to_json($self->all_objects, \%opts);
-}
-
 =item C<< $doc->model >>
 
 Returns data as an RDF::Trine::Model, suitable for serialising as
 RDF or running SPARQL queries.
 
-=cut
- 
-sub model
-{
-	my $self  = shift;
-	my $model = RDF::Trine::Model->temporary_model;
-	$self->add_to_model($model);
-	return $model;
-}
-
 =item C<< $object->serialise_model(as => $format) >> 
 
 As C<model> but returns a string.
-
-=back
-
-=cut
-
-sub serialise_model
-{
-	my $self = shift;
-	
-	my %opts = ref $_[0] ? %{ $_[0] } : @_;
-	$opts{as} ||= 'Turtle';
-	
-	my $ser = RDF::Trine::Serializer->new(delete $opts{as}, %opts);
-	return $ser->serialize_model_to_string($self->model);
-}
 
 =item C<< $doc->add_to_model($model) >>
 
@@ -388,25 +396,6 @@ Adds data to an existing RDF::Trine::Model.
 Returns a reference to the document.
 
 =back
-
-=cut
-
-sub add_to_model
-{
-	my $self  = shift;
-	my $model = shift;
-	$self->parse_microformats;
-	
-	foreach my $fmt ($self->formats)
-	{
-		foreach my $object (@{ $self->{'objects'}->{$fmt} })
-		{
-			$object->add_to_model($model);
-		}
-	}
-	
-	return $self;
-}
 
 =head2 Utility Functions
 
@@ -417,37 +406,12 @@ sub add_to_model
 Returns a list of Perl modules, each of which implements a specific
 microformat.
 
-=cut
-
-use Module::Pluggable
-	require     => 1,
-	inner       => 0,
-	search_path => ['HTML::Microformats::Format'],
-	only        => qr/^HTML::Microformats::Format::[^:]+$/,
-	sub_name    => 'modules',
-	;
-
 =item C<< HTML::Microformats->formats >>
 
 As per C<modules>, but strips 'HTML::Microformats::Format::' off the
 module name, and sorts alphabetically.
 
 =back
-
-=cut
-
-sub formats
-{
-	my $class = shift || __PACKAGE__;
-	return
-		sort { lc $a cmp lc $b }
-		map { s/^HTML::Microformats::Format:://; $_ }
-		$class->modules;
-}
-
-1;
-
-__END__
 
 =head1 WHY ANOTHER MICROFORMATS MODULE?
 
@@ -564,9 +528,9 @@ L<http://microformats.org/>, L<http://www.perlrdf.org/>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -576,7 +540,4 @@ under the same terms as Perl itself.
 THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
 MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
-
-=cut
 

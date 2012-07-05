@@ -1,6 +1,6 @@
 package HTML::Microformats::Mixin::Parser;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use HTML::Microformats::Utilities qw(/^search/);
@@ -22,7 +22,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Mixin::Parser::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Mixin::Parser::VERSION   = '0.104';
+	$HTML::Microformats::Mixin::Parser::VERSION   = '0.105';
 }
 
 # Cleans away nested compound microformats. Any intentionally
@@ -968,7 +968,7 @@ L<HTML::Microformats>
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
 Copyright 2008-2010 Toby Inkster
 

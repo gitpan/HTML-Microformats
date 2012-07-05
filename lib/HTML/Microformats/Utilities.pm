@@ -11,7 +11,7 @@ This module includes a few functions for searching and manipulating HTML trees.
 package HTML::Microformats::Utilities;
 
 use base qw(Exporter);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use utf8;
 use 5.010;
 
@@ -19,7 +19,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Utilities::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Utilities::VERSION   = '0.104';
+	$HTML::Microformats::Utilities::VERSION   = '0.105';
 }
 our @EXPORT_OK;
 BEGIN {
@@ -726,9 +726,9 @@ L<HTML::Microformats>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

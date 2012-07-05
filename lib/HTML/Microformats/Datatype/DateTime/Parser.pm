@@ -30,11 +30,11 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 Based on DateTime::Format::ISO8601 by Joshua Hoblitt.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
 Copyright 2003-2005 Joshua Hoblitt
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -50,7 +50,7 @@ MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 package HTML::Microformats::Datatype::DateTime::Parser;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 
 use Carp qw( croak );
 use DateTime;
@@ -61,7 +61,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Datatype::DateTime::Parser::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Datatype::DateTime::Parser::VERSION   = '0.104';
+	$HTML::Microformats::Datatype::DateTime::Parser::VERSION   = '0.105';
 }
 
 {
@@ -927,7 +927,7 @@ sub _fix_1_digit_year {
      
     no strict 'refs';
     my $year = ( $p{ self }{ base_datetime } || DateTime->now )->year;
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     $year =~ s/.$//;
     $p{ parsed }{ year } =  $year . $p{ parsed }{ year };
@@ -955,7 +955,7 @@ sub _fix_2_digit_year {
             ? $p{ self }{ cut_off_year } : $p{ self }->DefaultCutOffYear;
         $p{ parsed }{ year } += $p{ parsed }{ year } > $cutoff ? 1900 : 2000;
     }
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     return 1;
 }
@@ -966,7 +966,7 @@ sub _add_minute {
     no strict 'refs';
     $p{ parsed }{ minute } = ( $p{ self }{ base_datetime } || DateTime->now )->minute;
     $p{ self }{ missing_details }{ minute } = 1;
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     return 1;
 }
@@ -977,7 +977,7 @@ sub _add_hour {
     no strict 'refs';
     $p{ parsed }{ hour } = ( $p{ self }{ base_datetime } || DateTime->now )->hour;
     $p{ self }{ missing_details }{ hour } = 1;
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     return 1;
 }
@@ -988,7 +988,7 @@ sub _add_day {
     no strict 'refs';
     $p{ parsed }{ day } = ( $p{ self }{ base_datetime } || DateTime->now )->day;
     $p{ self }{ missing_details }{ day } = 1;
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     return 1;
 }
@@ -999,7 +999,7 @@ sub _add_week {
     no strict 'refs';
     $p{ parsed }{ week } = ( $p{ self }{ base_datetime } || DateTime->now )->week;
     $p{ self }{ missing_details }{ week } = 1;
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     return 1;
 }
@@ -1010,7 +1010,7 @@ sub _add_month {
     no strict 'refs';
     $p{ parsed }{ month } = ( $p{ self }{ base_datetime } || DateTime->now )->month;
     $p{ self }{ missing_details }{ month } = 1;
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     return 1;
 }
@@ -1021,7 +1021,7 @@ sub _add_year {
     no strict 'refs';
     $p{ parsed }{ year } = ( $p{ self }{ base_datetime } || DateTime->now )->year;
     $p{ self }{ missing_details }{ year } = 1;
-    use strict;
+    use strict qw(subs vars); no warnings;
 
     return 1;
 }

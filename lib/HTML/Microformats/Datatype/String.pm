@@ -12,7 +12,7 @@ HTML::Microformats::Datatype::String - text in a particular language
 
 package HTML::Microformats::Datatype::String;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use overload '""'=>\&to_string, '.'=>\&concat, 'cmp'=>\&compare;
 
 use base qw(Exporter HTML::Microformats::Datatype);
@@ -25,7 +25,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Datatype::String::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Datatype::String::VERSION   = '0.104';
+	$HTML::Microformats::Datatype::String::VERSION   = '0.105';
 }
 
 =head1 DESCRIPTION
@@ -221,9 +221,9 @@ L<HTML::Microformats::Datatype>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

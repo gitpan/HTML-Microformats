@@ -1,18 +1,6 @@
-=head1 NAME
-
-HTML::Microformats::DocumentContext - context for microformat objects
-
-=head1 DESCRIPTION
-
-Microformat objects need context when being parsed to properly make sense.
-For example, a base URI is needed to resolve relative URI references, and a full
-copy of the DOM tree is needed to implement the include pattern.
-
-=cut
-
 package HTML::Microformats::DocumentContext;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use Data::UUID;
@@ -25,22 +13,8 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::DocumentContext::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::DocumentContext::VERSION   = '0.104';
+	$HTML::Microformats::DocumentContext::VERSION   = '0.105';
 }
-
-=head2 Constructor
-
-=over 4
-
-=item C<< $context = HTML::Microformats::DocumentContext->new($dom, $baseuri) >>
-
-Creates a new context from a DOM document and a base URI.
-
-$dom will be modified, so if you care about keeping it pristine, make a clone first.
-
-=back
-
-=cut
 
 sub new
 {
@@ -71,43 +45,15 @@ sub new
 	return $self;
 }
 
-=head2 Public Methods
-
-=over 4
-
-=item C<< $context->cache >>
-
-A Microformat cache for the context. This prevents the same microformat object from
-being parsed and reparsed - e.g. an adr parsed first in its own right, and later as a child
-of an hCard.
-
-=cut
-
 sub cache
 {
 	return $_[0]->{'cache'};
 }
 
-
-=item C<< $context->document >>
-
-Return the modified DOM document.
-
-=cut
-
 sub document
 {
 	return $_[0]->{'document'};
 }
-
-=item C<< $context->uri( [$relative_reference] ) >>
-
-Called without a parameter, returns the context's base URI.
-
-Called with a parameter, resolves the URI reference relative to the
-base URI.
-
-=cut
 
 sub uri
 {
@@ -147,26 +93,11 @@ sub uri
 	return $rv;
 }
 
-=item C<< $context->document_uri >>
-
-Returns a URI representing the document itself. (Usually the same as the
-base URI.)
-
-=cut
-
 sub document_uri
 {
 	my $self = shift;
 	return $self->{'document_uri'} || $self->uri;
 }
-
-=item C<< $context->make_bnode( [$element] ) >>
-
-Mint a blank node identifier or a URI.
-
-If an element is passed, this may be used to construct a URI in some way.
-
-=cut
 
 sub make_bnode
 {
@@ -181,22 +112,10 @@ sub make_bnode
 	return sprintf('_:B%s%04d', $self->{'bnode_prefix'}, $self->{'next_bnode'}++);
 }
 
-=item C<< $context->profiles >>
-
-A list of profile URIs declared by the document.
-
-=cut
-
 sub profiles
 {
 	return @{ $_[0]->{'profiles'} };
 }
-
-=item C<< $context->has_profile(@profiles) >>
-
-Returns true iff any of the profiles in the array are declared by the document.
-
-=cut
 
 sub has_profile
 {
@@ -211,12 +130,6 @@ sub has_profile
 	return 0;
 }
 
-=item C<< $context->add_profile(@profiles) >>
-
-Declare these additional profiles.
-
-=cut
-
 sub add_profile
 {
 	my $self = shift;
@@ -226,13 +139,6 @@ sub add_profile
 			unless $self->has_profile($p);
 	}
 }
-
-=item C<< $context->representative_hcard >>
-
-Returns the hCard for the person that is "represented by" the page (in the XFN sense),
-or undef if no suitable hCard could be found
-
-=cut
 
 sub representative_hcard
 {
@@ -276,13 +182,6 @@ sub representative_hcard
 	return $self->{'representative_hcard'};
 }
 
-=item C<< $context->representative_person_id( [$as_trine] ) >>
-
-Equivalent to calling C<< $context->representative_hcard->id($as_trine, 'holder') >>,
-however magically works even if $context->representative_hcard returns undef.
-
-=cut
-
 sub representative_person_id
 {
 	my $self     = shift;
@@ -308,18 +207,6 @@ sub representative_person_id
 	
 	return $self->{'representative_person_id'};
 }
-
-
-=item C<< $context->contact_hcard >>
-
-Returns the hCard for the contact person for the page, or undef if none can be found.
-
-hCards are considered potential contact hCards if they are contained within an HTML
-E<lt>addressE<gt> tag, or their root element is an E<lt>addressE<gt> tag. If there
-are several such hCards, then the one in the shallowest E<lt>addressE<gt> tag is
-used; if there are several E<lt>addressE<gt> tags equally shallow, the first is used.
-
-=cut
 
 sub contact_hcard
 {
@@ -355,13 +242,6 @@ sub contact_hcard
 
 	return $self->{'contact_hcard'};
 }
-
-=item C<< $context->contact_person_id( [$as_trine] ) >>
-
-Equivalent to calling C<< $context->contact_hcard->id($as_trine, 'holder') >>,
-however magically works even if $context->contact_hcard returns undef.
-
-=cut
 
 sub contact_person_id
 {
@@ -433,6 +313,98 @@ sub _detect_profiles
 
 __END__
 
+=head1 NAME
+
+HTML::Microformats::DocumentContext - context for microformat objects
+
+=head1 DESCRIPTION
+
+Microformat objects need context when being parsed to properly make sense.
+For example, a base URI is needed to resolve relative URI references, and a full
+copy of the DOM tree is needed to implement the include pattern.
+
+=head2 Constructor
+
+=over
+
+=item C<< $context = HTML::Microformats::DocumentContext->new($dom, $baseuri) >>
+
+Creates a new context from a DOM document and a base URI.
+
+$dom will be modified, so if you care about keeping it pristine, make a clone first.
+
+=back
+
+=head2 Public Methods
+
+=over
+
+=item C<< $context->cache >>
+
+A Microformat cache for the context. This prevents the same microformat object from
+being parsed and reparsed - e.g. an adr parsed first in its own right, and later as a child
+of an hCard.
+
+=item C<< $context->document >>
+
+Return the modified DOM document.
+
+=item C<< $context->uri( [$relative_reference] ) >>
+
+Called without a parameter, returns the context's base URI.
+
+Called with a parameter, resolves the URI reference relative to the
+base URI.
+
+=item C<< $context->document_uri >>
+
+Returns a URI representing the document itself. (Usually the same as the
+base URI.)
+
+=item C<< $context->make_bnode( [$element] ) >>
+
+Mint a blank node identifier or a URI.
+
+If an element is passed, this may be used to construct a URI in some way.
+
+=item C<< $context->profiles >>
+
+A list of profile URIs declared by the document.
+
+=item C<< $context->has_profile(@profiles) >>
+
+Returns true iff any of the profiles in the array are declared by the document.
+
+=item C<< $context->add_profile(@profiles) >>
+
+Declare these additional profiles.
+
+=item C<< $context->representative_hcard >>
+
+Returns the hCard for the person that is "represented by" the page (in the XFN sense),
+or undef if no suitable hCard could be found
+
+=item C<< $context->representative_person_id( [$as_trine] ) >>
+
+Equivalent to calling C<< $context->representative_hcard->id($as_trine, 'holder') >>,
+however magically works even if $context->representative_hcard returns undef.
+
+=item C<< $context->contact_hcard >>
+
+Returns the hCard for the contact person for the page, or undef if none can be found.
+
+hCards are considered potential contact hCards if they are contained within an HTML
+E<lt>addressE<gt> tag, or their root element is an E<lt>addressE<gt> tag. If there
+are several such hCards, then the one in the shallowest E<lt>addressE<gt> tag is
+used; if there are several E<lt>addressE<gt> tags equally shallow, the first is used.
+
+=item C<< $context->contact_person_id( [$as_trine] ) >>
+
+Equivalent to calling C<< $context->contact_hcard->id($as_trine, 'holder') >>,
+however magically works even if $context->contact_hcard returns undef.
+
+=back
+
 =head1 BUGS
 
 Please report any bugs to L<http://rt.cpan.org/>.
@@ -445,9 +417,9 @@ L<HTML::Microformats>
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -458,5 +430,3 @@ THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
 MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-
-=cut

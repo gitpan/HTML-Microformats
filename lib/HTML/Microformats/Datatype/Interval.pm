@@ -12,7 +12,7 @@ HTML::Microformats::Datatype::Interval - concrete periods of time
 package HTML::Microformats::Datatype::Interval;
 
 use overload '""'=>\&to_string, '<=>'=>\&compare, 'cmp'=>\&compare;
-use common::sense;
+use strict qw(subs vars); no warnings;
 
 use base qw(Exporter HTML::Microformats::Datatype);
 our @EXPORT    = qw();
@@ -26,7 +26,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Datatype::Interval::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Datatype::Interval::VERSION   = '0.104';
+	$HTML::Microformats::Datatype::Interval::VERSION   = '0.105';
 }
 
 =head1 DESCRIPTION
@@ -300,9 +300,9 @@ L<DateTime::Span>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

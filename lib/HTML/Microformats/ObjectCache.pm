@@ -1,39 +1,14 @@
-=head1 NAME
-
-HTML::Microformats::ObjectCache - cache for microformat objects
-
-=head1 DESCRIPTION
-
-Prevents microformats from being parsed twice within the same context.
-
-This is not just for saving time. It also prevents the occasional infinite loop, and
-makes sure identifiers are used consistently.
-
-=cut
-
 package HTML::Microformats::ObjectCache;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::ObjectCache::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::ObjectCache::VERSION   = '0.104';
+	$HTML::Microformats::ObjectCache::VERSION   = '0.105';
 }
-
-=head2 Constructor
-
-=over 4
-
-=item C<< $cache = HTML::Microformats::ObjectCache->new >>
-
-Creates a new, empty cache.
-
-=back
-
-=cut
 
 sub new
 {
@@ -41,17 +16,6 @@ sub new
 	my $self  = bless {}, $class;
 	return $self;
 }
-
-=head2 Public Methods
-
-=over 4
-
-=item C<< $cache->set($context, $package, $element, $object);
-
-For a given context, package (e.g. 'HTML::Microformats::Format::hCard') and DOM
-element node, stores an object in the cache.
-
-=cut
 
 sub set
 {
@@ -68,13 +32,6 @@ sub set
 	return $self->{ $ctx->uri }->{ $klass }->{ $nodepath };
 }
 
-=item C<< $object = $cache->get($context, $package, $element);
-
-For a given context, package (e.g. 'HTML::Microformats::Format::hCard') and DOM
-element node, retrieves an object from the cache.
-
-=cut
-
 sub get
 {
 	my $self  = shift;
@@ -90,15 +47,6 @@ sub get
 
 	return $self->{ $ctx->uri }->{ $klass }->{ $nodepath };
 }
-
-=item C<< @objects = $cache->get_all($context, [$package]);
-
-For a given context and package (e.g. 'HTML::Microformats::Format::hCard'), retrieves a
-list of objects from within the cache.
-
-=back
-
-=cut
 
 sub get_all
 {
@@ -123,6 +71,48 @@ sub get_all
 
 __END__
 
+=head1 NAME
+
+HTML::Microformats::ObjectCache - cache for microformat objects
+
+=head1 DESCRIPTION
+
+Prevents microformats from being parsed twice within the same context.
+
+This is not just for saving time. It also prevents the occasional infinite loop, and
+makes sure identifiers are used consistently.
+
+=head2 Constructor
+
+=over
+
+=item C<< $cache = HTML::Microformats::ObjectCache->new >>
+
+Creates a new, empty cache.
+
+=back
+
+=head2 Public Methods
+
+=over
+
+=item C<< $cache->set($context, $package, $element, $object); >>
+
+For a given context, package (e.g. 'HTML::Microformats::Format::hCard') and DOM
+element node, stores an object in the cache.
+
+=item C<< $object = $cache->get($context, $package, $element); >>
+
+For a given context, package (e.g. 'HTML::Microformats::Format::hCard') and DOM
+element node, retrieves an object from the cache.
+
+=item C<< @objects = $cache->get_all($context, [$package]); >>
+
+For a given context and package (e.g. 'HTML::Microformats::Format::hCard'), retrieves a
+list of objects from within the cache.
+
+=back
+
 =head1 BUGS
 
 Please report any bugs to L<http://rt.cpan.org/>.
@@ -135,9 +125,9 @@ L<HTML::Microformats>
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -148,5 +138,3 @@ THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
 MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-
-=cut

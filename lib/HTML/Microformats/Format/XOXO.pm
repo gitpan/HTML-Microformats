@@ -52,7 +52,7 @@ object, rather than a plain hashref.
 package HTML::Microformats::Format::XOXO;
 
 use base qw(HTML::Microformats::Format);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
@@ -62,7 +62,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Format::XOXO::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Format::XOXO::VERSION   = '0.104';
+	$HTML::Microformats::Format::XOXO::VERSION   = '0.105';
 }
 
 sub new
@@ -156,7 +156,7 @@ sub profiles
 
 package HTML::Microformats::Format::XOXO::AbstractList;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 sub parse
@@ -210,7 +210,7 @@ Logically what you think get_values("*") might do.
 package HTML::Microformats::Format::XOXO::DL;
 
 use base qw[HTML::Microformats::Format::XOXO::AbstractList];
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
@@ -296,7 +296,7 @@ Returns an array of values, where each is a HTML::Microformats::Format::XOXO::LI
 package HTML::Microformats::Format::XOXO::UL;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractList);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 1;
@@ -318,14 +318,14 @@ Returns an array of values, where each is a HTML::Microformats::Format::XOXO::LI
 package HTML::Microformats::Format::XOXO::OL;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractList);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 1;
 
 package HTML::Microformats::Format::XOXO::AbstractListItem;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use HTML::Microformats::Utilities qw(stringify xml_stringify);
@@ -526,7 +526,7 @@ A shortcut for C<< $li->get_properties->get_values($key) >>.
 package HTML::Microformats::Format::XOXO::LI;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractListItem);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 1;
@@ -540,7 +540,7 @@ This has an identical interface to HTML::Microformats::Format::XOXO::LI.
 package HTML::Microformats::Format::XOXO::DD;
 
 use base qw(HTML::Microformats::Format::XOXO::AbstractListItem);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 1;
@@ -568,9 +568,9 @@ L<HTML::Microformats>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

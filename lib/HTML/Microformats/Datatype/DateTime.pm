@@ -24,7 +24,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Datatype::DateTime::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Datatype::DateTime::VERSION   = '0.104';
+	$HTML::Microformats::Datatype::DateTime::VERSION   = '0.105';
 }
 
 =head1 DESCRIPTION
@@ -267,9 +267,9 @@ L<DateTime>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

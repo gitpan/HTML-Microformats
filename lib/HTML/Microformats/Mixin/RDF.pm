@@ -1,6 +1,6 @@
 package HTML::Microformats::Mixin::RDF;
 
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use Encode qw(encode);
@@ -11,7 +11,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Mixin::RDF::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Mixin::RDF::VERSION   = '0.104';
+	$HTML::Microformats::Mixin::RDF::VERSION   = '0.105';
 }
 
 sub _simple_rdf
@@ -167,7 +167,7 @@ L<HTML::Microformats>
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
 Copyright 2008-2010 Toby Inkster
 

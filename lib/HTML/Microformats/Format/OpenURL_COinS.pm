@@ -25,7 +25,7 @@ constructors, etc.
 package HTML::Microformats::Format::OpenURL_COinS;
 
 use base qw(HTML::Microformats::Format);
-use common::sense;
+use strict qw(subs vars); no warnings;
 use 5.010;
 
 use CGI;
@@ -36,7 +36,7 @@ use Object::AUTHORITY;
 
 BEGIN {
 	$HTML::Microformats::Format::OpenURL_COinS::AUTHORITY = 'cpan:TOBYINK';
-	$HTML::Microformats::Format::OpenURL_COinS::VERSION   = '0.104';
+	$HTML::Microformats::Format::OpenURL_COinS::VERSION   = '0.105';
 }
 
 sub new
@@ -223,7 +223,7 @@ that community. Nevertheless it's an interesting format, and perhaps a useful
 one.
 
 HTML::Microformats::Format::OpenURL_COinS supports COinS as described at
-L<http://ocoins.org/>, with the following addition:
+L<http://ocoins.info/>, with the following addition:
 
 =over 4
 
@@ -271,9 +271,9 @@ L<HTML::Microformats>.
 
 Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENCE
 
-Copyright 2008-2011 Toby Inkster
+Copyright 2008-2012 Toby Inkster
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
